@@ -3,7 +3,7 @@ import javafx.scene.input.Clipboard;
 
 class Utilities {
 
-    static Image getImageFromClipboard() {
+    static Image getClipboardImage() {
 
         final Clipboard clipboard = Clipboard.getSystemClipboard();
 

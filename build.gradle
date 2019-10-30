@@ -3,7 +3,7 @@ plugins {
     id 'org.openjfx.javafxplugin' version '0.0.8'
 }
 
-group 'blaise.latex2img'
+group 'blaise.img2latex'
 version '0.0.1'
 
 sourceCompatibility = 11

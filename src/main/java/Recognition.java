@@ -1,20 +1,38 @@
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import javafx.scene.image.Image;
 
+import javafx.embed.swing.SwingFXUtils;
 import javax.imageio.ImageIO;
-import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Base64;
+import java.util.concurrent.Callable;
 
-public class ImageProcessing {
+public class Recognition implements Callable<OCRRequest.Response> {
 
-    static OCRRequest.Response queryResult(BufferedImage image, String appID, String appKey) throws IOException {
+    private Image clipboardImage;
+    private String appID;
+    private String appKey;
+
+    Recognition(Image clipboardImage, String appID, String appKey) {
+
+        this.clipboardImage = clipboardImage;
+        this.appID = appID;
+        this.appKey = appKey;
+
+    }
+
+    @Override
+    public OCRRequest.Response call() throws IOException {
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
+        BufferedImage image = SwingFXUtils.fromFXImage(this.clipboardImage, null);
+
         ImageIO.write(image, "png", byteArrayOutputStream);
+
         byte[] imageInByte = byteArrayOutputStream.toByteArray();
 
         JsonObject parameters = new JsonObject();
@@ -65,29 +83,7 @@ public class ImageProcessing {
 
         parameters.add("format_options", formatOptions);
 
-        return OCRRequest.getResult(parameters, appID, appKey);
-
-    }
-
-    public static void main(String[] args) throws IOException, UnsupportedFlavorException {
-
-        String appID = System.getenv("APP_ID");
-        String appKey = System.getenv("APP_KEY");
-
-        BufferedImage lastImage = Util.getImageFromClipboard();
-
-        if (lastImage != null) {
-
-            OCRRequest.Response response = queryResult(lastImage, appID, appKey);
-
-            System.out.println(response.getLatex_styled() + "\n");
-            System.out.println(response.getText() + "\n");
-            System.out.println(response.getText_display() + "\n");
-            System.out.println(Util.replaceDoubleDollarWithWrapper(response.getText_display()) + "\n");
-
-            System.out.println("Confidence: " + response.getLatex_confidence());
-
-        }
+        return OCRRequest.getResult(parameters, this.appID, this.appKey);
 
     }
 

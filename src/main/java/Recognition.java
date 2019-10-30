@@ -3,6 +3,7 @@ import com.google.gson.JsonObject;
 import javafx.scene.image.Image;
 
 import javafx.embed.swing.SwingFXUtils;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -24,14 +25,13 @@ public class Recognition implements Callable<OCRRequest.Response> {
 
     }
 
-    @Override
-    public OCRRequest.Response call() throws IOException {
+    private JsonObject constructParameters(Image image) throws IOException {
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
-        BufferedImage image = SwingFXUtils.fromFXImage(this.clipboardImage, null);
+        BufferedImage bufferedImage = SwingFXUtils.fromFXImage(image, null);
 
-        ImageIO.write(image, "png", byteArrayOutputStream);
+        ImageIO.write(bufferedImage, "png", byteArrayOutputStream);
 
         byte[] imageInByte = byteArrayOutputStream.toByteArray();
 
@@ -82,6 +82,15 @@ public class Recognition implements Callable<OCRRequest.Response> {
         formatOptions.add("latex_styled", transformOptions);
 
         parameters.add("format_options", formatOptions);
+
+        return parameters;
+
+    }
+
+    @Override
+    public OCRRequest.Response call() throws IOException {
+
+        JsonObject parameters = constructParameters(this.clipboardImage);
 
         return OCRRequest.getResult(parameters, this.appID, this.appKey);
 

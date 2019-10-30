@@ -32,11 +32,8 @@ class OCRRequest {
     static class Response {
 
         private String text;
-
         private String text_display;
-
         private String latex_styled;
-
         private double latex_confidence;
 
         String getText() {

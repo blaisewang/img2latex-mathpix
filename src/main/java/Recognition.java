@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.Base64;
 import java.util.concurrent.Callable;
 
+
 public class Recognition implements Callable<OCRRequest.Response> {
 
     private static JsonObject parameters = new JsonObject();

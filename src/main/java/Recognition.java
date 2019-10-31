@@ -1,8 +1,7 @@
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import javafx.scene.image.Image;
-
 import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.image.Image;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -14,14 +13,12 @@ import java.util.concurrent.Callable;
 public class Recognition implements Callable<OCRRequest.Response> {
 
     private Image clipboardImage;
-    private String appID;
-    private String appKey;
+    private static final String APP_ID = System.getenv("APP_ID");
+    private static final String APP_KEY = System.getenv("APP_KEY");
 
-    Recognition(Image clipboardImage, String appID, String appKey) {
+    Recognition(Image clipboardImage) {
 
         this.clipboardImage = clipboardImage;
-        this.appID = appID;
-        this.appKey = appKey;
 
     }
 
@@ -92,7 +89,7 @@ public class Recognition implements Callable<OCRRequest.Response> {
 
         JsonObject parameters = constructParameters(this.clipboardImage);
 
-        return OCRRequest.getResult(parameters, this.appID, this.appKey);
+        return OCRRequest.getResult(parameters, APP_ID, APP_KEY);
 
     }
 

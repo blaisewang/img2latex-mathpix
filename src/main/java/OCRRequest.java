@@ -11,14 +11,17 @@ import org.apache.http.util.EntityUtils;
 
 class OCRRequest {
 
-    static Response getResult(JsonObject parameters, String appID, String appKey) throws IOException {
+    private static final String APP_ID = System.getenv("APP_ID");
+    private static final String APP_KEY = System.getenv("APP_KEY");
+
+    static Response getResult(JsonObject parameters) throws IOException {
 
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         StringEntity requestParameters = new StringEntity(parameters.toString());
 
         HttpPost request = new HttpPost("https://api.mathpix.com/v3/latex");
-        request.addHeader("app_id", appID);
-        request.addHeader("app_key", appKey);
+        request.addHeader("app_id", APP_ID);
+        request.addHeader("app_key", APP_KEY);
         request.addHeader("Content-type", "application/json");
         request.setEntity(requestParameters);
 

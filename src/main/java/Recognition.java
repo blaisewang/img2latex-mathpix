@@ -12,30 +12,12 @@ import java.util.concurrent.Callable;
 
 public class Recognition implements Callable<OCRRequest.Response> {
 
-    private Image clipboardImage;
-    private static final String APP_ID = System.getenv("APP_ID");
-    private static final String APP_KEY = System.getenv("APP_KEY");
+    private static JsonObject parameters = new JsonObject();
 
-    Recognition(Image clipboardImage) {
 
-        this.clipboardImage = clipboardImage;
+    Recognition() {
 
-    }
-
-    private JsonObject constructParameters(Image image) throws IOException {
-
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-
-        BufferedImage bufferedImage = SwingFXUtils.fromFXImage(image, null);
-
-        ImageIO.write(bufferedImage, "png", byteArrayOutputStream);
-
-        byte[] imageInByte = byteArrayOutputStream.toByteArray();
-
-        JsonObject parameters = new JsonObject();
-
-        String src = "data:image/jpg;base64," + Base64.getEncoder().encodeToString(imageInByte);
-        parameters.addProperty("src", src);
+        parameters.addProperty("src", "");
 
         JsonArray ocrParameters = new JsonArray();
         ocrParameters.add("math");
@@ -55,8 +37,8 @@ public class Recognition implements Callable<OCRRequest.Response> {
         transformParameters.add("long_frac");
 
         JsonArray displayMathDelimiterParameters = new JsonArray();
-        displayMathDelimiterParameters.add("\n$$\n");
-        displayMathDelimiterParameters.add("\n$$\n");
+        displayMathDelimiterParameters.add("\n$$\n ");
+        displayMathDelimiterParameters.add(" \n$$\n");
 
         JsonArray mathDelimiterParameters = new JsonArray();
         mathDelimiterParameters.add("\\(");
@@ -80,16 +62,37 @@ public class Recognition implements Callable<OCRRequest.Response> {
 
         parameters.add("format_options", formatOptions);
 
-        return parameters;
+    }
+
+    Boolean setSrcParameters(Image image) {
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+
+        BufferedImage bufferedImage = SwingFXUtils.fromFXImage(image, null);
+
+        try {
+            ImageIO.write(bufferedImage, "png", byteArrayOutputStream);
+
+            byte[] imageInByte = byteArrayOutputStream.toByteArray();
+
+            String src = "data:image/jpg;base64," + Base64.getEncoder().encodeToString(imageInByte);
+
+            parameters.addProperty("src", src);
+
+            return true;
+
+        } catch (IOException e) {
+
+            return false;
+
+        }
 
     }
 
     @Override
     public OCRRequest.Response call() throws IOException {
 
-        JsonObject parameters = constructParameters(this.clipboardImage);
-
-        return OCRRequest.getResult(parameters, APP_ID, APP_KEY);
+        return OCRRequest.getResult(parameters);
 
     }
 

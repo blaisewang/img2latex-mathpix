@@ -14,7 +14,6 @@ public class Recognition implements Callable<OCRRequest.Response> {
 
     private static JsonObject parameters = new JsonObject();
 
-
     Recognition() {
 
         parameters.addProperty("src", "");
@@ -71,6 +70,7 @@ public class Recognition implements Callable<OCRRequest.Response> {
         BufferedImage bufferedImage = SwingFXUtils.fromFXImage(image, null);
 
         try {
+
             ImageIO.write(bufferedImage, "png", byteArrayOutputStream);
 
             byte[] imageInByte = byteArrayOutputStream.toByteArray();

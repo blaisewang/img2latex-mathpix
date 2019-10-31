@@ -9,6 +9,8 @@ import java.util.concurrent.Future;
 
 class Utilities {
 
+    private static Recognition recognition = new Recognition();
+
 
     static Image getClipboardImage() {
 
@@ -32,23 +34,32 @@ class Utilities {
 
     static OCRRequest.Response concurrentCall(Image image) {
 
-        Recognition recognition = new Recognition(image);
-
         ExecutorService executor = Executors.newSingleThreadExecutor();
-        Future<OCRRequest.Response> result = executor.submit(recognition);
 
-        try {
-            return result.get();
-        } catch (InterruptedException | ExecutionException e) {
-            return null;
+        if (recognition.setSrcParameters(image)) {
+
+            Future<OCRRequest.Response> result = executor.submit(recognition);
+
+            try {
+
+                return result.get();
+
+            } catch (InterruptedException | ExecutionException e) {
+
+                return null;
+
+            }
+
         }
+
+        return null;
 
     }
 
     static String replaceDoubleDollarWithWrapper(String doubleDollarResult) {
 
-        String result = doubleDollarResult.replaceFirst("\\$\\$\n", "\\\\begin{equation}\n");
-        return result.replaceFirst("\n\\$\\$", "\n\\\\end{equation}");
+        String result = doubleDollarResult.replaceFirst("\\$\\$\n ", "\\\\begin{equation}\n ");
+        return result.replaceFirst(" \n\\$\\$", " \n\\\\end{equation}");
 
     }
 

@@ -2,15 +2,30 @@ import javafx.scene.image.Image;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.io.IOException;
+import java.util.concurrent.*;
 
 
 class Utilities {
 
     private static Recognition recognition = new Recognition();
+
+    static boolean isMacDarkMode() {
+
+        try {
+
+            final Process process = Runtime.getRuntime().exec(new String[]{"defaults", "read", "-g", "AppleInterfaceStyle"});
+            process.waitFor(100, TimeUnit.MILLISECONDS);
+            
+            return process.exitValue() == 0;
+
+        } catch (IOException | InterruptedException | IllegalThreadStateException e) {
+
+            return false;
+
+        }
+
+    }
 
     static Image getClipboardImage() {
 

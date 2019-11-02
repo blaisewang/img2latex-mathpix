@@ -12,7 +12,6 @@ class Utilities {
 
     private static Recognition recognition = new Recognition();
 
-
     static Image getClipboardImage() {
 
         final Clipboard clipboard = Clipboard.getSystemClipboard();
@@ -57,10 +56,16 @@ class Utilities {
 
     }
 
-    static String replaceDoubleDollarWithWrapper(String doubleDollarResult) {
 
-        String result = doubleDollarResult.replaceFirst("\\$\\$\n ", "\\\\begin{equation}\n ");
-        return result.replaceFirst(" \n\\$\\$", " \n\\\\end{equation}");
+    static String addDoubleDollarWrapper(String originalResult) {
+
+        return "$$\n " + originalResult + " \n$$";
+
+    }
+
+    static String addEquationWrapper(String originalResult) {
+
+        return "\\begin{equation}\n " + originalResult + " \n\\end{equation}";
 
     }
 

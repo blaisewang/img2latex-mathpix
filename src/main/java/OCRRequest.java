@@ -1,5 +1,3 @@
-import java.io.IOException;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.apache.http.HttpResponse;
@@ -8,6 +6,9 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 
 class OCRRequest {
@@ -39,6 +40,7 @@ class OCRRequest {
         private String text_display;
         private String latex_styled;
         private double latex_confidence;
+        private ArrayList<String> detection_list;
 
         String getText() {
             return text;
@@ -55,6 +57,30 @@ class OCRRequest {
 
         double getLatex_confidence() {
             return latex_confidence;
+        }
+
+        Boolean is_not_math() {
+            return detection_list.contains("is_not_math");
+        }
+
+        public void setText(String text) {
+            this.text = text;
+        }
+
+        public void setText_display(String text_display) {
+            this.text_display = text_display;
+        }
+
+        public void setLatex_styled(String latex_styled) {
+            this.latex_styled = latex_styled;
+        }
+
+        public void setLatex_confidence(double latex_confidence) {
+            this.latex_confidence = latex_confidence;
+        }
+
+        public void setDetection_list(ArrayList<String> detection_list) {
+            this.detection_list = detection_list;
         }
 
     }

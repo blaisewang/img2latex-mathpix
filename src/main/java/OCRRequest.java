@@ -1,6 +1,7 @@
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -18,7 +19,10 @@ class OCRRequest {
 
     static Response getResult(JsonObject parameters) throws IOException {
 
-        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+        RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(10000).build();
+
+        CloseableHttpClient httpClient = HttpClientBuilder.create().setDefaultRequestConfig(requestConfig).build();
+
         StringEntity requestParameters = new StringEntity(parameters.toString());
 
         HttpPost request = new HttpPost("https://api.mathpix.com/v3/latex");
@@ -55,7 +59,7 @@ class OCRRequest {
             return latex_styled;
         }
 
-        double getLatex_confidence() {
+        Double getLatex_confidence() {
             return latex_confidence;
         }
 

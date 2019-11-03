@@ -40,11 +40,16 @@ class OCRRequest {
 
     static class Response {
 
+        private String error;
         private String text;
         private String text_display;
         private String latex_styled;
         private double latex_confidence;
         private ArrayList<String> detection_list;
+
+        String getError() {
+            return error;
+        }
 
         String getText() {
             return text;
@@ -65,6 +70,10 @@ class OCRRequest {
 
         Boolean is_not_math() {
             return detection_list.contains("is_not_math");
+        }
+
+        public void setError(String error) {
+            this.error = error;
         }
 
         public void setText(String text) {

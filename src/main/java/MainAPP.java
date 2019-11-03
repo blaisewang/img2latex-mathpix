@@ -18,8 +18,6 @@ public class MainAPP extends Application {
 
     private Stage stage;
 
-    private Boolean hasAddToTray;
-
     private static Image lastImage = null;
 
     private BackGridPane backGridPane = new BackGridPane();
@@ -72,6 +70,8 @@ public class MainAPP extends Application {
     @Override
     public void start(Stage primaryStage) {
 
+        boolean hasAddIconToTray = false;
+
         this.stage = primaryStage;
 
         Platform.setImplicitExit(false);
@@ -80,7 +80,7 @@ public class MainAPP extends Application {
 
         try {
 
-            addIconToTray();
+            hasAddIconToTray = addIconToTray();
 
         } catch (IOException | AWTException e) {
 
@@ -102,7 +102,7 @@ public class MainAPP extends Application {
 
         this.stage.getIcons().add(new Image(inputStream));
 
-        if (hasAddToTray) {
+        if (hasAddIconToTray) {
 
             this.stage.initStyle(StageStyle.UTILITY);
 
@@ -125,15 +125,13 @@ public class MainAPP extends Application {
 
     }
 
-    private void addIconToTray() throws IOException, AWTException {
+    private Boolean addIconToTray() throws IOException, AWTException {
 
         Toolkit.getDefaultToolkit();
 
         if (!SystemTray.isSupported()) {
 
-            hasAddToTray = false;
-
-            return;
+            return false;
 
         }
 
@@ -188,7 +186,7 @@ public class MainAPP extends Application {
 
         tray.add(trayIcon);
 
-        hasAddToTray = true;
+        return true;
 
     }
 

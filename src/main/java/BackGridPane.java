@@ -10,6 +10,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 
+/**
+ * BackGridPane.java
+ * Used for display current clipboard image and confidence progressbar.
+ * The back grid panel has 2 Labels, 1 ImageView with 1 BorderPane, 1 Button, and 1 ProgressBar.
+ */
 class BackGridPane extends GridPane {
 
     private static final int PREFERRED_WIDTH = 390;
@@ -32,16 +37,22 @@ class BackGridPane extends GridPane {
 
     private static FrontGridPane frontGridPane = new FrontGridPane(PREFERRED_MARGIN, TEXT_MARGIN, PANE_BORDER_STROKE);
 
+    // get components from FrontGridPane instance
     private static CopiedButton copiedButton = frontGridPane.getCopiedButton();
-    private static PressCopyTextField latexStyledResultTextField = frontGridPane.getLatexStyledResultTextField();
-    private static PressCopyTextField textResultTextField = frontGridPane.getTextResultTextField();
-    private static PressCopyTextField nNBlockResultTextField = frontGridPane.getNNBlockResultTextField();
-    private static PressCopyTextField nBlockResultTextField = frontGridPane.getNBlockResultTextField();
+    private static PressCopyTextField latexStyledResult = frontGridPane.getLatexStyledResult();
+    private static PressCopyTextField textResult = frontGridPane.getTextResult();
+    private static PressCopyTextField notNumberedBlockModeResult = frontGridPane.getNotNumberedBlockModeResult();
+    private static PressCopyTextField numberedBlockModeResult = frontGridPane.getNumberedBlockModeResult();
 
+    /**
+     * BackGridPane Initialisation.
+     */
     BackGridPane() {
 
         this.setPadding(new Insets(PREFERRED_MARGIN, 0, PREFERRED_MARGIN, 0));
         this.setBackground(BACKGROUND);
+
+        // 6 * 1 layout
         this.setVgap(6);
         this.setHgap(1);
 
@@ -50,14 +61,19 @@ class BackGridPane extends GridPane {
         imageViewText.setTextFill(new Color(0.149, 0.149, 0.149, 1));
         this.add(imageViewText, 0, 0);
 
+        // preserve image ratio
         clipboardImageView.setPreserveRatio(true);
+        // maximum width is 390 maximum height is 150
+        // image larger than the above size will be scaled down
         clipboardImageView.setFitWidth(PREFERRED_WIDTH);
         clipboardImageView.setFitHeight(150);
 
+        // use BorderPane to add a border stroke to the ImageView
         borderPane.setBorder(new Border(PANE_BORDER_STROKE));
         borderPane.setPrefSize(PREFERRED_WIDTH, 150);
         this.add(borderPane, 0, 1);
 
+        // is not a part of focus traversal cycle
         submitButton.setFocusTraversable(false);
         GridPane.setHalignment(submitButton, HPos.CENTER);
         GridPane.setMargin(submitButton, new Insets(TEXT_MARGIN, 0, TEXT_MARGIN, 0));
@@ -67,39 +83,43 @@ class BackGridPane extends GridPane {
 
             if (clipboardImage != null) {
 
+                // clear last location
                 copiedButton.setVisible(false);
 
                 OCRRequest.Response response = Utilities.concurrentCall(clipboardImage);
 
+                // if response received
                 if (response != null) {
-
+                    // error occurred
                     if (response.getError() != null) {
-
+                        // clear error image and last results
                         clearErrorImage();
-
+                        // show error content with a alert dialog
                         Utilities.showErrorDialog(response.getError());
 
                         return;
-
                     }
 
+                    // put default result into the system clipboard
                     Utilities.putStringIntoClipboard(response.getLatex_styled());
+                    // set CopiedButton to the corresponded location
                     frontGridPane.setCopiedButtonRowIndex();
 
-                    latexStyledResultTextField.setFormattedText(response.getLatex_styled());
-                    textResultTextField.setFormattedText(response.getText());
-
+                    // set results to corresponded TextFields.
+                    latexStyledResult.setFormattedText(response.getLatex_styled());
+                    textResult.setFormattedText(response.getText());
+                    // no equation found in image
                     if (response.is_not_math()) {
-                        nNBlockResultTextField.setFormattedText(Utilities.addDoubleDollarWrapper(response.getLatex_styled()));
+                        // add $$ ... $$ wrapper, similar handling as Mathpix Snip
+                        notNumberedBlockModeResult.setFormattedText(Utilities.addDoubleDollarWrapper(response.getLatex_styled()));
                     } else {
-                        nNBlockResultTextField.setFormattedText(response.getText_display());
+                        notNumberedBlockModeResult.setFormattedText(response.getText_display());
                     }
-
-                    nBlockResultTextField.setFormattedText(Utilities.addEquationWrapper(response.getLatex_styled()));
-
+                    numberedBlockModeResult.setFormattedText(Utilities.addEquationWrapper(response.getLatex_styled()));
 
                     double confidence = response.getLatex_confidence();
 
+                    // minimal confidence is set to 1%
                     if (confidence > 0 && confidence < 0.01) {
                         confidence = 0.01;
                     }
@@ -108,12 +128,14 @@ class BackGridPane extends GridPane {
 
                 } else {
 
+                    // no response received
                     clearErrorImage();
 
                 }
 
             } else {
 
+                // no image in the system clipboard
                 Utilities.showErrorDialog("No image found in the clipboard");
 
             }
@@ -124,55 +146,56 @@ class BackGridPane extends GridPane {
 
         this.add(frontGridPane, 0, 3);
 
+        // "Confidence" label text
         confidenceText.setFont(Font.font(12));
         GridPane.setMargin(confidenceText, new Insets(TEXT_MARGIN, 0, TEXT_MARGIN, PREFERRED_MARGIN));
         confidenceText.setTextFill(new Color(0.149, 0.149, 0.149, 1));
         this.add(confidenceText, 0, 4);
 
+        // confidence progress bar
         confidenceProgressBar.setPrefSize(PREFERRED_WIDTH - 2 * PREFERRED_MARGIN - 1, 20);
         GridPane.setMargin(confidenceProgressBar, new Insets(0, 0, 0, PREFERRED_MARGIN));
-
+        // red for less than 20% certainty, yellow for 20% ~ 60%, and green for above 60%
         confidenceProgressBar.progressProperty().addListener((observable, oldValue, newValue) -> {
-
             if (newValue.doubleValue() < 0.2) {
-
                 setStyle("-fx-accent: #ec4d3d;");
-
             } else if (newValue.doubleValue() < 0.6) {
-
                 setStyle("-fx-accent: #f8cd46;");
-
             } else {
-
                 setStyle("-fx-accent: #63c956;");
-
             }
-
         });
-
         this.add(confidenceProgressBar, 0, 5);
 
     }
 
+    /**
+     * Method to clear error image and last recognition results
+     */
     private void clearErrorImage() {
-
+        // put empty string into the clipboard to avoid displaying the same error image again
         Utilities.putStringIntoClipboard("");
 
+        // set empty image
         clipboardImageView.setImage(null);
 
-        latexStyledResultTextField.setText("");
-        textResultTextField.setText("");
-        nNBlockResultTextField.setText("");
-        nBlockResultTextField.setText("");
+        // clear result TextFields
+        latexStyledResult.setText("");
+        textResult.setText("");
+        notNumberedBlockModeResult.setText("");
+        numberedBlockModeResult.setText("");
 
+        // set 0 confidence
         confidenceProgressBar.setProgress(0);
-
     }
 
-    void setImageView(Image image) {
-
+    /**
+     * If new image found in the system clipboard, this method is used to display new image.
+     *
+     * @param image image to be displayed at the ImageView.
+     */
+    void setClipboardImageView(Image image) {
         clipboardImageView.setImage(image);
-
     }
 
 }

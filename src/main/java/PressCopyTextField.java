@@ -32,7 +32,15 @@ class PressCopyTextField extends TextField {
 
         this.addEventHandler(MouseEvent.MOUSE_EXITED, event -> this.setStyle("-fx-text-inner-color: black;"));
 
-        this.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> Utilities.putStringIntoClipboard(this.getFormattedText()));
+        this.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+
+            if (getLength() > 0) {
+
+                Utilities.putStringIntoClipboard(this.getFormattedText());
+
+            }
+            
+        });
 
     }
 

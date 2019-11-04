@@ -1,14 +1,13 @@
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 
-import java.awt.*;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Optional;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 import java.util.concurrent.*;
 
 
@@ -20,6 +19,8 @@ class Utilities {
 
     // Recognition object initialisation
     private static Recognition recognition = new Recognition();
+
+    private final static Path configFilePath = Paths.get("./config");
 
     /**
      * Original source: https://stackoverflow.com/a/33477375/4658633
@@ -72,12 +73,12 @@ class Utilities {
      * @param image image to be recognised.
      * @return recognised result.
      */
-    static OCRRequest.Response concurrentCall(Image image) {
+    static Response concurrentCall(Image image) {
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
 
         if (recognition.setSrcParameters(image)) {
-            Future<OCRRequest.Response> result = executor.submit(recognition);
+            Future<Response> result = executor.submit(recognition);
             try {
                 return result.get();
             } catch (InterruptedException | ExecutionException e) {
@@ -85,6 +86,47 @@ class Utilities {
                 showErrorDialog("Broken internet connection");
                 return null;
             }
+        }
+
+        return null;
+
+    }
+
+    /**
+     * Create a standard config file template.
+     */
+    static void createConfigFile() {
+
+        String text = "APP_ID=YOUR_ID" + System.lineSeparator() + "APP_KEY=YOUR_APP_KEY";
+
+        // early return
+        if (Files.exists(configFilePath)) {
+            return;
+        }
+
+        try {
+            // create a config template
+            Files.createFile(configFilePath);
+            Files.write(configFilePath, text.getBytes());
+        } catch (IOException ignored) {
+
+        }
+
+    }
+
+    /**
+     * Read app_id and app_key config from ./config file.
+     *
+     * @return AppConfig object.
+     */
+    static AppConfig readConfigFile() {
+
+        try {
+            // read config file
+            List<String> configs = Files.readAllLines(configFilePath);
+            return new AppConfig(configs.get(0).split("APP_ID=")[1], configs.get(1).split("APP_KEY=")[1]);
+        } catch (IOException | ArrayIndexOutOfBoundsException e) {
+            e.printStackTrace();
         }
 
         return null;
@@ -105,24 +147,7 @@ class Utilities {
         alert.setHeaderText(null);
         alert.setContentText(context);
 
-        // add an issue button
-        ButtonType issueButton = new ButtonType("Open an issue");
-        alert.getButtonTypes().add(issueButton);
-
-        // get the selected result
-        Optional<ButtonType> result = alert.showAndWait();
-
-        // if the value is present
-        if (result.isPresent()) {
-            // issue button clicked
-            if (result.get() == issueButton) {
-                try {
-                    // open the project page to open an issue if necessary
-                    Desktop.getDesktop().browse(new URI("https://github.com/blaisewang/img2latex-mathpix/issues"));
-                } catch (IOException | URISyntaxException ignored) {
-                }
-            }
-        }
+        alert.showAndWait();
 
     }
 

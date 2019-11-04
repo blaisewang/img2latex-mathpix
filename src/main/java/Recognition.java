@@ -16,7 +16,7 @@ import java.util.concurrent.Callable;
  * It initialises a common JsonObject used for request with unchanged parameters.
  * Set the "src" value with base64 encoded clipboard image before each request.
  */
-public class Recognition implements Callable<OCRRequest.Response> {
+public class Recognition implements Callable<Response> {
 
     private static JsonObject parameters = new JsonObject();
 
@@ -127,7 +127,7 @@ public class Recognition implements Callable<OCRRequest.Response> {
      * @throws IOException if there is an internet connection error.
      */
     @Override
-    public OCRRequest.Response call() throws IOException {
+    public Response call() throws IOException {
         return OCRRequest.getResult(parameters);
     }
 

@@ -86,7 +86,7 @@ class BackGridPane extends GridPane {
                 // clear last location
                 copiedButton.setVisible(false);
 
-                OCRRequest.Response response = Utilities.concurrentCall(clipboardImage);
+                Response response = Utilities.concurrentCall(clipboardImage);
 
                 // if response received
                 if (response != null) {

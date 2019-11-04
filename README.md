@@ -1,1 +1,1 @@
-# latex2img-mathpix
+# Image2LaTeX

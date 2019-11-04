@@ -7,7 +7,10 @@ plugins {
 group 'blaise.img2latex'
 version '0.0.1'
 
-sourceCompatibility = 11
+compileJava {
+    sourceCompatibility = 11
+    targetCompatibility = 11
+}
 
 repositories {
     mavenCentral()
@@ -20,12 +23,19 @@ javafx {
 
 dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
+    implementation "org.openjfx:javafx-graphics:13.0.1:mac"
+    implementation "org.openjfx:javafx-graphics:13.0.1:win"
+    implementation "org.openjfx:javafx-graphics:13.0.1:linux"
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
     implementation group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.12'
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.10'
 }
 
-mainClassName = 'Main'
+
+application {
+    mainClassName = 'Main'
+    applicationName = 'Image2LaTeX'
+}
 
 jar {
     from {

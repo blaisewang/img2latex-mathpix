@@ -101,6 +101,9 @@ public class MainAPP extends Application {
     @Override
     public void start(Stage primaryStage) {
 
+        // create config file if it does not exists
+        Utilities.createConfigFile();
+
         // indicate whether the tray icon was successfully added to the menu bar
         Boolean hasAddIconToTray = false;
 

@@ -131,7 +131,7 @@ public class MainAPP extends Application {
         this.stage.setTitle(APPLICATION_TITLE);
 
         // load icon resources
-        InputStream iconInputStream = getClass().getClassLoader().getResourceAsStream("icon-blue.png");
+        InputStream iconInputStream = getClass().getClassLoader().getResourceAsStream("icon-other.png");
         assert iconInputStream != null;
 
         // set the title bar app icon
@@ -187,17 +187,17 @@ public class MainAPP extends Application {
             // dark mode
             if (Utilities.isMacDarkMode()) {
                 // load the white colour icon
-                iconInputStream = getClass().getClassLoader().getResourceAsStream("icon-dark.png");
+                iconInputStream = getClass().getClassLoader().getResourceAsStream("icon-mac-dark.png");
             } else {
                 // load the black colour icon
-                iconInputStream = getClass().getClassLoader().getResourceAsStream("icon.png");
+                iconInputStream = getClass().getClassLoader().getResourceAsStream("icon-mac.png");
             }
         } else if (SystemUtils.IS_OS_WINDOWS) {
             // while colour icon for windows
-            iconInputStream = getClass().getClassLoader().getResourceAsStream("icon.png");
+            iconInputStream = getClass().getClassLoader().getResourceAsStream("icon-windows.png");
         } else {
             // blue colour icon for the rest OS
-            iconInputStream = getClass().getClassLoader().getResourceAsStream("icon-blue.png");
+            iconInputStream = getClass().getClassLoader().getResourceAsStream("icon-other.png");
         }
         assert iconInputStream != null;
 

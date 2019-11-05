@@ -52,3 +52,6 @@ gradle-app.setting
 
 # App config file
 config
+
+# JDK directory
+jdk

@@ -32,7 +32,6 @@ dependencies {
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.10'
 }
 
-
 application {
     mainClassName = 'Main'
     applicationName = 'Image2LaTeX'
@@ -49,7 +48,7 @@ jar {
 
 runtime {
     options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
-    targetPlatform('linux', 'jdk/linux-jdk-11.0.2')
-    targetPlatform('macos', 'jdk/osx-jdk-11.0.2.jdk/Contents/Home')
-    targetPlatform('windows', 'jdk/windows-jdk-11.0.2')
+    targetPlatform('linux', 'jdk/linux-jdk-11.0.5')
+    targetPlatform('macos', 'jdk/osx-jdk-11.0.5.jdk/Contents/Home')
+    targetPlatform('windows', 'jdk/windows-jdk-11.0.5')
 }

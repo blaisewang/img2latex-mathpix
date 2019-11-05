@@ -11,6 +11,10 @@ With the help of [MathpixOCR](https://mathpix.com/ocr/) and this supplementary a
 [Image2LaTeX](https://github.com/blaisewang/img2latex-mathpix/) is a personal side project that keeps only core functions of the [Snip](https://mathpix.com/) such as convert images to certain LaTeX equation formats and OCR.
 For other advanced functions and unlimited snips, subscribe to the [Snip](https://mathpix.com/) for $4.99 per month.
 
+## Features
+
+See the [features](https://mathpix.com/ocr#features) section on MathpixOCR website.
+
 ## Requirements
 
 - Your API keys in your [MathpixOCR dashboard](https://dashboard.mathpix.com/) (different from the Mathpix account used in the Snip app)

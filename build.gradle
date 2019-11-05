@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'application'
+    id "org.beryx.runtime" version "1.7.1"
     id 'org.openjfx.javafxplugin' version '0.0.8'
 }
 
@@ -44,4 +45,11 @@ jar {
     manifest {
         attributes 'Main-Class': "Main"
     }
+}
+
+runtime {
+    options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
+    targetPlatform('linux', 'jdk/linux-jdk-11.0.2')
+    targetPlatform('macos', 'jdk/osx-jdk-11.0.2.jdk/Contents/Home')
+    targetPlatform('windows', 'jdk/windows-jdk-11.0.2')
 }

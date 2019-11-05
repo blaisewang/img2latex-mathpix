@@ -97,7 +97,7 @@ class Utilities {
      */
     static void createConfigFile() {
 
-        String text = "APP_ID=YOUR_ID" + System.lineSeparator() + "APP_KEY=YOUR_APP_KEY";
+        String text = "APP_ID=YOUR_APP_ID" + System.lineSeparator() + "APP_KEY=YOUR_APP_KEY";
 
         // early return
         if (Files.exists(configFilePath)) {

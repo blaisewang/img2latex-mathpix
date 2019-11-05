@@ -49,4 +49,7 @@ jar {
 
 runtime {
     options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
+    targetPlatform('linux', 'jdk/linux-jdk-11.0.2')
+    targetPlatform('macos', 'jdk/osx-jdk-11.0.2.jdk/Contents/Home')
+    targetPlatform('windows', 'jdk/windows-jdk-11.0.2')
 }

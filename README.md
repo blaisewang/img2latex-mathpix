@@ -29,7 +29,7 @@ APP_KEY=YOUR_APP_KEY
 Replace `YOUR_APP_ID` and `YOUR_APP_KEY` with your API keys.
 
 Put the `config` file in the same directory location as the executable app.
-For example, if you are using native build version `Image2LaTeX-x.x.x.zip`, place it to extracted location `Image2LaTeX-x.x.x/bin/` .
+For example, if you are using native build version `Image2LaTeX-x.x.x-OS.zip`, place it to extracted location `Image2LaTeX-OS/bin/` .
 
 Otherwise, this app will create a template `config` in the aforementioned location at the first launch.
 Replace your credentials before the first request is submitted.
@@ -39,7 +39,7 @@ This app will also not send your API keys to others except for MathpixOCR API se
 
 ## Usage
 
-If you downloaded `Image2LaTeX-x.x.x.zip`, run this app with double-clicking the executable `Image2LaTeX` (or `Image2LaTeX.bat` on Windows) at `Image2LaTeX-x.x.x/bin/` or with:
+If you downloaded `Image2LaTeX-x.x.x-OS.zip`, run this app with double-clicking the executable `Image2LaTeX` (or `Image2LaTeX.bat` on Windows) at `Image2LaTeX-OS/bin/` or with:
 
 ```
 ./Image2LaTeX
@@ -70,7 +70,7 @@ At that time, I will drop the release of `.jar` and `.zip` files and no one (exc
 
 #### Why two types of the application released? Which one I should download?
 
-The `Image2LaTeX-x.x.x.zip` is built with the [Badass Runtime Plugin](https://badass-runtime-plugin.beryx.org/releases/latest/) which has a huge size.
+The `Image2LaTeX-x.x.x-OS.zip` is built with the [Badass Runtime Plugin](https://badass-runtime-plugin.beryx.org/releases/latest/) which has a huge size.
 You don't need to have JDK 11 installed for running this version.
 
 Considering the people using similar apps, I assumed that a large percentage of users should have JDK installed.

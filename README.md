@@ -1,15 +1,21 @@
 # Image2LaTeX
 
-[![CI Status](https://github.com/blaisewang/img2latex-mathpix/workflows/CI/badge.svg)](https://github.com/blaisewang/img2latex-mathpix/actions)[![Releases](https://img.shields.io/github/v/release/blaisewang/img2latex-mathpix?include_prereleases)](https://github.com/blaisewang/img2latex-mathpix/releases)[![License](https://img.shields.io/github/license/blaisewang/img2latex-mathpix)](https://github.com/blaisewang/img2latex-mathpix/blob/master/LICENSE)
+[![CI Status](https://github.com/blaisewang/img2latex-mathpix/workflows/CI/badge.svg)](https://github.com/blaisewang/img2latex-mathpix/actions)
+[![Releases](https://img.shields.io/github/v/release/blaisewang/img2latex-mathpix?include_prereleases)](https://github.com/blaisewang/img2latex-mathpix/releases)
+[![License](https://img.shields.io/github/license/blaisewang/img2latex-mathpix)](https://github.com/blaisewang/img2latex-mathpix/blob/master/LICENSE)
 
-[Snip](https://mathpix.com/) is an amazing app built by Mathpix to help you extract LaTeX (also text) from documents. It gives you the first 50 snips for free every single month. With the help of [MathpixOCR](https://mathpix.com/ocr/) and this supplementary app, you can now make up to 1000 OCR requests per month for free.
+[Snip](https://mathpix.com/) is an amazing app built by Mathpix to help you extract LaTeX (also text) from documents.
+It gives you the first 50 snips for free every single month.
+With the help of [MathpixOCR](https://mathpix.com/ocr/) and this supplementary app, you can now make up to 1000 OCR requests per month for free.
 
-[Image2LaTeX](https://github.com/blaisewang/img2latex-mathpix/) is a personal side project that keeps only core functions of the [Snip](https://mathpix.com/) such as convert images to certain LaTeX equation formats and OCR. For other advanced functions and unlimited snips, subscribe to the [Snip](https://mathpix.com/) for $4.99 per month.
+[Image2LaTeX](https://github.com/blaisewang/img2latex-mathpix/) is a personal side project that keeps only core functions of the [Snip](https://mathpix.com/) such as convert images to certain LaTeX equation formats and OCR.
+For other advanced functions and unlimited snips, subscribe to the [Snip](https://mathpix.com/) for $4.99 per month.
 
-## Requirments
+## Requirements
 
 - Your API keys in your [MathpixOCR dashboard](https://dashboard.mathpix.com/) (different from the Mathpix account used in the Snip app)
-- JDK 11 or higher ([OpenJDK](https://openjdk.java.net/) is highly recommended) if you plan to use `Image2LaTeX-x.x.x.jar`
+
+- JDK 11 or higher version ([OpenJDK](https://openjdk.java.net/) is highly recommended) if you plan to use `Image2LaTeX-x.x.x.jar`
 
 ## Prerequisites for using this app
 
@@ -20,13 +26,16 @@ APP_ID=YOUR_APP_ID
 APP_KEY=YOUR_APP_KEY
 ```
 
-Replace `YOUR_APP_ID` and `YOUR_APP_KEY` with your API keys. 
+Replace `YOUR_APP_ID` and `YOUR_APP_KEY` with your API keys.
 
-Put the `config` file in the same directory location as the executable app. For example, if you are using native build version `Image2LaTeX-x.x.x.zip`, place it to extracted location `Image2LaTeX-x.x.x/bin/` .
+Put the `config` file in the same directory location as the executable app.
+For example, if you are using native build version `Image2LaTeX-x.x.x.zip`, place it to extracted location `Image2LaTeX-x.x.x/bin/` .
 
-Otherwise, this app will create a template `config` in the aforementioned location at the first launch. Replace your creaditals before the first request is submitted.
+Otherwise, this app will create a template `config` in the aforementioned location at the first launch.
+Replace your credentials before the first request is submitted.
 
-**Do not share your `config` file with others.** This app will also not send your API keys to others except for MathpixOCR API server (see [OCRRequest.java](https://github.com/blaisewang/img2latex-mathpix/blob/master/src/main/java/OCRRequest.java) to learn how your API keys are used).
+**Do not share your `config` file with others.**
+This app will also not send your API keys to others except for MathpixOCR API server (see [OCRRequest.java](https://github.com/blaisewang/img2latex-mathpix/blob/master/src/main/java/OCRRequest.java) to learn how your API keys are used).
 
 ## Usage
 
@@ -42,7 +51,11 @@ If you downloaded `Image2LaTeX-x.x.x.jar` and with a JAR launcher installed, run
 java -jar Image2LaTeX-x.x.x.jar
 ```
 
-Use your operating system's default methods (or other tools) to take a screenshot of equations or text (Shift (⇧)-Control (⌃)-Command (⌘)-4 on macOS by default). The Image2Latex app will display the image you captured. Click `Submit` button to make OCR request. See [demo](#Demo) section below.
+Use your operating system's default methods (or other tools) to take a screenshot of equations or text (Shift (⇧)-Control (⌃)-Command (⌘)-4 on macOS by default).
+
+The Image2Latex app will display the image you captured.
+Click `Submit` button to make OCR request.
+See [demo](#Demo) section below.
 
 ## Demo
 
@@ -52,13 +65,17 @@ Use your operating system's default methods (or other tools) to take a screensho
 
 #### No native self-contained executable application or `.exe` provided?
 
-Not yet. But, with the GA release of Java 14 in 2020, [jpackage](https://jdk.java.net/jpackage/) should be available for packaging self-contained JavaFX application. At that time, I will drop the release of `.jar` and `.zip` files and no one needs to install JDK anymore.
+Not yet. But, with the GA release of Java 14 in 2020, [jpackage](https://jdk.java.net/jpackage/) should be available for packaging self-contained JavaFX application.
+At that time, I will drop the release of `.jar` and `.zip` files and no one (except me) needs to install JDK anymore.
 
 #### Why two types of the application released? Which one I should download?
 
-The `Image2LaTeX-x.x.x.zip` is built with the [Badass Runtime Plugin](https://badass-runtime-plugin.beryx.org/releases/latest/) which has a huge size. You don't need to have JDK 11 installed for running this version. 
+The `Image2LaTeX-x.x.x.zip` is built with the [Badass Runtime Plugin](https://badass-runtime-plugin.beryx.org/releases/latest/) which has a huge size.
+You don't need to have JDK 11 installed for running this version.
 
-Considering the people using similar apps, I assumed that a large percentage of users should have JDK installed. Therefore, a smallar size Fat JAR `Image2LaTeX-x.x.x.jar` has also released. Plus, the way to execute a `.bat` file on Windows OS is pretty ugly.
+Considering the people using similar apps, I assumed that a large percentage of users should have JDK installed.
+Therefore, a smaller size Fat JAR `Image2LaTeX-x.x.x.jar` has also released.
+Plus, the way to execute a `.bat` file on Windows OS is pretty ugly.
 
 #### Any plans?
 
@@ -76,7 +93,9 @@ Welcome to open an [issue](https://github.com/blaisewang/img2latex-mathpix/issue
 
 ## Contributions
 
-Contributions are highly welcomed. Suggestions can be made through opening an [issue](https://github.com/blaisewang/img2latex-mathpix/issues) with [enhancement](https://github.com/blaisewang/img2latex-mathpix/labels/enhancement) label. [Pull Requests](https://github.com/blaisewang/img2latex-mathpix/pulls) including bug fixes, new features, code style guidances, etc., will be reviewed as soon as possible.
+Contributions are highly welcomed.
+Suggestions can be made through opening an [issue](https://github.com/blaisewang/img2latex-mathpix/issues) with [enhancement](https://github.com/blaisewang/img2latex-mathpix/labels/enhancement) label.
+[Pull Requests](https://github.com/blaisewang/img2latex-mathpix/pulls) including bug fixes, new features, code style guidance, etc., will be reviewed as soon as possible.
 
 ## License
 

@@ -7,25 +7,22 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 
 
 /**
  * BackGridPane.java
  * Used for display current clipboard image and confidence progressbar.
- * The back grid panel has 2 Labels, 1 ImageView with 1 BorderPane, 1 Button, and 1 ProgressBar.
+ * The back grid panel has 3 Labels, 2 ImageViews, 1 Button, and 1 ProgressBar.
  */
 class BackGridPane extends GridPane {
 
     private static final int PREFERRED_WIDTH = 390;
+    private static final int PREFERRED_HEIGHT = 130;
     private static final int PREFERRED_MARGIN = 10;
-    private static final int TEXT_MARGIN = 5;
 
-    private static Label imageViewText = new Label("Clipboard Image");
     private static ImageView clipboardImageView = new ImageView();
-    private static BorderPane borderPane = new BorderPane(clipboardImageView);
+    private static ImageView renderedImageView = new ImageView();
     private static Button submitButton = new Button("Submit");
-    private static Label confidenceText = new Label("Confidence");
     private static ProgressBar confidenceProgressBar = new ProgressBar(0);
 
     private static final Color PANE_BORDER_COLOR = new Color(0.898, 0.902, 0.9216, 1);
@@ -35,7 +32,7 @@ class BackGridPane extends GridPane {
     private static final BackgroundFill BACKGROUND_FILL = new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY);
     private static final Background BACKGROUND = new Background(BACKGROUND_FILL);
 
-    private static FrontGridPane frontGridPane = new FrontGridPane(PREFERRED_MARGIN, TEXT_MARGIN, PANE_BORDER_STROKE);
+    private static FrontGridPane frontGridPane = new FrontGridPane(PREFERRED_MARGIN, PANE_BORDER_STROKE);
 
     // get components from FrontGridPane instance
     private static CopiedButton copiedButton = frontGridPane.getCopiedButton();
@@ -52,31 +49,31 @@ class BackGridPane extends GridPane {
         this.setPadding(new Insets(PREFERRED_MARGIN, 0, PREFERRED_MARGIN, 0));
         this.setBackground(BACKGROUND);
 
-        // 6 * 1 layout
-        this.setVgap(6);
+        // 8 * 1 layout
+        this.setVgap(8);
         this.setHgap(1);
 
-        imageViewText.setFont(Font.font(12));
-        GridPane.setMargin(imageViewText, new Insets(0, 0, TEXT_MARGIN, PREFERRED_MARGIN));
-        imageViewText.setTextFill(new Color(0.149, 0.149, 0.149, 1));
-        this.add(imageViewText, 0, 0);
+        // add "Clipboard Image" text label
+        Label clipboardTextLabel = Utilities.getTextLabel("Clipboard Image");
+        Utilities.setNodeLeftMargin(clipboardTextLabel, PREFERRED_MARGIN);
+        this.add(clipboardTextLabel, 0, 0);
 
-        // preserve image ratio
-        clipboardImageView.setPreserveRatio(true);
-        // maximum width is 390 maximum height is 150
-        // image larger than the above size will be scaled down
-        clipboardImageView.setFitWidth(PREFERRED_WIDTH);
-        clipboardImageView.setFitHeight(150);
+        // get bordered ImageView
+        BorderPane clipboardBorderPane = setImageViewBorder(clipboardImageView);
+        this.add(clipboardBorderPane, 0, 1);
 
-        // use BorderPane to add a border stroke to the ImageView
-        borderPane.setBorder(new Border(PANE_BORDER_STROKE));
-        borderPane.setPrefSize(PREFERRED_WIDTH, 150);
-        this.add(borderPane, 0, 1);
+        // add "Rendered Equation" text label
+        Label renderedTextLabel = Utilities.getTextLabel("Rendered Equation");
+        Utilities.setNodeLeftMargin(renderedTextLabel, PREFERRED_MARGIN);
+        this.add(renderedTextLabel, 0, 2);
+
+        // get bordered ImageView
+        BorderPane renderedBorderPane = setImageViewBorder(renderedImageView);
+        this.add(renderedBorderPane, 0, 3);
 
         // is not a part of focus traversal cycle
         submitButton.setFocusTraversable(false);
         GridPane.setHalignment(submitButton, HPos.CENTER);
-        GridPane.setMargin(submitButton, new Insets(TEXT_MARGIN, 0, TEXT_MARGIN, 0));
         submitButton.setOnMouseClicked(event -> {
 
             Image clipboardImage = clipboardImageView.getImage();
@@ -104,6 +101,9 @@ class BackGridPane extends GridPane {
                     Utilities.putStringIntoClipboard(response.getLatex_styled());
                     // set CopiedButton to the corresponded location
                     frontGridPane.setCopiedButtonRowIndex();
+
+                    // set rendered image to renderedImageView
+                    renderedImageView.setImage(JLaTeXMathRendering.render(response.getLatex_styled()));
 
                     // set results to corresponded TextFields.
                     latexStyledResult.setFormattedText(response.getLatex_styled());
@@ -142,19 +142,20 @@ class BackGridPane extends GridPane {
 
         });
 
-        this.add(submitButton, 0, 2);
+        // add submit button
+        this.add(submitButton, 0, 4);
 
-        this.add(frontGridPane, 0, 3);
+        // add front grid panel
+        this.add(frontGridPane, 0, 5);
 
-        // "Confidence" label text
-        confidenceText.setFont(Font.font(12));
-        GridPane.setMargin(confidenceText, new Insets(TEXT_MARGIN, 0, TEXT_MARGIN, PREFERRED_MARGIN));
-        confidenceText.setTextFill(new Color(0.149, 0.149, 0.149, 1));
-        this.add(confidenceText, 0, 4);
+        // add "Confidence" label text
+        Label confidenceText = Utilities.getTextLabel("Confidence");
+        Utilities.setNodeLeftMargin(confidenceText, PREFERRED_MARGIN);
+        this.add(confidenceText, 0, 6);
 
         // confidence progress bar
+        Utilities.setNodeLeftMargin(confidenceProgressBar, PREFERRED_MARGIN);
         confidenceProgressBar.setPrefSize(PREFERRED_WIDTH - 2 * PREFERRED_MARGIN - 1, 20);
-        GridPane.setMargin(confidenceProgressBar, new Insets(0, 0, 0, PREFERRED_MARGIN));
         // red for less than 20% certainty, yellow for 20% ~ 60%, and green for above 60%
         confidenceProgressBar.progressProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.doubleValue() < 0.2) {
@@ -165,8 +166,31 @@ class BackGridPane extends GridPane {
                 setStyle("-fx-accent: #63c956;");
             }
         });
-        this.add(confidenceProgressBar, 0, 5);
+        this.add(confidenceProgressBar, 0, 7);
 
+    }
+
+    /**
+     * Method to set ImageView style and add a BorderPane for border plotting
+     *
+     * @param imageView ImageView to be customised
+     * @return customised ImageView with BorderPane
+     */
+    private BorderPane setImageViewBorder(ImageView imageView) {
+        // preserve image ratio
+        imageView.setPreserveRatio(true);
+        // maximum width is 390 maximum height is 150
+        // image larger than the above size will be scaled down
+        imageView.setFitWidth(PREFERRED_WIDTH);
+        imageView.setFitHeight(PREFERRED_HEIGHT);
+
+        BorderPane borderPane = new BorderPane(imageView);
+
+        // use BorderPane to add a border stroke to the ImageView
+        borderPane.setBorder(new Border(PANE_BORDER_STROKE));
+        borderPane.setPrefSize(PREFERRED_WIDTH, 150);
+
+        return borderPane;
     }
 
     /**
@@ -178,6 +202,7 @@ class BackGridPane extends GridPane {
 
         // set empty image
         clipboardImageView.setImage(null);
+        renderedImageView.setImage(null);
 
         // clear result TextFields
         latexStyledResult.setText("");

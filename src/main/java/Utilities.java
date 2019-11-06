@@ -1,7 +1,13 @@
+import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -112,6 +118,32 @@ class Utilities {
 
         }
 
+    }
+
+    /**
+     * Method to set left margin to a node
+     *
+     * @param node       node to be set left margin
+     * @param leftMargin left margin
+     */
+    static void setNodeLeftMargin(Node node, int leftMargin) {
+        GridPane.setMargin(node, new Insets(0, 0, 5, leftMargin));
+    }
+
+    /**
+     * Method to get a customised Label
+     *
+     * @param text text to be displayed
+     * @return a customised Label
+     */
+    static Label getTextLabel(String text) {
+        Label label = new Label(text);
+        // set font size
+        label.setFont(Font.font(12));
+        // set text color
+        label.setTextFill(new Color(0.149, 0.149, 0.149, 1));
+
+        return label;
     }
 
     /**

@@ -101,8 +101,10 @@ public class MainAPP extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        // create config file if it does not exists
-        Utilities.createConfigFile();
+        // show API key dialog if config file does not exist
+        if (!Utilities.configFileExists()) {
+            showAPIKeyDialog();
+        }
 
         // indicate whether the tray icon was successfully added to the menu bar
         Boolean hasAddIconToTray = false;
@@ -218,6 +220,10 @@ public class MainAPP extends Application {
         // show the primary stage if the app name item is clicked
         openItem.addActionListener(event -> Platform.runLater(this::showStage));
 
+        // add change API key setting menu item
+        MenuItem settingItem = new MenuItem("API Keys");
+        settingItem.addActionListener(event -> Platform.runLater(this::showAPIKeyDialog));
+
         // add quit option as the app cannot be closed by clicking the window close button
         MenuItem exitItem = new MenuItem("Quit");
 
@@ -237,6 +243,7 @@ public class MainAPP extends Application {
         final PopupMenu popup = new PopupMenu();
         popup.add(openItem);
         popup.addSeparator();
+        popup.add(settingItem);
         popup.add(exitItem);
         trayIcon.setPopupMenu(popup);
 
@@ -256,6 +263,13 @@ public class MainAPP extends Application {
             stage.show();
             stage.toFront();
         }
+    }
+
+    /**
+     * Call Utilities.showAPIKeyDialog() to change API key.
+     */
+    private void showAPIKeyDialog() {
+        Utilities.showAPIKeyDialog();
     }
 
     /**

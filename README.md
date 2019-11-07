@@ -17,31 +17,28 @@ For other advanced functions and unlimited snips, subscribe to the Snip for $4.9
 
 See the [features](https://mathpix.com/ocr#features) section on MathpixOCR website.
 
+### New Featurs
+
+- Rendered equation view.
+
+- Setting panel for changing the API keys.
+
 ## Requirements
 
-- Your API Keys in your [MathpixOCR dashboard](https://dashboard.mathpix.com/) (different from the Mathpix account used in the Snip app)
+- Your API keys in your [MathpixOCR dashboard](https://dashboard.mathpix.com/) (different from the Mathpix account used in the Snip app)
 
 - JDK 11 or higher version ([OpenJDK](https://openjdk.java.net/) is highly recommended) if you plan to use `Image2LaTeX-x.x.x.jar`
 
-## Prerequisites for using this app
+## Run
 
-Create a `config` file with the following lines:
+Enter your API keys (without single quotes) at the first launch of this app.
 
-```
-APP_ID=YOUR_APP_ID
-APP_KEY=YOUR_APP_KEY
-```
+To change your API keys, macOS and Windows users will find a menu item called `API Key` by clicking this app's menu bar icon.
 
-Replace `YOUR_APP_ID` and `YOUR_APP_KEY` with your API Keys.
-
-Put the `config` file in the same directory location as the executable app.
-For example, if you are using native build version `Image2LaTeX-x.x.x-os.zip`, place it to extracted location `Image2LaTeX-os/bin/` .
-
-Otherwise, this app will create a template `config` in the aforementioned location at the first launch.
-Replace your credentials before the first request is submitted.
+Linux users need to change it manually by finding the `config` file and edit it by text editor.
 
 **Do not share your `config` file with others.**
-This app will also not send your API Keys to others except for MathpixOCR API server (see [OCRRequest.java](https://github.com/blaisewang/img2latex-mathpix/blob/master/src/main/java/OCRRequest.java) to learn how your API Keys are used).
+This app will also not send your API keys to others except for MathpixOCR API server (see [OCRRequest.java](https://github.com/blaisewang/img2latex-mathpix/blob/master/src/main/java/OCRRequest.java) to learn how your API keys are used).
 
 ## Usage
 
@@ -85,7 +82,6 @@ Plus, the way to execute a `.bat` file on Windows OS is pretty ugly.
 
 ### Any plans?
 
-- Add a preference panel for user settings, e.g. set API Keys in the app, not in the `config` file.
 - Add system tray icon support for some Linux distributions.
 - Implement cross-platform global keyboard listener to remove the `Submit` button.
 

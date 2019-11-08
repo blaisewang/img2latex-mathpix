@@ -1,6 +1,6 @@
 # Image2LaTeX
 
-English | [中文](./README-ZH.md)
+English | [中文](https://github.com/blaisewang/img2latex-mathpix/blob/master/README-ZH.md#readme)
 
 [![CI Status](https://github.com/blaisewang/img2latex-mathpix/workflows/CI/badge.svg)](https://github.com/blaisewang/img2latex-mathpix/actions)
 [![Releases](https://img.shields.io/github/v/release/blaisewang/img2latex-mathpix?include_prereleases)](https://github.com/blaisewang/img2latex-mathpix/releases)

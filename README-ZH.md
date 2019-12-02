@@ -1,6 +1,6 @@
 # Image2LaTeX
 
-[English](./README.md) | 中文
+[English](https://github.com/blaisewang/img2latex-mathpix#readme) | 中文
 
 [![CI Status](https://github.com/blaisewang/img2latex-mathpix/workflows/CI/badge.svg)](https://github.com/blaisewang/img2latex-mathpix/actions)
 [![Releases](https://img.shields.io/github/v/release/blaisewang/img2latex-mathpix?include_prereleases)](https://github.com/blaisewang/img2latex-mathpix/releases)
@@ -18,30 +18,28 @@ Image2LaTeX 是空闲时间的个人项目，仅保留了 Snip 的核心功能�
 
 查看 MathpixOCR 网站 [fetures](https://mathpix.com/ocr#features) 章节来了解其 API 的功能。
 
+### 新功能
+
+- 渲染结果方程式视图。
+
+- 更改 API keys 的设置面板。
+
 ## 使用要求
 
-- [MathpixOCR 控制台](https://dashboard.mathpix.com/) 中的 API Keys（与 Snip 不是同一个账号体系）。
+- [MathpixOCR 控制台](https://dashboard.mathpix.com/) 中的 API keys（与 Snip 不是同一个账号体系）。
 
-- 如果你打算使用 `Image2LaTeX-x.x.x.jar` 请安装 JDK 11 或更高版本（推荐使用 [OpenJDK](https://openjdk.java.net/) ）
+- 如果你打算使用 `Image2LaTeX-x.x.x.jar` 请安装 JDK 11 或更高版本（推荐使用 [OpenJDK](https://openjdk.java.net/)）。
 
-## 应用运行条件
+## 运行
 
-创建一个 `config` 文件包含以下内容：
+在程序第一次启动时输入你的 API keys（不含单引号）。
 
-```
-APP_ID=YOUR_APP_ID
-APP_KEY=YOUR_APP_KEY
-```
+macOS 和 Windows 用户可以在系统托盘找到 `API Key` 选项来修改你的 API keys 。
 
-将 `YOUR_APP_ID` and `YOUR_APP_KEY` 替换为你的API Keys。
-
-将 `config` 文件放置于与可执行应用相同路径下。
-例如，如果你下载了 `Image2LaTeX-x.x.x-os.zip`，那么就将 `config` 置于解压后的 `Image2LaTeX-os/bin/` 路径。
-
-此外，这款应用也会在第一次启动时自动在上述位置创建一个 `config` 模版文件，你可以在第一次提交 OCR 之前完成替换。
+Linux 用户需要首先找到 `config` 文件，再通过文本编辑器进行修改。
 
 **不要与其他人分享你的 `config` 文件。**
-这款应用同样也不会将你的 API Keys 发送给除 MathpixOCR API 服务器之外的任何人（查看 [OCRRequest.java](https://github.com/blaisewang/img2latex-mathpix/blob/master/src/main/java/OCRRequest.java) 了解你的 API Keys 是如何被使用的）。
+这款应用同样也不会将你的 API keys 发送给除 MathpixOCR API 服务器之外的任何人（查看 [OCRRequest.java](https://github.com/blaisewang/img2latex-mathpix/blob/master/src/main/java/OCRRequest.java) 了解你的 API keys 是如何被使用的）。
 
 ## 使用
 
@@ -78,7 +76,6 @@ java -jar Image2LaTeX-x.x.x.jar
 
 ### 开发计划？
 
-- 添加偏好设置面板以支持在应用内设置 API Keys 。
 - 为特定 Linux 发行版添加系统托盘图标的支持。
 - 实现跨平台的全局键盘监听以去除 `Submit` 按钮。
 

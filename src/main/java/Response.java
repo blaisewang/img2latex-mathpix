@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 /**
- * Response class
+ * Response.java
  * used by Gson to deserialize the JSON string to the object.
  */
 class Response {

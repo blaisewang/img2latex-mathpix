@@ -1,21 +1,19 @@
-import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.util.Pair;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.*;
 
 
@@ -139,7 +137,7 @@ class Utilities {
      * @param appID  APP ID to be written.
      * @param appKey APP key to be written.
      */
-    private static void createConfigFile(String appID, String appKey) {
+     static void createConfigFile(String appID, String appKey) {
 
         String text = appID + System.lineSeparator() + appKey;
 
@@ -189,64 +187,6 @@ class Utilities {
 
         alert.showAndWait();
 
-    }
-
-    /**
-     * Original source: https://code.makery.ch/blog/javafx-dialogs-official/
-     *
-     * Show a dialog to enter app ID and app key information.
-     */
-    static void showAPIKeyDialog() {
-        // create the custom dialog.
-        Dialog<Pair<String, String>> dialog = new Dialog<>();
-        dialog.setTitle("API Key");
-        dialog.setHeaderText("Enter your MathpixOCR App ID and key below");
-
-        // set the button types
-        ButtonType confirmButtonType = new ButtonType("Confirm", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(confirmButtonType, ButtonType.CANCEL);
-
-        // create the ID and key labels and fields
-        GridPane gridPane = new GridPane();
-        gridPane.setHgap(10);
-        gridPane.setVgap(10);
-        gridPane.setPadding(new Insets(20, 10, 10, 10));
-
-        TextField idTextField = new TextField();
-        idTextField.setPromptText("APP ID");
-        idTextField.setPrefWidth(200);
-        TextField keyTextField = new TextField();
-        keyTextField.setPromptText("APP Key");
-        keyTextField.setPrefWidth(200);
-
-        gridPane.add(new Label("APP ID:"), 0, 0);
-        gridPane.add(idTextField, 1, 0);
-        gridPane.add(new Label("APP Key:"), 0, 1);
-        gridPane.add(keyTextField, 1, 1);
-
-        // enable/disable confirm button depending on whether an ID was entered
-        Node confirmButton = dialog.getDialogPane().lookupButton(confirmButtonType);
-        confirmButton.setDisable(true);
-
-        // validation
-        idTextField.textProperty().addListener((observable, oldValue, newValue) -> confirmButton.setDisable(newValue.trim().isEmpty()));
-
-        dialog.getDialogPane().setContent(gridPane);
-
-        // request focus on the app ID field by default.
-        Platform.runLater(idTextField::requestFocus);
-
-        // convert the result to a id-key-pair when the confirm button is clicked.
-        dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == confirmButtonType) {
-                return new Pair<>(idTextField.getText(), keyTextField.getText());
-            }
-            return null;
-        });
-
-        Optional<Pair<String, String>> result = dialog.showAndWait();
-
-        result.ifPresent(idKey -> createConfigFile(idKey.getKey(), idKey.getValue()));
     }
 
     /**

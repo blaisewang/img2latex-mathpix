@@ -1,5 +1,5 @@
 /**
- * AppConfig class
+ * AppConfig.java
  * used to store app_id and id_key.
  */
 class AppConfig {

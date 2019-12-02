@@ -26,6 +26,8 @@ public class MainAPP extends Application {
 
     private Stage stage;
 
+    private APIKeyDialog apiKeyDialog = new APIKeyDialog();
+
     private static Image lastImage = null;
 
     private BackGridPane backGridPane = new BackGridPane();
@@ -107,7 +109,7 @@ public class MainAPP extends Application {
         }
 
         // indicate whether the tray icon was successfully added to the menu bar
-        Boolean hasAddIconToTray = false;
+        boolean hasAddIconToTray = false;
 
         // store the reference of the primaryStage
         this.stage = primaryStage;
@@ -269,7 +271,7 @@ public class MainAPP extends Application {
      * Call Utilities.showAPIKeyDialog() to change API key.
      */
     private void showAPIKeyDialog() {
-        Utilities.showAPIKeyDialog();
+        apiKeyDialog.show();
     }
 
     /**

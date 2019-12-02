@@ -12,7 +12,8 @@ import java.util.concurrent.Callable;
 
 
 /**
- * Recognition.java implements Callable<T> for concurrent call.
+ * Recognition.java
+ * implements Callable<T> for concurrent call.
  * It initialises a common JsonObject used for request with unchanged parameters.
  * Set the "src" value with base64 encoded clipboard image before each request.
  */

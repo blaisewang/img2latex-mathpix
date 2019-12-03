@@ -31,7 +31,7 @@ class Utilities {
     /**
      * Original source: https://stackoverflow.com/a/33477375/4658633
      *
-     * @return if the macOS enabled dark mode.
+     * @return if macOS enabled dark mode.
      */
     static boolean isMacDarkMode() {
 

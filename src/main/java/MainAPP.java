@@ -147,7 +147,7 @@ public class MainAPP extends Application {
         if (hasAddIconToTray) {
             // set the JavaFX app not to shutdown when the last window is closed
             Platform.setImplicitExit(false);
-            // set the app window with minimal  platform decorations
+            // set the app window with minimal platform decorations
             this.stage.initStyle(StageStyle.UTILITY);
         } else {
             // set the app shutdown when the window is closed

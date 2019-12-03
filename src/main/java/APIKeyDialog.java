@@ -3,6 +3,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 import javafx.util.Pair;
 
 import java.util.Optional;
@@ -14,6 +15,7 @@ import java.util.Optional;
 class APIKeyDialog {
 
     private Dialog<Pair<String, String>> dialog = new Dialog<>();
+    private Stage stage;
 
     /**
      * Original source: https://code.makery.ch/blog/javafx-dialogs-official/
@@ -75,17 +77,22 @@ class APIKeyDialog {
 
         });
 
+        stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+        stage.setAlwaysOnTop(true);
+
     }
 
     /**
-     * Show dialog
+     * Show dialog stage
      */
     void show() {
 
-        if (!dialog.isShowing()) {
+        if (!stage.isShowing()) {
             Optional<Pair<String, String>> result = dialog.showAndWait();
             result.ifPresent(idKey -> Utilities.createConfigFile(idKey.getKey(), idKey.getValue()));
         }
+
+        stage.toFront();
 
     }
 

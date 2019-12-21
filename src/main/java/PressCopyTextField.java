@@ -22,7 +22,8 @@ class PressCopyTextField extends TextField {
 
     PressCopyTextField() {
 
-        this.setPrefWidth(300);
+        this.setPrefWidth(220);
+        this.setPrefHeight(20);
 
         // PressCopyTextField is not editable
         this.setEditable(false);
@@ -32,7 +33,7 @@ class PressCopyTextField extends TextField {
 
         this.setBorder(new Border(BORDER_STROKE));
 
-        this.setFont(Font.font(16));
+        this.setFont(Font.font(14));
 
         // initialise with black text colour
         this.setStyle("-fx-text-inner-color: black;");

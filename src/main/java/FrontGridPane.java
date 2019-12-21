@@ -42,7 +42,7 @@ class FrontGridPane extends GridPane {
 
         // used to indicate which result on the left side has been copied, default invisible
         copiedButton.setVisible(false);
-        Utilities.setNodeLeftMargin(copiedButton, itemMargin);
+        Utilities.setNodeLeftMargin(copiedButton, itemMargin / 2);
         this.add(copiedButton, 1, 1);
 
         // add latexStyledResult

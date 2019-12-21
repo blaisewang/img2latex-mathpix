@@ -43,7 +43,7 @@ Linux 用户需要首先找到 `config` 文件，再通过文本编辑器进行�
 
 ## 使用
 
-如果你下载了 `Image2LaTeX-x.x.x-os.zip` ，双击可执行文件 `Image2LaTeX`（ Windows 为 `Image2LaTeX.bat` ）或者终端：
+如果你下载了 `Image2LaTeX-x.x.x-os.zip` ，双击可执行文件 `Image2LaTeX`（Windows 为 `Image2LaTeX.vbs`，感谢[@gongyan200](https://github.com/blaisewang/img2latex-mathpix/issues/24#issue-537383907)）或者终端：
 
 ```
 ./Image2LaTeX
@@ -55,7 +55,7 @@ Linux 用户需要首先找到 `config` 文件，再通过文本编辑器进行�
 java -jar Image2LaTeX-x.x.x.jar
 ```
 
-使用操作系统默认的方式（或者其他工具）对公式或文本进行截取（ macOS 默认为 Shift (⇧)-Control (⌃)-Command (⌘)-4 ）后，应用会显示被截取的内容，点击 `Submit` 进行 OCR 请求。
+使用操作系统默认的方式（或者其他工具）对公式或文本进行截取（macOS 默认为 Shift (⇧)-Control (⌃)-Command (⌘)-4）后，应用会显示被截取的内容，点击 `Submit` 进行 OCR 请求。
 查看下面的[展示](#展示)章节了解使用流程。
 
 ## 展示

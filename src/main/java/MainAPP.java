@@ -161,6 +161,9 @@ public class MainAPP extends Application {
 
         }
 
+        // set the app window always on top
+        this.stage.setAlwaysOnTop(true);
+
         // show the primary stage
         this.stage.show();
 
@@ -271,7 +274,15 @@ public class MainAPP extends Application {
      * Call Utilities.showAPIKeyDialog() to change API key.
      */
     private void showAPIKeyDialog() {
+
+        AppConfig appConfig = Utilities.readConfigFile();
+        if (appConfig != null) {
+            apiKeyDialog.idTextField.setText(appConfig.getApp_id());
+            apiKeyDialog.keyTextField.setText(appConfig.getApp_key());
+        }
+
         apiKeyDialog.show();
+
     }
 
     /**

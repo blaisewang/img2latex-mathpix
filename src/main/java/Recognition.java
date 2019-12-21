@@ -88,6 +88,12 @@ public class Recognition implements Callable<Response> {
 
         parameters.add("format_options", formatOptions);
 
+        // privacy option for not helping to improve
+        JsonObject privacyOption = new JsonObject();
+        privacyOption.addProperty("improve_mathpix", false);
+
+        parameters.add("metadata", privacyOption);
+
     }
 
     /**

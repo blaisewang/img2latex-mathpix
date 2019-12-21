@@ -17,6 +17,9 @@ class APIKeyDialog {
     private Dialog<Pair<String, String>> dialog = new Dialog<>();
     private Stage stage;
 
+    TextField idTextField = new TextField();
+    TextField keyTextField = new TextField();
+
     /**
      * Original source: https://code.makery.ch/blog/javafx-dialogs-official/
      **/
@@ -35,10 +38,8 @@ class APIKeyDialog {
         gridPane.setVgap(10);
         gridPane.setPadding(new Insets(20, 10, 10, 10));
 
-        TextField idTextField = new TextField();
         idTextField.setPromptText("APP ID");
         idTextField.setPrefWidth(200);
-        TextField keyTextField = new TextField();
         keyTextField.setPromptText("APP Key");
         keyTextField.setPrefWidth(200);
 

@@ -16,8 +16,8 @@ import javafx.scene.paint.Color;
  */
 class BackGridPane extends GridPane {
 
-    private static final int PREFERRED_WIDTH = 390;
-    private static final int PREFERRED_HEIGHT = 130;
+    private static final int PREFERRED_WIDTH = 300;
+    private static final int PREFERRED_HEIGHT = 100;
     private static final int PREFERRED_MARGIN = 10;
 
     private static ImageView clipboardImageView = new ImageView();
@@ -188,7 +188,7 @@ class BackGridPane extends GridPane {
 
         // use BorderPane to add a border stroke to the ImageView
         borderPane.setBorder(new Border(PANE_BORDER_STROKE));
-        borderPane.setPrefSize(PREFERRED_WIDTH, 150);
+        borderPane.setPrefSize(PREFERRED_WIDTH, 110);
 
         return borderPane;
     }

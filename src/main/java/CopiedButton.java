@@ -21,7 +21,7 @@ class CopiedButton extends Button {
     CopiedButton(String text) {
 
         this.setText(text);
-        this.setPrefHeight(24);
+        this.setPrefHeight(20);
         // white text colour
         this.setTextFill(Color.WHITE);
         this.setFont(Font.font("Arial Black", FontWeight.BOLD, 10));

@@ -42,7 +42,7 @@ This app will also not send your API keys to others except for MathpixOCR API se
 
 ## Usage
 
-If you downloaded `Image2LaTeX-x.x.x-os.zip`, run this app with double-clicking the executable `Image2LaTeX` (or `Image2LaTeX.bat` on Windows) at `Image2LaTeX-os/bin/` or with:
+If you downloaded `Image2LaTeX-x.x.x-os.zip`, run this app with double-clicking the executable `Image2LaTeX` (or `Image2LaTeX.vbs` on Windows, thanks to [@gongyan200](https://github.com/blaisewang/img2latex-mathpix/issues/24#issue-537383907)) at `Image2LaTeX-os/bin/` or with:
 
 ```
 ./Image2LaTeX
@@ -78,7 +78,6 @@ You don't need to have JDK 11 installed for running this version.
 
 Considering the people using similar apps, I assumed that a large percentage of users should have JDK installed.
 Therefore, a smaller size Fat JAR `Image2LaTeX-x.x.x.jar` has also released.
-Plus, the way to execute a `.bat` file on Windows OS is pretty ugly.
 
 ### Any plans?
 

@@ -12,6 +12,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 
 /**
@@ -229,6 +231,15 @@ public class MainAPP extends Application {
         MenuItem settingItem = new MenuItem("API Keys");
         settingItem.addActionListener(event -> Platform.runLater(this::showAPIKeyDialog));
 
+        // add check for updates menu item
+        MenuItem updateCheckItem = new MenuItem("Check for Updates");
+        updateCheckItem.addActionListener(event -> {
+            try {
+                Desktop.getDesktop().browse(new URI("https://github.com/blaisewang/img2latex-mathpix/releases"));
+            } catch (IOException | URISyntaxException ignored) {
+            }
+        });
+
         // add quit option as the app cannot be closed by clicking the window close button
         MenuItem exitItem = new MenuItem("Quit");
 
@@ -249,6 +260,10 @@ public class MainAPP extends Application {
         popup.add(openItem);
         popup.addSeparator();
         popup.add(settingItem);
+        popup.addSeparator();
+        popup.add("Version: 0.2.4");
+        popup.add(updateCheckItem);
+        popup.addSeparator();
         popup.add(exitItem);
         trayIcon.setPopupMenu(popup);
 

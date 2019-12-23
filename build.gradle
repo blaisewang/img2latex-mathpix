@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'blaise.img2latex'
-version '0.2.5'
+version '0.2.6'
 
 compileJava {
     sourceCompatibility = 11
@@ -38,6 +38,12 @@ application {
     applicationName = 'Image2LaTeX'
 }
 
+task('addInformation') {
+    doLast {
+        file("src/main/resources/project.properties").write("version=$version\napplicationName=$applicationName\n")
+    }
+}
+
 jar {
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
@@ -46,6 +52,8 @@ jar {
         attributes 'Main-Class': "Main"
     }
 }
+
+jar.dependsOn(addInformation)
 
 runtime {
     options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']

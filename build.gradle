@@ -1,12 +1,12 @@
 plugins {
     id 'java'
     id 'application'
-    id "org.beryx.runtime" version "1.7.1"
+    id "org.beryx.runtime" version "1.8.0"
     id 'org.openjfx.javafxplugin' version '0.0.8'
 }
 
 group 'blaise.img2latex'
-version '0.2.4'
+version '0.2.5'
 
 compileJava {
     sourceCompatibility = 11

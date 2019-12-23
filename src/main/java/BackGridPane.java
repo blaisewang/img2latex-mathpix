@@ -7,6 +7,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 
 /**
@@ -73,6 +74,7 @@ class BackGridPane extends GridPane {
 
         // is not a part of focus traversal cycle
         submitButton.setFocusTraversable(false);
+        submitButton.setFont(Font.font(12));
         GridPane.setHalignment(submitButton, HPos.CENTER);
         submitButton.setOnMouseClicked(event -> {
 

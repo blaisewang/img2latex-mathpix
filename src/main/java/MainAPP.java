@@ -306,6 +306,10 @@ public class MainAPP extends Application {
      * @param args command line arguments
      */
     public static void main(String[] args) {
+
+        // font smoothing
+        System.setProperty("prism.lcdtext", "false");
+
         launch(args);
     }
 

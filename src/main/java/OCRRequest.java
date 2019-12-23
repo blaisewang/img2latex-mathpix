@@ -3,11 +3,15 @@ import com.google.gson.JsonObject;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.ssl.SSLContexts;
 import org.apache.http.util.EntityUtils;
 
+import javax.net.ssl.SSLContext;
 import java.io.IOException;
 
 
@@ -42,11 +46,15 @@ class OCRRequest {
             return null;
         }
 
-        // maximum connection waiting time 10 seconds
-        RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(10000).build();
+        // workaround to resolve #26
+        SSLContext context = SSLContexts.createSystemDefault();
+        SSLConnectionSocketFactory fac = new SSLConnectionSocketFactory(context, new String[]{"TLSv1"}, null, NoopHostnameVerifier.INSTANCE);
+
+        // maximum connection waiting time 20 seconds
+        RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(20000).build();
 
         // build the HTTP client with above config
-        CloseableHttpClient httpClient = HttpClientBuilder.create().setDefaultRequestConfig(requestConfig).build();
+        CloseableHttpClient httpClient = HttpClientBuilder.create().setDefaultRequestConfig(requestConfig).setSSLSocketFactory(fac).build();
 
         // set the request parameters
         StringEntity requestParameters = new StringEntity(parameters.toString());

@@ -261,7 +261,7 @@ public class MainAPP extends Application {
         popup.addSeparator();
         popup.add(settingItem);
         popup.addSeparator();
-        popup.add("Version: 0.2.4");
+        popup.add("Version: 0.2.5");
         popup.add(updateCheckItem);
         popup.addSeparator();
         popup.add(exitItem);

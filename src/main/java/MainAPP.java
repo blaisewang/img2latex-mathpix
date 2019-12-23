@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Objects;
+import java.util.Properties;
 
 
 /**
@@ -34,7 +36,9 @@ public class MainAPP extends Application {
 
     private BackGridPane backGridPane = new BackGridPane();
 
-    private static final String APPLICATION_TITLE = "Image2LaTeX";
+    private static Properties properties = new Properties();
+
+    private static String APPLICATION_TITLE;
 
     private ClipboardListener clipboardListener = new ClipboardListener();
 
@@ -261,7 +265,7 @@ public class MainAPP extends Application {
         popup.addSeparator();
         popup.add(settingItem);
         popup.addSeparator();
-        popup.add("Version: 0.2.5");
+        popup.add("Version: v" + properties.getProperty("version"));
         popup.add(updateCheckItem);
         popup.addSeparator();
         popup.add(exitItem);
@@ -305,12 +309,17 @@ public class MainAPP extends Application {
      *
      * @param args command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+
+        // load application name
+        properties.load(Objects.requireNonNull(MainAPP.class.getClassLoader().getResourceAsStream("project.properties")));
+        APPLICATION_TITLE = properties.getProperty("applicationName");
 
         // font smoothing
         System.setProperty("prism.lcdtext", "false");
 
         launch(args);
+
     }
 
 }

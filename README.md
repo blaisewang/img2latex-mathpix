@@ -58,7 +58,7 @@ java -jar Image2LaTeX-x.x.x.jar
 Use your operating system's default methods (or other tools) to take a screenshot of equations or text (Shift (⇧)-Control (⌃)-Command (⌘)-4 on macOS by default).
 
 The Image2Latex app will display the image you captured.
-Click `Submit` button to make OCR request.
+Press the `Return` or `Enter` key to send the OCR request.
 See [demo](#Demo) section below.
 
 ## Demo
@@ -83,7 +83,6 @@ Therefore, a smaller size Fat JAR `Image2LaTeX-x.x.x.jar` has also released.
 ### Any plans?
 
 - Add system tray icon support for some Linux distributions.
-- Implement cross-platform global keyboard listener to remove the `Submit` button.
 
 ## Issues
 

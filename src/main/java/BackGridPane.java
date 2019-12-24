@@ -1,13 +1,10 @@
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 
 
 /**
@@ -23,7 +20,6 @@ class BackGridPane extends GridPane {
 
     private static ImageView clipboardImageView = new ImageView();
     private static ImageView renderedImageView = new ImageView();
-    private static Button submitButton = new Button("Submit");
     private static ProgressBar confidenceProgressBar = new ProgressBar(0);
 
     private static final Color PANE_BORDER_COLOR = new Color(0.898, 0.902, 0.9216, 1);
@@ -72,88 +68,13 @@ class BackGridPane extends GridPane {
         BorderPane renderedBorderPane = setImageViewBorder(renderedImageView);
         this.add(renderedBorderPane, 0, 3);
 
-        // is not a part of focus traversal cycle
-        submitButton.setFocusTraversable(false);
-        submitButton.setFont(Font.font(12));
-        GridPane.setHalignment(submitButton, HPos.CENTER);
-        submitButton.setOnMouseClicked(event -> {
-
-            Image clipboardImage = clipboardImageView.getImage();
-
-            if (clipboardImage != null) {
-
-                // clear last location
-                copiedButton.setVisible(false);
-
-                Response response = Utilities.concurrentCall(clipboardImage);
-
-                // if response received
-                if (response != null) {
-                    // error occurred
-                    if (response.getError() != null) {
-                        // clear error image and last results
-                        clearErrorImage();
-                        // show error content with a alert dialog
-                        Utilities.showErrorDialog(response.getError());
-
-                        return;
-                    }
-
-                    // put default result into the system clipboard
-                    Utilities.putStringIntoClipboard(response.getLatex_styled());
-                    // set CopiedButton to the corresponded location
-                    frontGridPane.setCopiedButtonRowIndex();
-
-                    // set rendered image to renderedImageView
-                    renderedImageView.setImage(JLaTeXMathRendering.render(response.getLatex_styled()));
-
-                    // set results to corresponded TextFields.
-                    latexStyledResult.setFormattedText(response.getLatex_styled());
-                    textResult.setFormattedText(response.getText());
-                    // no equation found in image
-                    if (response.is_not_math()) {
-                        // add $$ ... $$ wrapper, similar handling as Mathpix Snip
-                        notNumberedBlockModeResult.setFormattedText(Utilities.addDoubleDollarWrapper(response.getLatex_styled()));
-                    } else {
-                        notNumberedBlockModeResult.setFormattedText(response.getText_display());
-                    }
-                    numberedBlockModeResult.setFormattedText(Utilities.addEquationWrapper(response.getLatex_styled()));
-
-                    double confidence = response.getLatex_confidence();
-
-                    // minimal confidence is set to 1%
-                    if (confidence > 0 && confidence < 0.01) {
-                        confidence = 0.01;
-                    }
-
-                    confidenceProgressBar.setProgress(confidence);
-
-                } else {
-
-                    // no response received
-                    clearErrorImage();
-
-                }
-
-            } else {
-
-                // no image in the system clipboard
-                Utilities.showErrorDialog("No image found in the clipboard");
-
-            }
-
-        });
-
-        // add submit button
-        this.add(submitButton, 0, 4);
-
         // add front grid panel
-        this.add(frontGridPane, 0, 5);
+        this.add(frontGridPane, 0, 4);
 
         // add "Confidence" label text
         Label confidenceText = Utilities.getTextLabel("Confidence");
         Utilities.setNodeLeftMargin(confidenceText, PREFERRED_MARGIN);
-        this.add(confidenceText, 0, 6);
+        this.add(confidenceText, 0, 5);
 
         // confidence progress bar
         Utilities.setNodeLeftMargin(confidenceProgressBar, PREFERRED_MARGIN);
@@ -168,7 +89,7 @@ class BackGridPane extends GridPane {
                 setStyle("-fx-accent: #63c956;");
             }
         });
-        this.add(confidenceProgressBar, 0, 7);
+        this.add(confidenceProgressBar, 0, 6);
 
     }
 
@@ -223,6 +144,77 @@ class BackGridPane extends GridPane {
      */
     void setClipboardImageView(Image image) {
         clipboardImageView.setImage(image);
+    }
+
+    /**
+     * OCR request handler.
+     */
+    void requestHandler() {
+
+        Image clipboardImage = clipboardImageView.getImage();
+
+        if (clipboardImage != null) {
+
+            // clear last location
+            copiedButton.setVisible(false);
+
+            Response response = Utilities.concurrentCall(clipboardImage);
+
+            // if response received
+            if (response != null) {
+                // error occurred
+                if (response.getError() != null) {
+                    // clear error image and last results
+                    clearErrorImage();
+                    // show error content with a alert dialog
+                    Utilities.showErrorDialog(response.getError());
+
+                    return;
+                }
+
+                // put default result into the system clipboard
+                Utilities.putStringIntoClipboard(response.getLatex_styled());
+                // set CopiedButton to the corresponded location
+                frontGridPane.setCopiedButtonRowIndex();
+
+                // set rendered image to renderedImageView
+                renderedImageView.setImage(JLaTeXMathRendering.render(response.getLatex_styled()));
+
+                // set results to corresponded TextFields.
+                latexStyledResult.setFormattedText(response.getLatex_styled());
+                textResult.setFormattedText(response.getText());
+                // no equation found in image
+                if (response.is_not_math()) {
+                    // add $$ ... $$ wrapper, similar handling as Mathpix Snip
+                    notNumberedBlockModeResult.setFormattedText(Utilities.addDoubleDollarWrapper(response.getLatex_styled()));
+                } else {
+                    notNumberedBlockModeResult.setFormattedText(response.getText_display());
+                }
+                numberedBlockModeResult.setFormattedText(Utilities.addEquationWrapper(response.getLatex_styled()));
+
+                double confidence = response.getLatex_confidence();
+
+                // minimal confidence is set to 1%
+                if (confidence > 0 && confidence < 0.01) {
+                    confidence = 0.01;
+                }
+
+                confidenceProgressBar.setProgress(confidence);
+
+            } else {
+
+                // no response received
+                clearErrorImage();
+
+            }
+
+        } else {
+
+            // no image in the system clipboard
+            Utilities.showErrorDialog("No image found in the clipboard");
+
+        }
+
     }
 
 }

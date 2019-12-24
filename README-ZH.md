@@ -56,7 +56,7 @@ Linux 用户需要首先找到 `config` 文件，再通过文本编辑器进行�
 java -jar Image2LaTeX-x.x.x.jar
 ```
 
-使用操作系统默认的方式（或者其他工具）对公式或文本进行截取（macOS 默认为 Shift (⇧)-Control (⌃)-Command (⌘)-4）后，应用会显示被截取的内容，点击 `Submit` 进行 OCR 请求。
+使用操作系统默认的方式（或者其他工具）对公式或文本进行截取（macOS 默认为 Shift (⇧)-Control (⌃)-Command (⌘)-4）后，应用会显示被截取的内容，按下 `Return` 或者 `Enter` 健进行 OCR 请求。
 查看下面的[展示](#展示)章节了解使用流程。
 
 ## 展示
@@ -78,7 +78,6 @@ java -jar Image2LaTeX-x.x.x.jar
 ### 开发计划？
 
 - 为特定 Linux 发行版添加系统托盘图标的支持。
-- 实现跨平台的全局键盘监听以去除 `Submit` 按钮。
 
 ## 问题
 

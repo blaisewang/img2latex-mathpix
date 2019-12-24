@@ -8,6 +8,7 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -137,7 +138,7 @@ class Utilities {
      * @param appID  APP ID to be written.
      * @param appKey APP key to be written.
      */
-     static void createConfigFile(String appID, String appKey) {
+    static void createConfigFile(String appID, String appKey) {
 
         String text = appID + System.lineSeparator() + appKey;
 
@@ -185,7 +186,9 @@ class Utilities {
         alert.setHeaderText(null);
         alert.setContentText(context);
 
-        alert.showAndWait();
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.setAlwaysOnTop(true);
+        stage.showAndWait();
 
     }
 

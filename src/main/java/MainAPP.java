@@ -1,8 +1,11 @@
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.apache.commons.lang3.SystemUtils;
@@ -137,6 +140,13 @@ public class MainAPP extends Application {
         // initialise scene with the BackGridPane
         Scene scene = new Scene(backGridPane);
 
+        // press enter key to send the OCR request
+        scene.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                backGridPane.requestHandler();
+            }
+        });
+
         // add scene to the primary stage
         this.stage.setScene(scene);
 
@@ -172,6 +182,11 @@ public class MainAPP extends Application {
 
         // show the primary stage
         this.stage.show();
+
+        // set the app window in the upper right corner of the screen
+        Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+        this.stage.setX(primaryScreenBounds.getMinX() + primaryScreenBounds.getWidth() - this.stage.getWidth() - 80);
+        this.stage.setY(primaryScreenBounds.getMinY() + 80);
 
         // set the app window is not resizable
         this.stage.setResizable(false);

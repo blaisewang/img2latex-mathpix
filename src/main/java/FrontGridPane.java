@@ -37,31 +37,31 @@ class FrontGridPane extends GridPane {
 
         // add "Result" textL label
         Label resultTextLabel = Utilities.getTextLabel("Result");
-        Utilities.setNodeLeftMargin(resultTextLabel, itemMargin);
+        Utilities.setDefaultNodeMargin(resultTextLabel, itemMargin, 0);
         this.add(resultTextLabel, 0, 0);
 
         // used to indicate which result on the left side has been copied, default invisible
         copiedButton.setVisible(false);
-        Utilities.setNodeLeftMargin(copiedButton, itemMargin / 2);
+        Utilities.setDefaultNodeMargin(copiedButton, itemMargin / 2, 0);
         this.add(copiedButton, 1, 1);
 
         // add latexStyledResult
-        Utilities.setNodeLeftMargin(latexStyledResult, itemMargin);
+        Utilities.setDefaultNodeMargin(latexStyledResult, itemMargin, 0);
         setTextFieldEvent(latexStyledResult, 1);
         this.add(latexStyledResult, 0, 1);
 
         // add textResult
-        Utilities.setNodeLeftMargin(textResult, itemMargin);
+        Utilities.setDefaultNodeMargin(textResult, itemMargin, 0);
         setTextFieldEvent(textResult, 2);
         this.add(textResult, 0, 2);
 
         // add notNumberedBlockModeResult
-        Utilities.setNodeLeftMargin(notNumberedBlockModeResult, itemMargin);
+        Utilities.setDefaultNodeMargin(notNumberedBlockModeResult, itemMargin, 0);
         setTextFieldEvent(notNumberedBlockModeResult, 3);
         this.add(notNumberedBlockModeResult, 0, 3);
 
         // add numberedBlockModeResult
-        Utilities.setNodeLeftMargin(numberedBlockModeResult, itemMargin);
+        Utilities.setDefaultNodeMargin(numberedBlockModeResult, itemMargin, 0);
         setTextFieldEvent(numberedBlockModeResult, 4);
         this.add(numberedBlockModeResult, 0, 4);
 

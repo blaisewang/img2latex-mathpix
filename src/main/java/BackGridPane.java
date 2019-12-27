@@ -1,3 +1,5 @@
+import javafx.concurrent.Task;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
@@ -5,6 +7,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 
 /**
@@ -20,6 +24,7 @@ class BackGridPane extends GridPane {
 
     private static ImageView clipboardImageView = new ImageView();
     private static ImageView renderedImageView = new ImageView();
+    private static Label waitingTextLabel = new Label("Waiting...");
     private static ProgressBar confidenceProgressBar = new ProgressBar(0);
 
     private static final Color PANE_BORDER_COLOR = new Color(0.898, 0.902, 0.9216, 1);
@@ -48,36 +53,43 @@ class BackGridPane extends GridPane {
 
         // 8 * 1 layout
         this.setVgap(8);
-        this.setHgap(1);
+        this.setHgap(2);
 
         // add "Clipboard Image" text label
         Label clipboardTextLabel = Utilities.getTextLabel("Clipboard Image");
-        Utilities.setNodeLeftMargin(clipboardTextLabel, PREFERRED_MARGIN);
+        Utilities.setDefaultNodeMargin(clipboardTextLabel, PREFERRED_MARGIN, 0);
         this.add(clipboardTextLabel, 0, 0);
+
+        waitingTextLabel.setFont(Font.font("Arial Black", FontWeight.BOLD, 12));
+        waitingTextLabel.setTextFill(new Color(0.3882, 0.7882, 0.3373, 1));
+        waitingTextLabel.setVisible(false);
+        GridPane.setHalignment(waitingTextLabel, HPos.RIGHT);
+        Utilities.setDefaultNodeMargin(waitingTextLabel, 0, PREFERRED_MARGIN);
+        this.add(waitingTextLabel, 1, 0);
 
         // get bordered ImageView
         BorderPane clipboardBorderPane = setImageViewBorder(clipboardImageView);
-        this.add(clipboardBorderPane, 0, 1);
+        this.add(clipboardBorderPane, 0, 1, 2, 1);
 
         // add "Rendered Equation" text label
         Label renderedTextLabel = Utilities.getTextLabel("Rendered Equation");
-        Utilities.setNodeLeftMargin(renderedTextLabel, PREFERRED_MARGIN);
-        this.add(renderedTextLabel, 0, 2);
+        Utilities.setDefaultNodeMargin(renderedTextLabel, PREFERRED_MARGIN, 0);
+        this.add(renderedTextLabel, 0, 2, 2, 1);
 
         // get bordered ImageView
         BorderPane renderedBorderPane = setImageViewBorder(renderedImageView);
-        this.add(renderedBorderPane, 0, 3);
+        this.add(renderedBorderPane, 0, 3, 2, 1);
 
         // add front grid panel
-        this.add(frontGridPane, 0, 4);
+        this.add(frontGridPane, 0, 4, 2, 1);
 
         // add "Confidence" label text
         Label confidenceText = Utilities.getTextLabel("Confidence");
-        Utilities.setNodeLeftMargin(confidenceText, PREFERRED_MARGIN);
-        this.add(confidenceText, 0, 5);
+        Utilities.setDefaultNodeMargin(confidenceText, PREFERRED_MARGIN, 0);
+        this.add(confidenceText, 0, 5, 2, 1);
 
         // confidence progress bar
-        Utilities.setNodeLeftMargin(confidenceProgressBar, PREFERRED_MARGIN);
+        Utilities.setDefaultNodeMargin(confidenceProgressBar, PREFERRED_MARGIN, 0);
         confidenceProgressBar.setPrefSize(PREFERRED_WIDTH - 2 * PREFERRED_MARGIN - 1, 20);
         // red for less than 20% certainty, yellow for 20% ~ 60%, and green for above 60%
         confidenceProgressBar.progressProperty().addListener((observable, oldValue, newValue) -> {
@@ -89,7 +101,7 @@ class BackGridPane extends GridPane {
                 setStyle("-fx-accent: #63c956;");
             }
         });
-        this.add(confidenceProgressBar, 0, 6);
+        this.add(confidenceProgressBar, 0, 6, 2, 1);
 
     }
 
@@ -158,55 +170,72 @@ class BackGridPane extends GridPane {
             // clear last location
             copiedButton.setVisible(false);
 
-            Response response = Utilities.concurrentCall(clipboardImage);
+            // show waiting label
+            waitingTextLabel.setVisible(true);
 
-            // if response received
-            if (response != null) {
-                // error occurred
-                if (response.getError() != null) {
-                    // clear error image and last results
-                    clearErrorImage();
-                    // show error content with a alert dialog
-                    Utilities.showErrorDialog(response.getError());
-
-                    return;
+            Task<Response> task = new Task<>() {
+                @Override
+                protected Response call() {
+                    return Utilities.concurrentCall(clipboardImage);
                 }
+            };
+            task.setOnSucceeded(event -> {
 
-                // put default result into the system clipboard
-                Utilities.putStringIntoClipboard(response.getLatex_styled());
-                // set CopiedButton to the corresponded location
-                frontGridPane.setCopiedButtonRowIndex();
+                // hide waiting label
+                waitingTextLabel.setVisible(false);
 
-                // set rendered image to renderedImageView
-                renderedImageView.setImage(JLaTeXMathRendering.render(response.getLatex_styled()));
+                Response response = task.getValue();
 
-                // set results to corresponded TextFields.
-                latexStyledResult.setFormattedText(response.getLatex_styled());
-                textResult.setFormattedText(response.getText());
-                // no equation found in image
-                if (response.is_not_math()) {
-                    // add $$ ... $$ wrapper, similar handling as Mathpix Snip
-                    notNumberedBlockModeResult.setFormattedText(Utilities.addDoubleDollarWrapper(response.getLatex_styled()));
+                // if response received
+                if (response != null) {
+                    // error occurred
+                    if (response.getError() != null) {
+                        // clear error image and last results
+                        clearErrorImage();
+                        // show error content with a alert dialog
+                        Utilities.showErrorDialog(response.getError());
+
+                        return;
+                    }
+
+                    // put default result into the system clipboard
+                    Utilities.putStringIntoClipboard(response.getLatex_styled());
+                    // set CopiedButton to the corresponded location
+                    frontGridPane.setCopiedButtonRowIndex();
+
+                    // set rendered image to renderedImageView
+                    renderedImageView.setImage(JLaTeXMathRendering.render(response.getLatex_styled()));
+
+                    // set results to corresponded TextFields.
+                    latexStyledResult.setFormattedText(response.getLatex_styled());
+                    textResult.setFormattedText(response.getText());
+                    // no equation found in image
+                    if (response.is_not_math()) {
+                        // add $$ ... $$ wrapper, similar handling as Mathpix Snip
+                        notNumberedBlockModeResult.setFormattedText(Utilities.addDoubleDollarWrapper(response.getLatex_styled()));
+                    } else {
+                        notNumberedBlockModeResult.setFormattedText(response.getText_display());
+                    }
+                    numberedBlockModeResult.setFormattedText(Utilities.addEquationWrapper(response.getLatex_styled()));
+
+                    double confidence = response.getLatex_confidence();
+
+                    // minimal confidence is set to 1%
+                    if (confidence > 0 && confidence < 0.01) {
+                        confidence = 0.01;
+                    }
+
+                    confidenceProgressBar.setProgress(confidence);
+
                 } else {
-                    notNumberedBlockModeResult.setFormattedText(response.getText_display());
-                }
-                numberedBlockModeResult.setFormattedText(Utilities.addEquationWrapper(response.getLatex_styled()));
 
-                double confidence = response.getLatex_confidence();
+                    // no response received
+                    clearErrorImage();
 
-                // minimal confidence is set to 1%
-                if (confidence > 0 && confidence < 0.01) {
-                    confidence = 0.01;
                 }
 
-                confidenceProgressBar.setProgress(confidence);
-
-            } else {
-
-                // no response received
-                clearErrorImage();
-
-            }
+            });
+            new Thread(task).start();
 
         } else {
 

@@ -100,13 +100,14 @@ class Utilities {
     }
 
     /**
-     * Method to set left margin to a node
+     * Method to set left and right margin to a node with default bottom margin
      *
-     * @param node       node to be set left margin
-     * @param leftMargin left margin
+     * @param node node to be set margin
+     * @param left left margin
+     * @param right right margin
      */
-    static void setNodeLeftMargin(Node node, int leftMargin) {
-        GridPane.setMargin(node, new Insets(0, 0, 5, leftMargin));
+    static void setDefaultNodeMargin(Node node, int left, int right) {
+        GridPane.setMargin(node, new Insets(0, right, 5, left));
     }
 
     /**

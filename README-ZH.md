@@ -75,6 +75,10 @@ java -jar Image2LaTeX-x.x.x.jar
 
 考虑到使用这类应用的用户群体，可能有很大一部分已经安装了 JDK ，所以发布了体积更小的 `Image2LaTeX-x.x.x.jar` 版本。
 
+### 想要第一时间知道新版本的发布？
+
+查看GitHub这篇关于关注和取消关注仓库的发行版的[文章](https://help.github.com/cn/github/receiving-notifications-about-activity-on-github/watching-and-unwatching-releases-for-a-repository)。
+
 ### 开发计划？
 
 - 为特定 Linux 发行版添加系统托盘图标的支持。

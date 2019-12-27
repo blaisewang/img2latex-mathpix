@@ -80,6 +80,10 @@ You don't need to have JDK 11 installed for running this version.
 Considering the people using similar apps, I assumed that a large percentage of users should have JDK installed.
 Therefore, a smaller size Fat JAR `Image2LaTeX-x.x.x.jar` has also released.
 
+### Want to get updates on new releases ASAP?
+
+See this [article](https://help.github.com/en/github/receiving-notifications-about-activity-on-github/watching-and-unwatching-releases-for-a-repository) about watching and unwatching releases for a repository by GitHub.
+
 ### Any plans?
 
 - Add system tray icon support for some Linux distributions.

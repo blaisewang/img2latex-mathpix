@@ -16,8 +16,10 @@ public class Main {
      */
     public static void main(String[] args) throws IOException {
 
-        // hide icon in the Dock of macOS
         if (SystemUtils.IS_OS_MAC_OSX) {
+            // set config file path
+            Utilities.setConfigFilePath();
+            // hide icon in the Dock of macOS
             System.setProperty("apple.awt.UIElement", "true");
             Toolkit.getDefaultToolkit();
         }

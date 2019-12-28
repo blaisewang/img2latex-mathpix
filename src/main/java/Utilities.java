@@ -27,7 +27,7 @@ class Utilities {
     // Recognition object initialisation
     private static Recognition recognition = new Recognition();
 
-    private final static Path configFilePath = Paths.get("./config");
+    private static Path configFilePath = Paths.get("./config");
 
     /**
      * Original source: https://stackoverflow.com/a/33477375/4658633
@@ -102,8 +102,8 @@ class Utilities {
     /**
      * Method to set left and right margin to a node with default bottom margin
      *
-     * @param node node to be set margin
-     * @param left left margin
+     * @param node  node to be set margin
+     * @param left  left margin
      * @param right right margin
      */
     static void setDefaultNodeMargin(Node node, int left, int right) {
@@ -127,6 +127,13 @@ class Utilities {
     }
 
     /**
+     * Set config file path.
+     */
+    static void setConfigFilePath() {
+        configFilePath = Paths.get(System.getProperty("user.home") + "/Library/Image2LaTeX/config");
+    }
+
+    /**
      * @return config file exists
      */
     static Boolean configFileExists() {
@@ -146,6 +153,7 @@ class Utilities {
         try {
             // create one if not exists
             if (!configFileExists()) {
+                Files.createDirectories(configFilePath.getParent());
                 Files.createFile(configFilePath);
             }
             Files.write(configFilePath, text.getBytes());

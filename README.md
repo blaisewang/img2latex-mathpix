@@ -20,9 +20,7 @@ See the [features](https://mathpix.com/ocr#features) section on MathpixOCR websi
 
 ### New Featurs
 
-- Rendered equation view.
-
-- Setting panel for changing the API keys.
+- Self-contained executable application for macOS.
 
 ## Requirements
 
@@ -43,13 +41,25 @@ This app will also not send your API keys to others except for MathpixOCR API se
 
 ## Usage
 
-If you downloaded `Image2LaTeX-x.x.x-os.zip`, run this app with double-clicking the executable `Image2LaTeX` (or `Image2LaTeX.vbs` on Windows, thanks to [@gongyan200](https://github.com/blaisewang/img2latex-mathpix/issues/24#issue-537383907)) at `Image2LaTeX-os/bin/` or with:
+### macOS
+
+Run `Image2LaTeX.app`.
+
+### Windows
+
+Run `Image2LaTeX.vbs` at `Image2LaTeX-windows/bin/`.
+
+### Linux
+
+Run `Image2LaTeX` at `Image2LaTeX-linux/bin/` or with:
 
 ```
 ./Image2LaTeX
 ```
 
-If you downloaded `Image2LaTeX-x.x.x.jar` and with a JAR launcher installed, run this app with double-clicking `Image2LaTeX-x.x.x.jar` or with:
+### JAR
+
+With a JAR launcher installed, run `Image2LaTeX-x.x.x.jar` or with:
 
 ```
 java -jar Image2LaTeX-x.x.x.jar
@@ -57,7 +67,7 @@ java -jar Image2LaTeX-x.x.x.jar
 
 Use your operating system's default methods (or other tools) to take a screenshot of equations or text (Shift (⇧)-Control (⌃)-Command (⌘)-4 on macOS by default).
 
-The Image2Latex app will display the image you captured.
+The Image2LaTex app will display the image you captured.
 Press the `Return` or `Enter` key to send the OCR request.
 See [demo](#Demo) section below.
 
@@ -67,15 +77,18 @@ See [demo](#Demo) section below.
 
 ## FQA
 
-### No native self-contained executable application or `.exe` provided?
+### No native self-contained executable application provided for Widnows or Linux?
 
 Not yet. But, with the GA release of Java 14 in 2020, [jpackage](https://jdk.java.net/jpackage/) should be available for packaging self-contained JavaFX application.
 At that time, I will drop the release of `.jar` and `.zip` files and no one (except me) needs to install JDK anymore.
 
-### Why two types of the application released? Which one I should download?
+### Why three types of the application released? Which one I should download?
 
-The `Image2LaTeX-x.x.x-os.zip` is built with the [Badass Runtime Plugin](https://badass-runtime-plugin.beryx.org/releases/latest/) which has a huge size.
-You don't need to have JDK 11 installed for running this version.
+The `Image2LaTeX.app` is for macOS only.
+
+The `Image2LaTeX-x.x.x-windows.zip` 和 `Image2LaTeX-x.x.x-linux.zip` are built with the [Badass Runtime Plugin](https://badass-runtime-plugin.beryx.org/releases/latest/) which has a huge size.
+
+You don't need to have JDK 11 installed for running these versions.
 
 Considering the people using similar apps, I assumed that a large percentage of users should have JDK installed.
 Therefore, a smaller size Fat JAR `Image2LaTeX-x.x.x.jar` has also released.

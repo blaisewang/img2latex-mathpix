@@ -30,7 +30,10 @@
 	<array>
 		<string>MacOSX</string>
 	</array>
-
+	<key>NSSupportsAutomaticGraphicsSwitching</key>
+    <true/>
+    <key>NSHighResolutionCapable</key>
+    <true/>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.productivity</string>
 	<key>LSMinimumSystemVersion</key>

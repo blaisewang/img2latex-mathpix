@@ -1,3 +1,5 @@
+APP_NAME=Image2LaTeX.app
+
 APP_PATH=./Image2LaTeX.app/Contents
 
 cd ../build/libs || exit
@@ -20,4 +22,8 @@ rm -rf ./Image2LaTeX-macos
 
 VERSION="$(echo "$FILENAME" | cut -d'-' -f2)"
 
-sed -i "" "s/0.0.0/$VERSION/g" ./Image2LaTeX.app/Contents/Info.plist
+sed -i "" "s/0.0.0/$VERSION/g" ./$APP_NAME/Contents/Info.plist
+
+zip -r -q "$FILENAME" ./$APP_NAME
+
+rm -rf ./"$APP_NAME"

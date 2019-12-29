@@ -10,6 +10,8 @@ cp ../../macOS/Info.plist.template $APP_PATH/Info.plist
 
 cp ../../macOS/AppIcon.icns $APP_PATH/Resources/AppIcon.icns
 
+cp ../../macOS/Assets.car $APP_PATH/Resources/Assets.car
+
 FILENAME="$(ls *macos.zip)"
 
 unzip -q "$FILENAME"
@@ -23,6 +25,8 @@ rm -rf ./Image2LaTeX-macos
 VERSION="$(echo "$FILENAME" | cut -d'-' -f2)"
 
 sed -i "" "s/0.0.0/$VERSION/g" ./$APP_NAME/Contents/Info.plist
+
+touch Image2LaTeX.app
 
 zip -r -q "$FILENAME" ./$APP_NAME
 

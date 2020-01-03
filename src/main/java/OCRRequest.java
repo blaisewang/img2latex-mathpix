@@ -13,6 +13,7 @@ import org.apache.http.util.EntityUtils;
 
 import javax.net.ssl.SSLContext;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 
 /**
@@ -28,9 +29,8 @@ class OCRRequest {
      *
      * @param parameters JsonObject to send as the request parameters.
      * @return a Response object.
-     * @throws IOException if errors happened during the request execution.
      */
-    static Response getResult(JsonObject parameters) throws IOException {
+    static Response getResult(JsonObject parameters) {
 
         String app_id;
         String app_key;
@@ -41,7 +41,6 @@ class OCRRequest {
             app_id = appConfig.getApp_id();
             app_key = appConfig.getApp_key();
         } else {
-            Utilities.showErrorDialog("Illegal App ID or App Key");
             // early return
             return null;
         }
@@ -57,7 +56,12 @@ class OCRRequest {
         CloseableHttpClient httpClient = HttpClientBuilder.create().setDefaultRequestConfig(requestConfig).setSSLSocketFactory(fac).build();
 
         // set the request parameters
-        StringEntity requestParameters = new StringEntity(parameters.toString());
+        StringEntity requestParameters;
+        try {
+            requestParameters = new StringEntity(parameters.toString());
+        } catch (UnsupportedEncodingException e) {
+            return null;
+        }
 
         // API url
         HttpPost request = new HttpPost("https://api.mathpix.com/v3/latex");
@@ -68,10 +72,15 @@ class OCRRequest {
         request.addHeader("Content-type", "application/json");
         request.setEntity(requestParameters);
 
-        // get the raw result from the execution
-        HttpResponse result = httpClient.execute(request);
-        // obtain the message entity of this response
-        String json = EntityUtils.toString(result.getEntity(), "UTF-8");
+        String json;
+        try {
+            // get the raw result from the execution
+            HttpResponse result = httpClient.execute(request);
+            // obtain the message entity of this response
+            json = EntityUtils.toString(result.getEntity(), "UTF-8");
+        } catch (IOException e) {
+            return null;
+        }
 
         // return the parsed result
         return new Gson().fromJson(json, Response.class);

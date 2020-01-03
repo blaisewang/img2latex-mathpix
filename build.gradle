@@ -1,12 +1,12 @@
 plugins {
-    id 'java'
-    id 'application'
+    id "java"
+    id "application"
     id "org.beryx.runtime" version "1.8.0"
-    id 'org.openjfx.javafxplugin' version '0.0.8'
+    id "org.openjfx.javafxplugin" version "0.0.8"
 }
 
-group 'blaise.img2latex'
-version '0.3.2'
+group "blaise.img2latex"
+version "0.3.3"
 
 compileJava {
     sourceCompatibility = 11
@@ -19,28 +19,28 @@ repositories {
 
 javafx {
     version = "11.0.2"
-    modules = ['javafx.controls', 'javafx.swing']
+    modules = ["javafx.controls", "javafx.swing"]
 }
 
 dependencies {
-    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation "com.google.code.gson:gson:2.8.6"
     implementation "org.openjfx:javafx-graphics:11.0.2:mac"
     implementation "org.openjfx:javafx-graphics:11.0.2:win"
     implementation "org.openjfx:javafx-graphics:11.0.2:linux"
-    implementation group: 'org.scilab.forge', name: 'jlatexmath', version: '1.0.7'
-    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
-    implementation group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.12'
-    implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.10'
+    implementation "org.scilab.forge:jlatexmath:1.0.7"
+    implementation "org.apache.commons:commons-lang3:3.9"
+    implementation "org.apache.httpcomponents:httpcore:4.4.12"
+    implementation "org.apache.httpcomponents:httpclient:4.5.10"
 }
 
 application {
-    mainClassName = 'Main'
-    applicationName = 'Image2LaTeX'
+    mainClassName = "Main"
+    applicationName = "Image2LaTeX"
 }
 
-task('addInformation') {
+task("addInformation") {
     doLast {
-        file("src/main/resources/project.properties").write("version=$version\napplicationName=$applicationName\n")
+        file("src/main/resources/project.properties").write("applicationName=$applicationName\nversion=$version\n")
     }
 }
 
@@ -49,16 +49,16 @@ jar {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
     manifest {
-        attributes 'Main-Class': "Main"
+        attributes "Main-Class": "Main"
     }
 }
 
 jar.dependsOn(addInformation)
 
 runtime {
-    options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
+    options = ["--strip-debug", "--compress", "2", "--no-header-files", "--no-man-pages"]
     imageZip = file("$buildDir/libs/Image2LaTeX-" + version + ".zip")
-    targetPlatform('linux', 'jdk/linux-jdk-11.0.5')
-    targetPlatform('macos', 'jdk/osx-jdk-11.0.5.jdk/Contents/Home')
-    targetPlatform('windows', 'jdk/windows-jdk-11.0.5')
+    targetPlatform("linux", "jdk/linux-jdk-11.0.5")
+    targetPlatform("macos", "jdk/osx-jdk-11.0.5.jdk/Contents/Home")
+    targetPlatform("windows", "jdk/windows-jdk-11.0.5")
 }

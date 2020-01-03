@@ -28,9 +28,6 @@ class PressCopyTextField extends TextField {
         // PressCopyTextField is not editable
         this.setEditable(false);
 
-        // is not a part of focus traversal cycle
-        this.setFocusTraversable(false);
-
         this.setBorder(new Border(BORDER_STROKE));
 
         this.setFont(Font.font(14));

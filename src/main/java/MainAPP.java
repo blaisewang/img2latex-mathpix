@@ -4,7 +4,6 @@ import javafx.concurrent.Task;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.input.KeyCode;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -140,12 +139,8 @@ public class MainAPP extends Application {
         // initialise scene with the BackGridPane
         Scene scene = new Scene(backGridPane);
 
-        // press enter key to send the OCR request
-        scene.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                backGridPane.requestHandler();
-            }
-        });
+        // enter key pressed event binding to the Scene
+        scene.onKeyReleasedProperty().bind(backGridPane.onKeyReleasedProperty());
 
         // add scene to the primary stage
         this.stage.setScene(scene);

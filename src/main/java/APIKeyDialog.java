@@ -52,6 +52,19 @@ class APIKeyDialog {
         Node confirmButton = dialog.getDialogPane().lookupButton(confirmButtonType);
         confirmButton.setDisable(true);
 
+        // moves the caret to after the last char of the text
+        idTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                Platform.runLater(idTextField::end);
+            }
+        });
+
+        keyTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                Platform.runLater(keyTextField::end);
+            }
+        });
+
         // validation
         idTextField.textProperty().addListener((observable, oldValue, newValue) -> confirmButton.setDisable(newValue.trim().isEmpty()));
 

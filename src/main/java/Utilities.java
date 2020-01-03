@@ -89,8 +89,6 @@ class Utilities {
             try {
                 return result.get();
             } catch (InterruptedException | ExecutionException e) {
-                // show internet connection error
-                showErrorDialog("Broken internet connection");
                 return null;
             }
         }
@@ -182,18 +180,18 @@ class Utilities {
     }
 
     /**
-     * Show an alert dialog.
+     * Display an error alert dialog.
      *
-     * @param context context text to be displayed.
+     * @param error error message to be displayed.
      */
-    static void showErrorDialog(String context) {
+    static void displayError(String error) {
 
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
 
         // set no header area in the dialog
         alert.setHeaderText(null);
-        alert.setContentText(context);
+        alert.setContentText(error);
 
         Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
         stage.setAlwaysOnTop(true);

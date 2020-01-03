@@ -7,6 +7,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Base64;
 import java.util.concurrent.Callable;
 
@@ -131,10 +132,9 @@ public class Recognition implements Callable<Response> {
      * Override the supertype method.
      *
      * @return OCR request result.
-     * @throws IOException if there is an internet connection error.
      */
     @Override
-    public Response call() throws IOException {
+    public Response call() {
         return OCRRequest.getResult(parameters);
     }
 

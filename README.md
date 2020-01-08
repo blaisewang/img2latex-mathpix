@@ -47,7 +47,7 @@ Run `Image2LaTeX.app`.
 
 ### Windows
 
-Run `Image2LaTeX.vbs` at `Image2LaTeX-windows/bin/`.
+Run `Image2LaTeX.vbs` at `Image2LaTeX-windows/`.
 
 ### Linux
 

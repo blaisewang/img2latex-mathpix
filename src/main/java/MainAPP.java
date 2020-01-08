@@ -245,8 +245,19 @@ public class MainAPP extends Application {
         MenuItem settingItem = new MenuItem("API Keys");
         settingItem.addActionListener(event -> Platform.runLater(this::showAPIKeyDialog));
 
-        // add check for updates menu item
+        String currentVersion = properties.getProperty("version");
+        String latestVersion = Utilities.getLatestVersion();
+
         MenuItem updateCheckItem = new MenuItem("Check for Updates");
+
+        if (latestVersion != null) {
+            // new version found
+            if (!latestVersion.equals(currentVersion)) {
+                updateCheckItem.setLabel("New Version: " + latestVersion);
+            }
+        }
+
+        // add check for updates menu item
         updateCheckItem.addActionListener(event -> {
             try {
                 Desktop.getDesktop().browse(new URI("https://github.com/blaisewang/img2latex-mathpix/releases"));
@@ -275,7 +286,7 @@ public class MainAPP extends Application {
         popup.addSeparator();
         popup.add(settingItem);
         popup.addSeparator();
-        popup.add("Version: v" + properties.getProperty("version"));
+        popup.add("Version: " + currentVersion);
         popup.add(updateCheckItem);
         popup.addSeparator();
         popup.add(exitItem);

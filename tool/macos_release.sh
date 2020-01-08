@@ -12,7 +12,7 @@ cp ../../macOS/AppIcon.icns $APP_PATH/Resources/AppIcon.icns
 
 cp ../../macOS/Assets.car $APP_PATH/Resources/Assets.car
 
-FILENAME="$(ls *macos.zip)"
+FILENAME="$(ls ./*macos.zip)"
 
 unzip -q "$FILENAME"
 

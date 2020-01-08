@@ -48,7 +48,7 @@ Linux 用户需要首先找到 `config` 文件，再通过文本编辑器进行�
 
 ### Windows
 
-执行 `Image2LaTeX-windows/bin/` 目录下的 `Image2LaTeX.vbs`。
+执行 `Image2LaTeX-windows/` 目录下的 `Image2LaTeX.vbs`。
 
 ### Linux
 

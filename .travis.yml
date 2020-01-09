@@ -1,4 +1,12 @@
+os: linux
+dist: trusty
 language: java
+jdk: oraclejdk11
+
+before_install:
+  - "sudo apt-get -y install unzip"
+install: true
+
 before_cache:
   - "rm -f $HOME/.gradle/caches/modules-2/modules-2.lock"
   - "rm -rf $HOME/.gradle/caches/*/plugin-resolution/"
@@ -6,27 +14,24 @@ cache:
   directories:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
-install: true
-os: linux
-dist: trusty
-jdk: oraclejdk11
-before_install:
-  - "sudo apt-get -y install unzip"
+
 script:
   - "./gradlew build"
+
 before_deploy:
   - "bash ./tool/deploy.sh"
   - "./gradlew clean"
   - "./gradlew runtimeZip"
   - "bash ./tool/macos_release.sh"
   - "bash ./tool/windows_release.sh"
+
 deploy:
   provider: releases
-  api_key:
+  edge: true
+  token:
     secure: YiK8EJNe3pSbw9FR3vOJSXkuU/jj3iKkGFKWqNkUTaMve+UD8GctkHgKXSyO10AD2ukBqcLk5ZSxUKbxv0uz1tuBkkHaQxTbMghcql2KhiZdfP5PCx6Sw08q28ahA2MpzPFM15kvcrkZ6brN9YkYy+1PyK8bdLKIXJXpnNE6ogjfe6h8snywhf8y844nLA3d//D0KkdGW09PxsI2gIL3MvqbNPqHjm1UXssuJYUaOUA9hcC01+mdz+AhgHs1hFKLXJ1haDHL19V+dfmDvoyUEK/FtNkBaT+ZXkXanA7i3FSVurOU+F4962JIlL1O5G/WRWmFk4LsFcEULKc0z4Wt2JA/a+kSJbn3xV/JNthDd/8xqUGfRgJ+iNg6InrO0lGXkyxIUic7O1f8kG7OwlV6NAguZ6zfmX8DdAp+4WLL21JDjLvlb2HK9BXBVTGTY2wbFy7vEbepPQK8hcrYzCtep/vKVe7hG2vgv5CUtYd1+TXFIEHg/YFlwhSenbokAzInWzL5Ty7q3p406Atm31WugtdubL/WH4R+RU20lVueHxRNg3Nf5Grs481q9HOGT41nE3xflRmbGZwCmkGr+Nji7oUlS2LddFmFQFa7EMavB5yywrnUIDbXnHZnjCXfeJdwtFGSdgk2JJ5FHhlW328H2hdLVr8shohIIlGvcvPyd1w=
   file_glob: true
   file: build/libs/*
-  skip_cleanup: true
   on:
     repo: blaisewang/img2latex-mathpix
     tags: true

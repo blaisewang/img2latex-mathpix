@@ -55,3 +55,6 @@ config
 
 # JDK directory
 jdk
+
+# .DS_Store
+.DS_Store

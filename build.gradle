@@ -6,7 +6,7 @@ plugins {
 }
 
 group "blaise.img2latex"
-version "0.3.4"
+version "0.3.5"
 
 compileJava {
     sourceCompatibility = 11
@@ -58,7 +58,7 @@ jar.dependsOn(addInformation)
 runtime {
     options = ["--strip-debug", "--compress", "2", "--no-header-files", "--no-man-pages"]
     imageZip = file("$buildDir/libs/Image2LaTeX-" + version + ".zip")
-    targetPlatform("linux", "jdk/linux-jdk-11.0.5")
-    targetPlatform("macos", "jdk/osx-jdk-11.0.5.jdk/Contents/Home")
-    targetPlatform("windows", "jdk/windows-jdk-11.0.5")
+    targetPlatform("linux", "jdk/linux-jdk")
+    targetPlatform("windows", "jdk/windows-jdk")
+    targetPlatform("macos", "jdk/osx-jdk.jdk/Contents/Home")
 }

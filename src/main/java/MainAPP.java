@@ -248,6 +248,7 @@ public class MainAPP extends Application {
         String currentVersion = properties.getProperty("version");
         String latestVersion = Utilities.getLatestVersion();
 
+        // add check for updates menu item
         MenuItem updateCheckItem = new MenuItem("Check for Updates");
 
         if (latestVersion != null) {
@@ -257,7 +258,7 @@ public class MainAPP extends Application {
             }
         }
 
-        // add check for updates menu item
+        // add click action listener
         updateCheckItem.addActionListener(event -> {
             try {
                 Desktop.getDesktop().browse(new URI("https://github.com/blaisewang/img2latex-mathpix/releases"));

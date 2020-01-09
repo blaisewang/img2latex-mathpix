@@ -6,7 +6,6 @@
 [![Releases](https://img.shields.io/github/v/release/blaisewang/img2latex-mathpix?include_prereleases)](https://github.com/blaisewang/img2latex-mathpix/releases)
 [![Downloads](https://img.shields.io/github/downloads/blaisewang/img2latex-mathpix/total?color=orange)](https://github.com/blaisewang/img2latex-mathpix/releases)
 [![License](https://img.shields.io/github/license/blaisewang/img2latex-mathpix)](https://github.com/blaisewang/img2latex-mathpix/blob/master/LICENSE)
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
 
 [Snip](https://mathpix.com/) 是由 Mathpix 打造的一款出色的应用。
 它可以帮助你提取文档中的公式及文本将其转换为LaTeX格式，并每月免费提供给所有用户 50 次识别。
@@ -116,11 +115,20 @@ java -jar Image2LaTeX-x.x.x.jar
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+
 <table>
   <tr>
     <td align="center"><a href="https://nyxflower.github.io/"><img src="https://avatars1.githubusercontent.com/u/38955723?v=4" width="100px;" alt=""/><br /><sub><b>Hao Xu</b></sub></a><br /><a href="#ideas-NYXFLOWER" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="http://blog.gongyan.me"><img src="https://avatars0.githubusercontent.com/u/14838533?v=4" width="100px;" alt=""/><br /><sub><b>龚焱</b></sub></a><br /><a href="#ideas-gongyan200" title="Ideas, Planning, & Feedback">🤔</a> <a href="#tutorial-gongyan200" title="Tutorials">✅</a></td>
   </tr>
 </table>
+
+<!-- markdownlint-enable -->
+<!-- prettier-ignore-end -->
+<!-- ALL-CONTRIBUTORS-LIST:END -->
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->

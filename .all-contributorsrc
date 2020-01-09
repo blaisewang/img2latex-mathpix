@@ -13,6 +13,16 @@
       "contributions": [
         "ideas"
       ]
+    },
+    {
+      "login": "gongyan200",
+      "name": "龚焱",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/14838533?v=4",
+      "profile": "http://blog.gongyan.me",
+      "contributions": [
+        "ideas",
+        "tutorial"
+      ]
     }
   ],
   "contributorsPerLine": 7,

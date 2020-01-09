@@ -24,7 +24,11 @@ rm -rf ./Image2LaTeX-macos
 
 VERSION="$(echo "$FILENAME" | cut -d'-' -f2)"
 
-sed -i "" "s/0.0.0/$VERSION/g" ./$APP_NAME/Contents/Info.plist
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  sed -i "" "s/0.0.0/$VERSION/g" ./$APP_NAME/Contents/Info.plist
+else
+  sed -i "s/0.0.0/$VERSION/g" ./$APP_NAME/Contents/Info.plist
+fi
 
 touch Image2LaTeX.app
 

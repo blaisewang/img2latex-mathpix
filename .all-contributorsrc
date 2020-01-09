@@ -23,6 +23,16 @@
         "ideas",
         "tutorial"
       ]
+    },
+    {
+      "login": "wtbsw",
+      "name": "BOB",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/14332504?v=4",
+      "profile": "https://github.com/wtbsw",
+      "contributions": [
+        "bug",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,

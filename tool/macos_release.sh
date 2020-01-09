@@ -2,7 +2,7 @@ APP_NAME=Image2LaTeX.app
 
 APP_PATH=./Image2LaTeX.app/Contents
 
-cd ../build/libs || exit
+cd build/libs || exit
 
 mkdir -p $APP_PATH $APP_PATH/MacOS $APP_PATH/Resources
 

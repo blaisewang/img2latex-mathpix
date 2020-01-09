@@ -1,4 +1,4 @@
-cd ../build/libs || exit
+cd build/libs || exit
 
 FILENAME="$(ls ./*windows.zip)"
 

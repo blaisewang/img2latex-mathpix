@@ -53,7 +53,7 @@ Run `Image2LaTeX.vbs` at `Image2LaTeX-windows/`.
 
 Run `Image2LaTeX` at `Image2LaTeX-linux/bin/` or with:
 
-```
+```bash
 ./Image2LaTeX
 ```
 
@@ -61,7 +61,7 @@ Run `Image2LaTeX` at `Image2LaTeX-linux/bin/` or with:
 
 With a JAR launcher installed, run `Image2LaTeX-x.x.x.jar` or with:
 
-```
+```bash
 java -jar Image2LaTeX-x.x.x.jar
 ```
 

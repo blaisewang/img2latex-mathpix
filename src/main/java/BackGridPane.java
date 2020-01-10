@@ -3,8 +3,8 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.Clipboard;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -30,6 +30,9 @@ class BackGridPane extends GridPane {
     private static Label waitingTextLabel = new Label("Waiting...");
     private static ProgressBar confidenceProgressBar = new ProgressBar(0);
 
+    private final Clipboard clipboard = Clipboard.getSystemClipboard();
+
+    private static long lastUpdateCompletionTimestamp = Instant.now().getEpochSecond();
     private static long lastRequestCompletionTimestamp = Instant.now().getEpochSecond();
 
     private static final Color PANE_BORDER_COLOR = new Color(0.898, 0.902, 0.9216, 1);
@@ -85,11 +88,32 @@ class BackGridPane extends GridPane {
         BorderPane renderedBorderPane = setImageViewBorder(renderedImageView);
         this.add(renderedBorderPane, 0, 3, 2, 1);
 
-        // enter key pressed event to send the OCR request
         frontGridPane.setOnKeyReleased(event -> {
+
+            // space key to update image
+            if (event.getCode() == KeyCode.SPACE) {
+
+                // prevent multiple image updates in a short time
+                if (Instant.now().getEpochSecond() - lastUpdateCompletionTimestamp < 1) {
+                    lastUpdateCompletionTimestamp = Instant.now().getEpochSecond();
+                    return;
+                }
+
+                // an Image has been registered on the clipboard
+                if (clipboard.hasImage()) {
+                    // update the ImageView
+                    clipboardImageView.setImage(clipboard.getImage());
+                }
+
+                lastUpdateCompletionTimestamp = Instant.now().getEpochSecond();
+
+            }
+
+            // enter key to send the OCR request
             if (event.getCode() == KeyCode.ENTER) {
                 this.requestHandler();
             }
+
         });
         // add front grid panel
         this.add(frontGridPane, 0, 4, 2, 1);
@@ -164,28 +188,23 @@ class BackGridPane extends GridPane {
     }
 
     /**
-     * If new image found in the system clipboard, this method is used to display new image.
-     *
-     * @param image image to be displayed at the ImageView.
-     */
-    void setClipboardImageView(Image image) {
-        clipboardImageView.setImage(image);
-    }
-
-    /**
      * OCR request handler.
      */
     void requestHandler() {
 
         // prevent multiple OCR requests from being sent in a short time
-        if (Instant.now().getEpochSecond() - lastRequestCompletionTimestamp < 2) {
+        if (Instant.now().getEpochSecond() - lastRequestCompletionTimestamp < 1) {
             lastRequestCompletionTimestamp = Instant.now().getEpochSecond();
             return;
         }
 
-        Image clipboardImage = clipboardImageView.getImage();
+        // no image displayed
+        if (clipboard.hasImage()) {
+            // update the ImageView
+            clipboardImageView.setImage(clipboard.getImage());
+        }
 
-        if (clipboardImage != null) {
+        if (clipboardImageView.getImage() != null) {
 
             // clear last location
             copiedButton.setVisible(false);
@@ -196,7 +215,7 @@ class BackGridPane extends GridPane {
             Task<Response> task = new Task<>() {
                 @Override
                 protected Response call() {
-                    return Utilities.concurrentCall(clipboardImage);
+                    return Utilities.concurrentCall(clipboardImageView.getImage());
                 }
             };
             task.setOnSucceeded(event -> {

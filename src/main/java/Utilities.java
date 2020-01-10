@@ -62,22 +62,6 @@ class Utilities {
     }
 
     /**
-     * @return current image in the system clipboard.
-     */
-    static Image getClipboardImage() {
-
-        final Clipboard clipboard = Clipboard.getSystemClipboard();
-
-        // return null if there is no image in the clipboard
-        if (clipboard.hasImage()) {
-            return clipboard.getImage();
-        }
-
-        return null;
-
-    }
-
-    /**
      * @param text the recognised result to be put into clipboard.
      */
     static void putStringIntoClipboard(String text) {

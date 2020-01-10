@@ -1,6 +1,5 @@
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.concurrent.Task;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -24,7 +23,6 @@ import java.util.Properties;
  * MainAPP.java
  * Initialises main interface of the JavaFX application.
  * The primary stage will be initialised with 1 ImageView, 1 Button, 4 TextFields and 1 ProgressBar.
- * The app will also start a new thread to listen to the system clipboard changes.
  * The app will add a tray icon to menu bar and set the window style as StageStyle.UTILITY.
  * The color of the icon dependents on the OS. White for macOS dark, black for macOS light, blue for the rest.
  */
@@ -34,74 +32,11 @@ public class MainAPP extends Application {
 
     private APIKeyDialog apiKeyDialog = new APIKeyDialog();
 
-    private static Image lastImage = null;
-
     private BackGridPane backGridPane = new BackGridPane();
 
     private static Properties properties = new Properties();
 
     private static String APPLICATION_TITLE;
-
-    private ClipboardListener clipboardListener = new ClipboardListener();
-
-    /**
-     * ClipboardListener class
-     * javafx.concurrent.Task for the listener thread to monitor the system clipboard.
-     */
-    private class ClipboardListener extends Task<Void> {
-
-        // boolean variable for stopping the while loop in Void call()
-        private volatile boolean exit = false;
-
-        /**
-         * Set new image found in clipboard to be painted by the ImageView.
-         *
-         * @return nothing.
-         */
-        @Override
-        protected Void call() {
-
-            while (!exit) {
-
-                // check the clipboard ~2 times per second
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    break;
-                }
-
-                // Platform.runLater() for update UI elements in JavaFX app
-                Platform.runLater(() -> {
-
-                    Image image = Utilities.getClipboardImage();
-
-                    // check if the current image in the clipboard is as the same as the previous one
-                    if (image != null && !image.equals(lastImage)) {
-
-                        // store the current image for next check
-                        lastImage = image;
-
-                        // update the ImageView
-                        backGridPane.setClipboardImageView(image);
-
-                    }
-
-                });
-
-            }
-
-            return null;
-
-        }
-
-        /**
-         * Stop the listener thread.
-         */
-        void stop() {
-            exit = true;
-        }
-
-    }
 
     /**
      * Start of JavaFX application.
@@ -122,16 +57,10 @@ public class MainAPP extends Application {
         // store the reference of the primaryStage
         this.stage = primaryStage;
 
-        // start the clipboard listener thread
-        new Thread(clipboardListener).start();
-
         try {
             // call add icon to menu bar method, get a boolean result
             hasAddIconToTray = addIconToMenuBar();
         } catch (IOException | AWTException e) {
-            // otherwise, stop the listener thread and exit the app
-            clipboardListener.stop();
-
             Platform.exit();
             System.exit(0);
         }
@@ -163,9 +92,6 @@ public class MainAPP extends Application {
         } else {
             // set the app shutdown when the window is closed
             this.stage.setOnCloseRequest(e -> {
-                // stop the listener thread
-                clipboardListener.stop();
-
                 Platform.exit();
                 System.exit(0);
             });
@@ -271,9 +197,6 @@ public class MainAPP extends Application {
 
         // add action listener for cleanup
         exitItem.addActionListener(event -> {
-            // stop the listener thread
-            clipboardListener.stop();
-
             // remove the icon
             tray.remove(trayIcon);
 

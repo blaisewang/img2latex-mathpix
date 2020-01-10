@@ -67,8 +67,9 @@ java -jar Image2LaTeX-x.x.x.jar
 
 Use your operating system's default methods (or other tools) to take a screenshot of equations or text (Shift (⇧)-Control (⌃)-Command (⌘)-4 on macOS by default).
 
-The Image2LaTex app will display the image you captured.
-Press the `Return` or `Enter` key to send the OCR request.
+Then, press the `Space` key to preview the screenshot.
+Or, press the `Return` or `Enter` key to send the OCR request.
+
 See [demo](#Demo) section below.
 
 ## Demo

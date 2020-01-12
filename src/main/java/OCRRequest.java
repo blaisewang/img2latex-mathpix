@@ -78,8 +78,6 @@ class OCRRequest {
             HttpResponse result = httpClient.execute(request);
             // obtain the message entity of this response
             json = EntityUtils.toString(result.getEntity(), "UTF-8");
-            // close and release resources
-            httpClient.close();
         } catch (IOException e) {
             return null;
         }

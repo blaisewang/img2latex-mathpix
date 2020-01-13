@@ -5,6 +5,7 @@
 [![Build Status](https://travis-ci.com/blaisewang/img2latex-mathpix.svg?branch=master)](https://travis-ci.com/blaisewang/img2latex-mathpix)
 [![Releases](https://img.shields.io/github/v/release/blaisewang/img2latex-mathpix?include_prereleases)](https://github.com/blaisewang/img2latex-mathpix/releases)
 [![Downloads](https://img.shields.io/github/downloads/blaisewang/img2latex-mathpix/total?color=orange)](https://github.com/blaisewang/img2latex-mathpix/releases)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?color=ff69b4)](http://makeapullrequest.com)
 [![License](https://img.shields.io/github/license/blaisewang/img2latex-mathpix)](https://github.com/blaisewang/img2latex-mathpix/blob/master/LICENSE)
 
 [Snip](https://mathpix.com/) 是由 Mathpix 打造的一款出色的应用。

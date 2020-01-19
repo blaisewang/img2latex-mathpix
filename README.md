@@ -2,7 +2,8 @@
 
 English | [中文](https://github.com/blaisewang/img2latex-mathpix/blob/master/README-ZH.md#readme)
 
-[![Build Status](https://img.shields.io/travis/com/blaisewang/img2latex-mathpix/master?style=flat-square)](https://travis-ci.com/blaisewang/img2latex-mathpix)
+[![Codacy Badge](https://img.shields.io/codacy/grade/89cd8aa01451404f8d782ead0b4d153d?logo=codacy&style=flat-square)](https://www.codacy.com/manual/blaisewang/img2latex-mathpix)
+[![Build Status](https://img.shields.io/travis/com/blaisewang/img2latex-mathpix/master?logo=travis&style=flat-square)](https://travis-ci.com/blaisewang/img2latex-mathpix)
 [![Releases](https://img.shields.io/github/v/release/blaisewang/img2latex-mathpix?include_prereleases&style=flat-square)](https://github.com/blaisewang/img2latex-mathpix/releases)
 [![Downloads](https://img.shields.io/github/downloads/blaisewang/img2latex-mathpix/total?color=orange&style=flat-square)](https://github.com/blaisewang/img2latex-mathpix/releases)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?color=ff69b4&style=flat-square)](http://makeapullrequest.com)

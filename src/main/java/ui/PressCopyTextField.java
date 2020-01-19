@@ -1,16 +1,22 @@
+package ui;
+
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 
 /**
- * PressCopyTextField.java
+ * UI.PressCopyTextField.java
  * Extension of javafx.scene.control.TextField.
  * With customised border stroke and click-to-copy function.
  */
-class PressCopyTextField extends TextField {
+public class PressCopyTextField extends TextField {
 
     // variable to keep the original text format such as "\n"
     private String formattedText = "";
@@ -20,12 +26,12 @@ class PressCopyTextField extends TextField {
     private static final BorderWidths BORDER_WIDTHS = new BorderWidths(1, 1, 1, 1);
     private static final BorderStroke BORDER_STROKE = new BorderStroke(COLOR, BorderStrokeStyle.SOLID, CORNER_RADII, BORDER_WIDTHS);
 
-    PressCopyTextField() {
+    public PressCopyTextField() {
 
         this.setPrefWidth(220);
         this.setPrefHeight(20);
 
-        // PressCopyTextField is not editable
+        // UI.PressCopyTextField is not editable
         this.setEditable(false);
 
         this.setBorder(new Border(BORDER_STROKE));
@@ -35,17 +41,17 @@ class PressCopyTextField extends TextField {
         // initialise with black text colour
         this.setStyle("-fx-text-inner-color: black;");
 
-        // text colour turns to light blue when mouse enters the PressCopyTextField
+        // text colour turns to light blue when mouse enters the UI.PressCopyTextField
         this.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> this.setStyle("-fx-text-inner-color: #3d93f7;"));
 
-        // text colour turns back to black when mouse exits the PressCopyTextField
+        // text colour turns back to black when mouse exits the UI.PressCopyTextField
         this.addEventHandler(MouseEvent.MOUSE_EXITED, event -> this.setStyle("-fx-text-inner-color: black;"));
 
-        // put the formatted text into clipboard when the PressCopyTextField is clicked
+        // put the formatted text into clipboard when the UI.PressCopyTextField is clicked
         this.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (getLength() > 0) {
                 // copy text if there is text
-                Utilities.putStringIntoClipboard(this.formattedText);
+                UIUtils.putStringIntoClipboard(this.formattedText);
             }
         });
 
@@ -54,7 +60,7 @@ class PressCopyTextField extends TextField {
     /**
      * @param text text to be displayed and copied.
      */
-    final void setFormattedText(String text) {
+    public final void setFormattedText(String text) {
         // display text without formatted by the supertype method
         this.setText(text);
         // store the formatted text in this object
@@ -73,7 +79,7 @@ class PressCopyTextField extends TextField {
             super.copy();
         } else {
             // copy formatted text
-            Utilities.putStringIntoClipboard(this.formattedText);
+            UIUtils.putStringIntoClipboard(this.formattedText);
         }
     }
 

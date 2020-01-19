@@ -1,3 +1,7 @@
+package ui;
+
+import io.AppConfig;
+import io.IOUtils;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;
@@ -9,7 +13,13 @@ import javafx.stage.StageStyle;
 import org.apache.commons.lang3.SystemUtils;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.AWTException;
+import java.awt.Desktop;
+import java.awt.MenuItem;
+import java.awt.PopupMenu;
+import java.awt.SystemTray;
+import java.awt.Toolkit;
+import java.awt.TrayIcon;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,7 +30,7 @@ import java.util.Properties;
 
 
 /**
- * MainAPP.java
+ * UI.MainAPP.java
  * Initialises main interface of the JavaFX application.
  * The primary stage will be initialised with 1 ImageView, 1 Button, 4 TextFields and 1 ProgressBar.
  * The app will add a tray icon to menu bar and set the window style as StageStyle.UTILITY.
@@ -47,7 +57,7 @@ public class MainAPP extends Application {
     public void start(Stage primaryStage) {
 
         // show API key dialog if config file does not exist
-        if (!Utilities.configFileExists()) {
+        if (!IOUtils.isConfigExists()) {
             showAPIKeyDialog();
         }
 
@@ -59,13 +69,13 @@ public class MainAPP extends Application {
 
         try {
             // call add icon to menu bar method, get a boolean result
-            hasAddIconToTray = addIconToMenuBar();
+            hasAddIconToTray = addTrayIcon();
         } catch (IOException | AWTException e) {
             Platform.exit();
             System.exit(0);
         }
 
-        // initialise scene with the BackGridPane
+        // initialise scene with the UI.BackGridPane
         Scene scene = new Scene(backGridPane);
 
         // enter key pressed event binding to the Scene
@@ -122,7 +132,7 @@ public class MainAPP extends Application {
      * @throws IOException  if the icon resources cannot be loaded.
      * @throws AWTException if the icon cannot be correctly added to the system menu bar.
      */
-    private Boolean addIconToMenuBar() throws IOException, AWTException {
+    private Boolean addTrayIcon() throws IOException, AWTException {
 
         // initialise the AWT toolkit
         Toolkit.getDefaultToolkit();
@@ -137,7 +147,7 @@ public class MainAPP extends Application {
         // macOS
         if (SystemUtils.IS_OS_MAC_OSX) {
             // dark mode
-            if (Utilities.isMacDarkMode()) {
+            if (UIUtils.isMacDarkMode()) {
                 // load the white colour icon
                 iconInputStream = getClass().getClassLoader().getResourceAsStream("icon-mac-dark.png");
             } else {
@@ -172,16 +182,14 @@ public class MainAPP extends Application {
         settingItem.addActionListener(event -> Platform.runLater(this::showAPIKeyDialog));
 
         String currentVersion = properties.getProperty("version");
-        String latestVersion = Utilities.getLatestVersion();
+        String latestVersion = IOUtils.getLatestVersion();
 
         // add check for updates menu item
         MenuItem updateCheckItem = new MenuItem("Check for Updates");
 
-        if (latestVersion != null) {
+        if (latestVersion != null && !latestVersion.equals(currentVersion)) {
             // new version found
-            if (!latestVersion.equals(currentVersion)) {
-                updateCheckItem.setLabel("New Version: " + latestVersion);
-            }
+            updateCheckItem.setLabel("New Version: " + latestVersion);
         }
 
         // add click action listener
@@ -239,10 +247,10 @@ public class MainAPP extends Application {
      */
     private void showAPIKeyDialog() {
 
-        AppConfig appConfig = Utilities.readConfigFile();
+        AppConfig appConfig = IOUtils.readConfigFile();
         if (appConfig != null) {
-            apiKeyDialog.idTextField.setText(appConfig.getApp_id());
-            apiKeyDialog.keyTextField.setText(appConfig.getApp_key());
+            apiKeyDialog.setId(appConfig.getAppId());
+            apiKeyDialog.setKey(appConfig.getAppKey());
         }
 
         apiKeyDialog.show();
@@ -250,9 +258,9 @@ public class MainAPP extends Application {
     }
 
     /**
-     * Launch JavaFx application
+     * Launch JavaFx application.
      *
-     * @param args command line arguments
+     * @param args command line arguments.
      */
     public static void main(String[] args) throws IOException {
 

@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 cd build/libs || exit
 
 FILENAME="$(ls ./*windows.zip)"

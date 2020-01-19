@@ -1,10 +1,12 @@
+package io;
+
 import java.util.ArrayList;
 
 /**
- * Response.java
+ * IO.Response.java
  * used by Gson to deserialize the JSON string to the object.
  */
-class Response {
+public class Response {
 
     private String error;
     private String text;
@@ -13,7 +15,7 @@ class Response {
     private double latex_confidence;
     private ArrayList<String> detection_list;
 
-    Response(String error, String text, String text_display, String latex_styled, double latex_confidence, ArrayList<String> detection_list) {
+    public Response(String error, String text, String text_display, String latex_styled, double latex_confidence, ArrayList<String> detection_list) {
 
         this.error = error;
         this.text = text;
@@ -27,42 +29,42 @@ class Response {
     /**
      * @return error message if any.
      */
-    String getError() {
+    public String getError() {
         return error;
     }
 
     /**
      * @return text format result.
      */
-    String getText() {
+    public String getText() {
         return text;
     }
 
     /**
      * @return text_display format result.
      */
-    String getText_display() {
+    public String getTextDisplay() {
         return text_display;
     }
 
     /**
      * @return LaTeX format result.
      */
-    String getLatex_styled() {
+    public String getLatexStyled() {
         return latex_styled;
     }
 
     /**
      * @return confidence of the correctness.
      */
-    Double getLatex_confidence() {
+    public Double getLatexConfidence() {
         return latex_confidence;
     }
 
     /**
      * @return if no equation in the image.
      */
-    Boolean is_not_math() {
+    public Boolean isNotMath() {
         return detection_list.contains("is_not_math");
     }
 

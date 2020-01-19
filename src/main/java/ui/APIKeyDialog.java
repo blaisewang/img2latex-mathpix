@@ -1,7 +1,14 @@
+package ui;
+
+import io.IOUtils;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -9,21 +16,21 @@ import javafx.util.Pair;
 import java.util.Optional;
 
 /***
- * APIKeyDialog.java
+ * UI.APIKeyDialog.java
  * shows a dialog to enter app ID and app key information.
  */
-class APIKeyDialog {
+public class APIKeyDialog {
 
     private Dialog<Pair<String, String>> dialog = new Dialog<>();
     private Stage stage;
 
-    TextField idTextField = new TextField();
-    TextField keyTextField = new TextField();
+    private TextField idTextField = new TextField();
+    private TextField keyTextField = new TextField();
 
     /**
      * Original source: https://code.makery.ch/blog/javafx-dialogs-official/
      **/
-    APIKeyDialog() {
+    public APIKeyDialog() {
 
         dialog.setTitle("API Key");
         dialog.setHeaderText("Enter your MathpixOCR App ID and key below");
@@ -97,13 +104,31 @@ class APIKeyDialog {
     }
 
     /**
-     * Show dialog stage
+     * Set id text.
+     *
+     * @param id to display.
      */
-    void show() {
+    public void setId(String id) {
+        this.idTextField.setText(id);
+    }
+
+    /**
+     * Set key text.
+     *
+     * @param key to display.
+     */
+    public void setKey(String key) {
+        this.keyTextField.setText(key);
+    }
+
+    /**
+     * Show dialog stage.
+     */
+    public void show() {
 
         if (!stage.isShowing()) {
             Optional<Pair<String, String>> result = dialog.showAndWait();
-            result.ifPresent(idKey -> Utilities.createConfigFile(idKey.getKey(), idKey.getValue()));
+            result.ifPresent(idKey -> IOUtils.createConfigFile(idKey.getKey(), idKey.getValue()));
         }
 
         stage.toFront();

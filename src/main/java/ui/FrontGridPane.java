@@ -1,15 +1,22 @@
+package ui;
+
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
 
 /**
- * FrontGridPane.java
+ * UI.FrontGridPane.java
  * Used for display recognised results.
- * The front grid panel has 1 Label, 1 CopiedButton and 4 PressCopyTextFields.
+ * The front grid panel has 1 Label, 1 UI.CopiedButton and 4 PressCopyTextFields.
  */
-class FrontGridPane extends GridPane {
+public class FrontGridPane extends GridPane {
 
     private static CopiedButton copiedButton = new CopiedButton("COPIED");
     private static PressCopyTextField latexStyledResult = new PressCopyTextField();
@@ -23,9 +30,9 @@ class FrontGridPane extends GridPane {
 
     /**
      * @param itemMargin   margin between items.
-     * @param borderStroke customised border stroke, same as in BackGridPane.
+     * @param borderStroke customised border stroke, same as in UI.BackGridPane.
      */
-    FrontGridPane(int itemMargin, BorderStroke borderStroke) {
+    public FrontGridPane(int itemMargin, BorderStroke borderStroke) {
 
         this.setBorder(new Border(borderStroke));
         this.setBackground(frontPaneBackground);
@@ -36,49 +43,49 @@ class FrontGridPane extends GridPane {
         this.setHgap(2);
 
         // add "Result" textL label
-        Label resultTextLabel = Utilities.getTextLabel("Result");
-        Utilities.setDefaultNodeMargin(resultTextLabel, itemMargin, 0);
+        Label resultTextLabel = UIUtils.getTextLabel("Result");
+        UIUtils.setDefaultNodeMargin(resultTextLabel, itemMargin, 0);
         this.add(resultTextLabel, 0, 0);
 
         // used to indicate which result on the left side has been copied, default invisible
         copiedButton.setVisible(false);
-        Utilities.setDefaultNodeMargin(copiedButton, itemMargin / 2, 0);
+        UIUtils.setDefaultNodeMargin(copiedButton, itemMargin / 2, 0);
         this.add(copiedButton, 1, 1);
 
         // add latexStyledResult
-        Utilities.setDefaultNodeMargin(latexStyledResult, itemMargin, 0);
+        UIUtils.setDefaultNodeMargin(latexStyledResult, itemMargin, 0);
         setTextFieldEvent(latexStyledResult, 1);
         this.add(latexStyledResult, 0, 1);
 
         // add textResult
-        Utilities.setDefaultNodeMargin(textResult, itemMargin, 0);
+        UIUtils.setDefaultNodeMargin(textResult, itemMargin, 0);
         setTextFieldEvent(textResult, 2);
         this.add(textResult, 0, 2);
 
         // add notNumberedBlockModeResult
-        Utilities.setDefaultNodeMargin(notNumberedBlockModeResult, itemMargin, 0);
+        UIUtils.setDefaultNodeMargin(notNumberedBlockModeResult, itemMargin, 0);
         setTextFieldEvent(notNumberedBlockModeResult, 3);
         this.add(notNumberedBlockModeResult, 0, 3);
 
         // add numberedBlockModeResult
-        Utilities.setDefaultNodeMargin(numberedBlockModeResult, itemMargin, 0);
+        UIUtils.setDefaultNodeMargin(numberedBlockModeResult, itemMargin, 0);
         setTextFieldEvent(numberedBlockModeResult, 4);
         this.add(numberedBlockModeResult, 0, 4);
 
     }
 
     /**
-     * Method to add a click event to a PressCopyTextField
+     * Method to add a click event to a UI.PressCopyTextField.
      *
-     * @param textField TextField to add the click event
-     * @param rowIndex  row index of CopiedButton showed
+     * @param textField TextField to add the click event.
+     * @param rowIndex  row index of UI.CopiedButton showed.
      */
     private void setTextFieldEvent(PressCopyTextField textField, int rowIndex) {
 
         // mouse clicked event
         textField.setOnMouseClicked(event -> {
             if (textField.getLength() > 0) {
-                // CopiedButton shows at (1, rowIndex)
+                // UI.CopiedButton shows at (1, rowIndex)
                 copiedButton.setVisible(true);
                 GridPane.setRowIndex(copiedButton, rowIndex);
             }
@@ -87,44 +94,44 @@ class FrontGridPane extends GridPane {
     }
 
     /**
-     * @return CopiedButton object used to be controlled by BackGridPane event.
+     * @return UI.CopiedButton object used to be controlled by UI.BackGridPane event.
      */
-    CopiedButton getCopiedButton() {
+    public CopiedButton getCopiedButton() {
         return copiedButton;
     }
 
     /**
      * @return LaTeX styled result TextField.
      */
-    PressCopyTextField getLatexStyledResult() {
+    public PressCopyTextField getLatexStyledResult() {
         return latexStyledResult;
     }
 
     /**
      * @return text result TextField.
      */
-    PressCopyTextField getTextResult() {
+    public PressCopyTextField getTextResult() {
         return textResult;
     }
 
     /**
      * @return not numbered block mode result TextField.
      */
-    PressCopyTextField getNotNumberedBlockModeResult() {
+    public PressCopyTextField getNotNumberedBlockModeResult() {
         return notNumberedBlockModeResult;
     }
 
     /**
      * @return numbered block mode result TextField.
      */
-    PressCopyTextField getNumberedBlockModeResult() {
+    public PressCopyTextField getNumberedBlockModeResult() {
         return numberedBlockModeResult;
     }
 
     /**
-     * Method to set the row index of CopiedButton in BackGridPane
+     * Method to set the row index of UI.CopiedButton in UI.BackGridPane.
      */
-    void setCopiedButtonRowIndex() {
+    public void setCopiedButtonRowIndex() {
         copiedButton.setVisible(true);
         GridPane.setRowIndex(copiedButton, 1);
     }

@@ -1,3 +1,5 @@
+package io;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import javafx.embed.swing.SwingFXUtils;
@@ -7,14 +9,13 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.Base64;
 import java.util.concurrent.Callable;
 
 
 /**
- * Recognition.java
- * implements Callable<T> for concurrent call.
+ * IO.Recognition.java
+ * implements Callable for concurrent call.
  * It initialises a common JsonObject used for request with unchanged parameters.
  * Set the "src" value with base64 encoded clipboard image before each request.
  */
@@ -24,9 +25,9 @@ public class Recognition implements Callable<Response> {
 
     /**
      * Original parameter explanation: https://docs.mathpix.com/
-     * Initialisation of the Recognition class and a JsonObject with unchanged parameters.
+     * Initialisation of the IO.Recognition class and a JsonObject with unchanged parameters.
      */
-    Recognition() {
+    public Recognition() {
 
         // "src" initialises with empty string
         parameters.addProperty("src", "");
@@ -104,7 +105,7 @@ public class Recognition implements Callable<Response> {
      * @param image Image to be recognised.
      * @return if the parameter set is successful.
      */
-    Boolean setSrcParameters(Image image) {
+    public Boolean setSrcParameters(Image image) {
 
         // output stream in byte array
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -135,7 +136,7 @@ public class Recognition implements Callable<Response> {
      */
     @Override
     public Response call() {
-        return OCRRequest.getResult(parameters);
+        return OCRRequestHelper.getResult(parameters);
     }
 
 }

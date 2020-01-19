@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 APP_NAME=Image2LaTeX.app
 
 APP_PATH=./Image2LaTeX.app/Contents

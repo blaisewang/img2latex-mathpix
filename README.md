@@ -21,13 +21,12 @@ See the [features](https://mathpix.com/ocr#features) section on MathpixOCR websi
 
 ### New Featurs
 
-- Self-contained executable application for macOS.
+-   Self-contained executable application for macOS.
 
 ## Requirements
 
-- Your API keys in your [MathpixOCR dashboard](https://dashboard.mathpix.com/) (different from the Mathpix account used in the Snip app)
-
-- JDK 11 or higher version ([OpenJDK](https://openjdk.java.net/) is highly recommended) if you plan to use `Image2LaTeX-x.x.x.jar`
+-   Your API keys in your [MathpixOCR dashboard](https://dashboard.mathpix.com/) (different from the Mathpix account used in the Snip app)
+-   JDK 11 or higher version ([OpenJDK](https://openjdk.java.net/) is highly recommended) if you plan to use `Image2LaTeX-x.x.x.jar`
 
 ## Run
 
@@ -38,7 +37,7 @@ To change your API keys, macOS and Windows users will find a menu item called `A
 Linux users need to change it manually by finding the `config` file and edit it by text editor.
 
 **Do not share your `config` file with others.**
-This app will also not send your API keys to others except for MathpixOCR API server (see [OCRRequest.java](https://github.com/blaisewang/img2latex-mathpix/blob/master/src/main/java/OCRRequest.java) to learn how your API keys are used).
+This app will also not send your API keys to others except for MathpixOCR API server (see [OCRRequestHelper.java](https://github.com/blaisewang/img2latex-mathpix/blob/master/src/main/java/io/OCRRequestHelper.java) to learn how your API keys are used).
 
 ## Usage
 
@@ -79,35 +78,31 @@ See [demo](#Demo) section below.
 
 ## FAQ
 
-### No native self-contained executable application provided for Widnows or Linux?
+### Native self-contained executable application for Windows and Linux
 
 Not yet. But, with the GA release of Java 14 in 2020, [jpackage](https://jdk.java.net/jpackage/) should be available for packaging self-contained JavaFX application.
 At that time, I will drop the release of `.jar` and `.zip` files and no one (except me) needs to install JDK anymore.
 
-### Why three types of the application released? Which one I should download?
+### Difference between released `*.jar` and `*.zip` files
 
-The `Image2LaTeX.app` is for macOS only.
-
-The `Image2LaTeX-x.x.x-windows.zip` 和 `Image2LaTeX-x.x.x-linux.zip` are built with the [Badass Runtime Plugin](https://badass-runtime-plugin.beryx.org/releases/latest/) which has a huge size.
-
-You don't need to have JDK 11 installed for running these versions.
+You don't need to have JDK 11 installed for running `*.zip` versions.
 
 Considering the people using similar apps, I assumed that a large percentage of users should have JDK installed.
 Therefore, a smaller size Fat JAR `Image2LaTeX-x.x.x.jar` has also released.
 
-### Want to get updates on new releases ASAP?
+### Getting updates on new releases ASAP
 
 See this [article](https://help.github.com/en/github/receiving-notifications-about-activity-on-github/watching-and-unwatching-releases-for-a-repository) about watching and unwatching releases for a repository by GitHub.
 
-### Any plans?
+### Development plans
 
-- Add system tray icon support for some Linux distributions.
+-   Add system tray icon support for some Linux distributions.
 
 ## Issues
 
 Please first refer to the official [API Docs](https://docs.mathpix.com/#error-id-types) about error types if an error dialogue is displayed.
 
-### Still have problems :thinking: ?
+### Encountered an unreported issue 🤔
 
 Welcome to open an [issue](https://github.com/blaisewang/img2latex-mathpix/issues) with the [bug](https://github.com/blaisewang/img2latex-mathpix/labels/bug) or [question](https://github.com/blaisewang/img2latex-mathpix/labels/question) label, but the time to fix non-vital bugs may not be guaranteed.
 

@@ -1,4 +1,4 @@
-/*
+package ui;/*
  * Copyright 2013 Heaton Research, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,15 +28,17 @@ import org.scilab.forge.jlatexmath.TeXConstants;
 import org.scilab.forge.jlatexmath.TeXFormula;
 import org.scilab.forge.jlatexmath.TeXIcon;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JLabel;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Insets;
 import java.awt.image.BufferedImage;
 
 /**
- * JLaTeXMathRendering.java
+ * UI.JLaTeXMathRenderingHelper.java
  * Utility class used to render LaTeX formulas.
  */
-class JLaTeXMathRendering {
+public class JLaTeXMathRenderingHelper {
 
     /**
      * Original source: https://github.com/jeffheaton/jlatexmath-example/blob/master/src/com/jeffheaton/latex/LatexExample.java
@@ -44,7 +46,7 @@ class JLaTeXMathRendering {
      * @param latexSource text to be rendered.
      * @return rendered formula image.
      */
-    static Image render(String latexSource) {
+    public static Image render(String latexSource) {
         // create a formula
         TeXFormula teXFormula = new TeXFormula(latexSource);
 

@@ -16,10 +16,10 @@ import javafx.util.Pair;
 import java.util.Optional;
 
 /***
- * UI.APIKeyDialog.java
+ * UI.APICredentialSettingDialog.java
  * shows a dialog to enter app ID and app key information.
  */
-public class APIKeyDialog {
+public class APICredentialSettingDialog {
 
     private Dialog<Pair<String, String>> dialog = new Dialog<>();
     private Stage stage;
@@ -30,14 +30,15 @@ public class APIKeyDialog {
     /**
      * Original source: https://code.makery.ch/blog/javafx-dialogs-official/
      **/
-    public APIKeyDialog() {
+    public APICredentialSettingDialog() {
 
-        dialog.setTitle("API Key");
-        dialog.setHeaderText("Enter your MathpixOCR App ID and key below");
+        dialog.setTitle("API Credentials");
+        dialog.setHeaderText("Enter your MathpixOCR API credentials below");
 
         // set the button types
-        ButtonType confirmButtonType = new ButtonType("Confirm", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(confirmButtonType, ButtonType.CANCEL);
+        ButtonType saveButtonType = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
+        ButtonType cancelButtonType = new ButtonType("Cancel", ButtonType.CANCEL.getButtonData());
+        dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, cancelButtonType);
 
         // create the ID and key labels and fields
         GridPane gridPane = new GridPane();
@@ -55,9 +56,9 @@ public class APIKeyDialog {
         gridPane.add(new Label("APP Key:"), 0, 1);
         gridPane.add(keyTextField, 1, 1);
 
-        // enable/disable confirm button depending on whether an ID was entered
-        Node confirmButton = dialog.getDialogPane().lookupButton(confirmButtonType);
-        confirmButton.setDisable(true);
+        // enable/disable save button depending on whether an ID was entered
+        Node saveButtonNode = dialog.getDialogPane().lookupButton(saveButtonType);
+        saveButtonNode.setDisable(true);
 
         // moves the caret to after the last char of the text
         idTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
@@ -73,17 +74,17 @@ public class APIKeyDialog {
         });
 
         // validation
-        idTextField.textProperty().addListener((observable, oldValue, newValue) -> confirmButton.setDisable(newValue.trim().isEmpty()));
+        keyTextField.textProperty().addListener((observable, oldValue, newValue) -> saveButtonNode.setDisable(newValue.trim().isEmpty()));
 
         dialog.getDialogPane().setContent(gridPane);
 
         // request focus on the app ID field by default.
         Platform.runLater(idTextField::requestFocus);
 
-        // convert the result to a id-key-pair when the confirm button is clicked.
+        // convert the result to a id-key-pair when the save button is clicked.
         dialog.setResultConverter(dialogButton -> {
 
-            if (dialogButton == confirmButtonType) {
+            if (dialogButton == saveButtonType) {
 
                 Pair<String, String> pair = new Pair<>(idTextField.getText(), keyTextField.getText());
 

@@ -1,6 +1,6 @@
 package ui;
 
-import io.AppConfig;
+import io.APICredentialConfig;
 import io.IOUtils;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -40,7 +40,7 @@ public class MainAPP extends Application {
 
     private Stage stage;
 
-    private APIKeyDialog apiKeyDialog = new APIKeyDialog();
+    private APICredentialSettingDialog apiCredentialSettingDialog = new APICredentialSettingDialog();
 
     private BackGridPane backGridPane = new BackGridPane();
 
@@ -58,7 +58,7 @@ public class MainAPP extends Application {
 
         // show API key dialog if config file does not exist
         if (!IOUtils.isConfigExists()) {
-            showAPIKeyDialog();
+            showAPICredentialSettingDialog();
         }
 
         // indicate whether the tray icon was successfully added to the menu bar
@@ -147,7 +147,7 @@ public class MainAPP extends Application {
         // macOS
         if (SystemUtils.IS_OS_MAC_OSX) {
             // dark mode
-            if (UIUtils.isMacDarkMode()) {
+            if (IOUtils.isMacDarkMode()) {
                 // load the white colour icon
                 iconInputStream = getClass().getClassLoader().getResourceAsStream("icon-mac-dark.png");
             } else {
@@ -177,9 +177,9 @@ public class MainAPP extends Application {
         // show the primary stage if the app name item is clicked
         openItem.addActionListener(event -> Platform.runLater(this::showStage));
 
-        // add change API key setting menu item
-        MenuItem settingItem = new MenuItem("API Keys");
-        settingItem.addActionListener(event -> Platform.runLater(this::showAPIKeyDialog));
+        // add change API Credentials setting menu item
+        MenuItem settingItem = new MenuItem("API Credentials");
+        settingItem.addActionListener(event -> Platform.runLater(this::showAPICredentialSettingDialog));
 
         String currentVersion = properties.getProperty("version");
         String latestVersion = IOUtils.getLatestVersion();
@@ -243,17 +243,17 @@ public class MainAPP extends Application {
     }
 
     /**
-     * Call Utilities.showAPIKeyDialog() to change API key.
+     * Call Utilities.showAPICredentialSettingDialog() to change API key.
      */
-    private void showAPIKeyDialog() {
+    private void showAPICredentialSettingDialog() {
 
-        AppConfig appConfig = IOUtils.readConfigFile();
-        if (appConfig != null) {
-            apiKeyDialog.setId(appConfig.getAppId());
-            apiKeyDialog.setKey(appConfig.getAppKey());
+        APICredentialConfig APICredentialConfig = IOUtils.readConfigFile();
+        if (APICredentialConfig != null) {
+            apiCredentialSettingDialog.setId(APICredentialConfig.getAppId());
+            apiCredentialSettingDialog.setKey(APICredentialConfig.getAppKey());
         }
 
-        apiKeyDialog.show();
+        apiCredentialSettingDialog.show();
 
     }
 

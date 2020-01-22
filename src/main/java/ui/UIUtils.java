@@ -3,6 +3,8 @@ package ui;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
@@ -11,33 +13,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-import java.util.concurrent.TimeUnit;
-
 
 /**
  * UI.UIUtils.java
  * Contains common UI methods.
  */
 public class UIUtils {
-
-    /**
-     * Original source: https://stackoverflow.com/a/33477375/4658633
-     *
-     * @return if macOS enabled dark mode.
-     */
-    public static boolean isMacDarkMode() {
-
-        try {
-            // process will exit with 0 if dark mode enabled
-            final Process process = Runtime.getRuntime().exec(new String[]{"defaults", "read", "-g", "AppleInterfaceStyle"});
-            process.waitFor(100, TimeUnit.MILLISECONDS);
-            return process.exitValue() == 0;
-        } catch (IOException | InterruptedException | IllegalThreadStateException e) {
-            return false;
-        }
-
-    }
 
     /**
      * Put text into clipboard.
@@ -88,6 +69,11 @@ public class UIUtils {
 
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
+
+        // Clear default OK button
+        alert.getButtonTypes().clear();
+        ButtonType okButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        alert.getButtonTypes().addAll(okButtonType);
 
         // set no header area in the dialog
         alert.setHeaderText(null);

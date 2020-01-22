@@ -1,15 +1,15 @@
 package io;
 
 /**
- * IO.AppConfig.java
+ * IO.APICredentialConfig.java
  * used to store app_id and id_key.
  */
-public class AppConfig {
+public class APICredentialConfig {
 
     private String appId;
     private String appKey;
 
-    public AppConfig(String appId, String appKey) {
+    public APICredentialConfig(String appId, String appKey) {
         this.appId = appId;
         this.appKey = appKey;
     }

@@ -23,6 +23,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -37,6 +38,24 @@ public class IOUtils {
 
     // IO.Recognition object initialisation
     private static Recognition recognition = new Recognition();
+
+    /**
+     * Original source: https://stackoverflow.com/a/33477375/4658633
+     *
+     * @return if macOS enabled dark mode.
+     */
+    public static boolean isMacDarkMode() {
+
+        try {
+            // process will exit with 0 if dark mode enabled
+            final Process process = Runtime.getRuntime().exec(new String[]{"defaults", "read", "-g", "AppleInterfaceStyle"});
+            process.waitFor(100, TimeUnit.MILLISECONDS);
+            return process.exitValue() == 0;
+        } catch (IOException | InterruptedException | IllegalThreadStateException e) {
+            return false;
+        }
+
+    }
 
     /**
      * Execute the OCR request in Java concurrent way.
@@ -120,8 +139,8 @@ public class IOUtils {
     /**
      * Create a standard config file.
      *
-     * @param appID  APP ID to be written.
-     * @param appKey APP key to be written.
+     * @param appID  App ID to be written.
+     * @param appKey App key to be written.
      */
     public static void createConfigFile(String appID, String appKey) {
 
@@ -144,14 +163,14 @@ public class IOUtils {
     /**
      * Read app_id and app_key config from ./config file.
      *
-     * @return IO.AppConfig object.
+     * @return IO.APICredentialConfig object.
      */
-    public static AppConfig readConfigFile() {
+    public static APICredentialConfig readConfigFile() {
 
         try {
             // read config file
             List<String> configs = Files.readAllLines(configFilePath);
-            return new AppConfig(configs.get(0), configs.get(1));
+            return new APICredentialConfig(configs.get(0), configs.get(1));
         } catch (IOException | ArrayIndexOutOfBoundsException e) {
             return null;
         }

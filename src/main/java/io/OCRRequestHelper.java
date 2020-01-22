@@ -37,11 +37,11 @@ public class OCRRequestHelper {
         String app_id;
         String app_key;
 
-        AppConfig appConfig = IOUtils.readConfigFile();
+        APICredentialConfig APICredentialConfig = IOUtils.readConfigFile();
 
-        if (appConfig != null) {
-            app_id = appConfig.getAppId();
-            app_key = appConfig.getAppKey();
+        if (APICredentialConfig != null) {
+            app_id = APICredentialConfig.getAppId();
+            app_key = APICredentialConfig.getAppKey();
         } else {
             // early return
             return null;

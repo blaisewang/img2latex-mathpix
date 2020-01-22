@@ -33,7 +33,7 @@ See the [features](https://mathpix.com/ocr#features) section on MathpixOCR websi
 
 Enter your API keys (without single quotes) at the first launch of this app.
 
-To change your API keys, macOS and Windows users will find a menu item called `API Key` by clicking this app's menu bar icon.
+To change your API keys, macOS and Windows users will find a menu item called `API Credentials` by clicking this app's menu bar icon.
 
 Linux users need to change it manually by finding the `config` file and edit it by text editor.
 

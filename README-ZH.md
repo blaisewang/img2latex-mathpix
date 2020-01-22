@@ -34,7 +34,7 @@ Image2LaTeX 是空闲时间的个人项目，仅保留了 Snip 的核心功能�
 
 在程序第一次启动时输入你的 API keys（不含单引号）。
 
-macOS 和 Windows 用户可以在系统托盘找到 `API Key` 选项来修改你的 API keys。
+macOS 和 Windows 用户可以在系统托盘找到 `API Credentials` 选项来修改你的 API keys。
 
 Linux 用户需要首先找到 `config` 文件，再通过文本编辑器进行修改。
 

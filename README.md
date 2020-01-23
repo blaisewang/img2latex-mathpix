@@ -22,12 +22,12 @@ See the [features](https://mathpix.com/ocr#features) section on MathpixOCR websi
 
 ### New Features
 
--   Self-contained executable application for macOS.
+- Self-contained executable application for macOS.
 
 ## Requirements
 
--   Your API keys in your [MathpixOCR dashboard](https://dashboard.mathpix.com/) (different from the Mathpix account used in the Snip app)
--   JDK 11 or higher version ([OpenJDK](https://openjdk.java.net/) is highly recommended) if you plan to use `Image2LaTeX-x.x.x.jar`
+- Your API keys in your [MathpixOCR dashboard](https://dashboard.mathpix.com/) (different from the Mathpix account used in the Snip app)
+- JDK 11 or higher version ([OpenJDK](https://openjdk.java.net/) is highly recommended) if you plan to use `Image2LaTeX-x.x.x.jar`
 
 ## Run
 
@@ -96,7 +96,7 @@ See this [article](https://help.github.com/en/github/receiving-notifications-abo
 
 ### Development plans
 
--   Add system tray icon support for some Linux distributions.
+- Add multiple result formatting option.
 
 ## Issues
 

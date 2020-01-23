@@ -93,7 +93,7 @@ java -jar Image2LaTeX-x.x.x.jar
 
 ### 开发计划
 
-- 为特定 Linux 发行版添加系统托盘图标的支持。
+- 增加多种结果格式选项。
 
 ## 问题
 

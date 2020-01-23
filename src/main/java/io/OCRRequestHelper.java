@@ -37,14 +37,14 @@ public class OCRRequestHelper {
         String app_id;
         String app_key;
 
-        APICredentialConfig APICredentialConfig = IOUtils.readConfigFile();
+        APICredentialConfig APICredentialConfig = IOUtils.getAPICredentialConfig();
 
-        if (APICredentialConfig != null) {
+        if (APICredentialConfig.isValid()) {
             app_id = APICredentialConfig.getAppId();
             app_key = APICredentialConfig.getAppKey();
         } else {
             // early return
-            return null;
+            return new Response("Invalid credentials");
         }
 
         // workaround to resolve #26

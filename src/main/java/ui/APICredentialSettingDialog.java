@@ -129,7 +129,7 @@ public class APICredentialSettingDialog {
 
         if (!stage.isShowing()) {
             Optional<Pair<String, String>> result = dialog.showAndWait();
-            result.ifPresent(idKey -> IOUtils.createConfigFile(idKey.getKey(), idKey.getValue()));
+            result.ifPresent(idKey -> IOUtils.setAPICredentialConfig(idKey.getKey(), idKey.getValue()));
         }
 
         stage.toFront();

@@ -20,7 +20,7 @@ For other advanced functions and unlimited snips, subscribe to the Snip for $4.9
 
 See the [features](https://mathpix.com/ocr#features) section on MathpixOCR website.
 
-### New Featurs
+### New Features
 
 -   Self-contained executable application for macOS.
 
@@ -35,10 +35,9 @@ Enter your API keys (without single quotes) at the first launch of this app.
 
 To change your API keys, macOS and Windows users will find a menu item called `API Credentials` by clicking this app's menu bar icon.
 
-Linux users need to change it manually by finding the `config` file and edit it by text editor.
+Linux users can open the `API Credentials` dialogue by right-clicking anywhere inside the application.
 
-**Do not share your `config` file with others.**
-This app will also not send your API keys to others except for MathpixOCR API server (see [OCRRequestHelper.java](https://github.com/blaisewang/img2latex-mathpix/blob/master/src/main/java/io/OCRRequestHelper.java) to learn how your API keys are used).
+**Note**, this app will not send your API keys to others except for MathpixOCR API server (see [OCRRequestHelper.java](https://github.com/blaisewang/img2latex-mathpix/blob/master/src/main/java/io/OCRRequestHelper.java) to learn how your API keys are used).
 
 ## Usage
 
@@ -101,7 +100,7 @@ See this [article](https://help.github.com/en/github/receiving-notifications-abo
 
 ## Issues
 
-Please first refer to the official [API Docs](https://docs.mathpix.com/#error-id-types) about error types if an error dialogue is displayed.
+Please first refer to the official [API Docs](https://docs.mathpix.com/#error-id-types) about error types and the [reported issue](https://github.com/blaisewang/img2latex-mathpix/issues) if you encountered an error.
 
 ### Encountered an unreported issue 🤔
 

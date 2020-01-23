@@ -36,10 +36,9 @@ Image2LaTeX 是空闲时间的个人项目，仅保留了 Snip 的核心功能�
 
 macOS 和 Windows 用户可以在系统托盘找到 `API Credentials` 选项来修改你的 API keys。
 
-Linux 用户需要首先找到 `config` 文件，再通过文本编辑器进行修改。
+Linux 用户可以通过在应用内任意位置右键单击的方式打开 `API Credentials` 对话框。
 
-**不要与其他人分享你的 `config` 文件。**
-这款应用同样也不会将你的 API keys 发送给除 MathpixOCR API 服务器之外的任何人（查看 [OCRRequestHelper.java](https://github.com/blaisewang/img2latex-mathpix/blob/master/src/main/java/io/OCRRequestHelper.java) 了解你的 API keys 是如何被使用的）。
+**注意，**，应用不会将你的 API keys 发送给除 MathpixOCR API 服务器之外的任何人（查看 [OCRRequestHelper.java](https://github.com/blaisewang/img2latex-mathpix/blob/master/src/main/java/io/OCRRequestHelper.java) 了解你的 API keys 是如何被使用的）。
 
 ## 使用
 
@@ -98,7 +97,7 @@ java -jar Image2LaTeX-x.x.x.jar
 
 ## 问题
 
-当出现错误对话框时，请先阅读 Mathpix OCR [API 文档](https://docs.mathpix.com/#error-id-types) 中关于 Error Types 章节。
+当遇到错误时，请首先阅读 Mathpix OCR [API 文档](https://docs.mathpix.com/#error-id-types) 中关于 Error Types 章节以及[已报告的问题](https://github.com/blaisewang/img2latex-mathpix/issues)。
 
 ### 遇到了尚未报告的问题 🤔
 

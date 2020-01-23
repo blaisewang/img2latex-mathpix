@@ -15,6 +15,12 @@ public class Response {
     private double latex_confidence;
     private ArrayList<String> detection_list;
 
+    public Response(String error) {
+
+        this.error = error;
+
+    }
+
     public Response(String error, String text, String text_display, String latex_styled, double latex_confidence, ArrayList<String> detection_list) {
 
         this.error = error;
@@ -62,9 +68,9 @@ public class Response {
     }
 
     /**
-     * @return if no equation in the image.
+     * @return whether there isn't equation in the image.
      */
-    public Boolean isNotMath() {
+    public boolean isNotMath() {
         return detection_list.contains("is_not_math");
     }
 

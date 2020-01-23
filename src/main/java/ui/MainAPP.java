@@ -1,12 +1,12 @@
 package ui;
 
-import io.APICredentialConfig;
 import io.IOUtils;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseButton;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -40,8 +40,6 @@ public class MainAPP extends Application {
 
     private Stage stage;
 
-    private APICredentialSettingDialog apiCredentialSettingDialog = new APICredentialSettingDialog();
-
     private BackGridPane backGridPane = new BackGridPane();
 
     private static Properties properties = new Properties();
@@ -56,9 +54,9 @@ public class MainAPP extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        // show API key dialog if config file does not exist
-        if (!IOUtils.isConfigExists()) {
-            showAPICredentialSettingDialog();
+        // show API key dialog if the config is invalid
+        if (!IOUtils.isAPICredentialConfigValid()) {
+            backGridPane.showAPICredentialSettingDialog();
         }
 
         // indicate whether the tray icon was successfully added to the menu bar
@@ -100,6 +98,12 @@ public class MainAPP extends Application {
             // set the app window with minimal platform decorations
             this.stage.initStyle(StageStyle.UTILITY);
         } else {
+            // right click to show API credential setting dialog
+            scene.setOnMouseReleased(event -> {
+                if (event.getButton() == MouseButton.SECONDARY) {
+                    backGridPane.showAPICredentialSettingDialog();
+                }
+            });
             // set the app shutdown when the window is closed
             this.stage.setOnCloseRequest(e -> {
                 Platform.exit();
@@ -179,7 +183,7 @@ public class MainAPP extends Application {
 
         // add change API Credentials setting menu item
         MenuItem settingItem = new MenuItem("API Credentials");
-        settingItem.addActionListener(event -> Platform.runLater(this::showAPICredentialSettingDialog));
+        settingItem.addActionListener(event -> Platform.runLater(this.backGridPane::showAPICredentialSettingDialog));
 
         String currentVersion = properties.getProperty("version");
         String latestVersion = IOUtils.getLatestVersion();
@@ -191,6 +195,9 @@ public class MainAPP extends Application {
             // new version found
             updateCheckItem.setLabel("New Version: " + latestVersion);
         }
+
+        // add current version info menu item
+        MenuItem versionItem = new MenuItem("Version: " + currentVersion);
 
         // add click action listener
         updateCheckItem.addActionListener(event -> {
@@ -218,7 +225,7 @@ public class MainAPP extends Application {
         popup.addSeparator();
         popup.add(settingItem);
         popup.addSeparator();
-        popup.add("Version: " + currentVersion);
+        popup.add(versionItem);
         popup.add(updateCheckItem);
         popup.addSeparator();
         popup.add(exitItem);
@@ -240,21 +247,6 @@ public class MainAPP extends Application {
             stage.show();
             stage.toFront();
         }
-    }
-
-    /**
-     * Call Utilities.showAPICredentialSettingDialog() to change API key.
-     */
-    private void showAPICredentialSettingDialog() {
-
-        APICredentialConfig APICredentialConfig = IOUtils.readConfigFile();
-        if (APICredentialConfig != null) {
-            apiCredentialSettingDialog.setId(APICredentialConfig.getAppId());
-            apiCredentialSettingDialog.setKey(APICredentialConfig.getAppKey());
-        }
-
-        apiCredentialSettingDialog.show();
-
     }
 
     /**

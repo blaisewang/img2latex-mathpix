@@ -15,15 +15,12 @@ import org.apache.http.util.EntityUtils;
 
 import javax.net.ssl.SSLContext;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.prefs.Preferences;
 
 
 /**
@@ -32,7 +29,11 @@ import java.util.concurrent.TimeUnit;
  */
 public class IOUtils {
 
-    private static Path configFilePath = Paths.get("./config");
+    private final static String I2L_APP_ID = "I2L_APP_ID";
+    private final static String I2L_APP_KEY = "I2L_APP_KEY";
+
+    private final static String CONFIG_NODE_PATH = "I2L_API_CREDENTIAL_CONFIG";
+    private static Preferences preferences = Preferences.userRoot().node(CONFIG_NODE_PATH);
 
     public final static String[] SUPPORTED_PROTOCOLS = new String[]{"TLSv1.2"};
 
@@ -42,7 +43,7 @@ public class IOUtils {
     /**
      * Original source: https://stackoverflow.com/a/33477375/4658633
      *
-     * @return if macOS enabled dark mode.
+     * @return whether macOS enabled dark mode.
      */
     public static boolean isMacDarkMode() {
 
@@ -123,58 +124,34 @@ public class IOUtils {
     }
 
     /**
-     * Set config file path.
+     * @return whether the API credential config is valid.
      */
-    public static void setConfigFilePath() {
-        configFilePath = Paths.get(System.getProperty("user.home") + "/Library/Image2LaTeX/config");
+    public static boolean isAPICredentialConfigValid() {
+        // default empty String
+        String appId = preferences.get(I2L_APP_ID, "");
+        String appKey = preferences.get(I2L_APP_KEY, "");
+
+        return !"".equals(appId) && !"".equals(appKey);
     }
 
     /**
-     * @return if the config file exists.
-     */
-    public static Boolean isConfigExists() {
-        return Files.exists(configFilePath);
-    }
-
-    /**
-     * Create a standard config file.
+     * Set API credential config with given App ID and App Key.
      *
-     * @param appID  App ID to be written.
+     * @param appId  App ID to be written.
      * @param appKey App key to be written.
      */
-    public static void createConfigFile(String appID, String appKey) {
-
-        String text = appID + System.lineSeparator() + appKey;
-
-        try {
-            // create one if not exists
-            if (!isConfigExists()) {
-                Files.createDirectories(configFilePath.getParent());
-                Files.createFile(configFilePath);
-            }
-            Files.write(configFilePath, text.getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
-
-        }
-
+    public static void setAPICredentialConfig(String appId, String appKey) {
+        preferences.put(I2L_APP_ID, appId);
+        preferences.put(I2L_APP_KEY, appKey);
     }
 
     /**
-     * Read app_id and app_key config from ./config file.
+     * Read App ID and App Key from Java Preferences API.
      *
      * @return IO.APICredentialConfig object.
      */
-    public static APICredentialConfig readConfigFile() {
-
-        try {
-            // read config file
-            List<String> configs = Files.readAllLines(configFilePath);
-            return new APICredentialConfig(configs.get(0), configs.get(1));
-        } catch (IOException | ArrayIndexOutOfBoundsException e) {
-            return null;
-        }
-
+    public static APICredentialConfig getAPICredentialConfig() {
+        return new APICredentialConfig(preferences.get(I2L_APP_ID, ""), preferences.get(I2L_APP_KEY, ""));
     }
 
 }

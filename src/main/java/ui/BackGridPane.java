@@ -1,5 +1,6 @@
 package ui;
 
+import io.APICredentialConfig;
 import io.IOUtils;
 import io.Response;
 import javafx.concurrent.Task;
@@ -55,6 +56,8 @@ public class BackGridPane extends GridPane {
     private static final Background BACKGROUND = new Background(BACKGROUND_FILL);
 
     private static FrontGridPane frontGridPane = new FrontGridPane(PREFERRED_MARGIN, PANE_BORDER_STROKE);
+
+    private APICredentialSettingDialog apiCredentialSettingDialog = new APICredentialSettingDialog();
 
     // get components from UI.FrontGridPane instance
     private static CopiedButton copiedButton = frontGridPane.getCopiedButton();
@@ -200,6 +203,20 @@ public class BackGridPane extends GridPane {
     }
 
     /**
+     * Call Utilities.showAPICredentialSettingDialog() to change API key.
+     */
+    public void showAPICredentialSettingDialog() {
+
+        APICredentialConfig APICredentialConfig = IOUtils.getAPICredentialConfig();
+        // set text displayed
+        apiCredentialSettingDialog.setId(APICredentialConfig.getAppId());
+        apiCredentialSettingDialog.setKey(APICredentialConfig.getAppKey());
+
+        apiCredentialSettingDialog.show();
+
+    }
+
+    /**
      * OCR request handler.
      */
     private void requestHandler() {
@@ -241,10 +258,17 @@ public class BackGridPane extends GridPane {
                 if (response != null) {
                     // error occurred
                     if (response.getError() != null) {
-                        // clear error image and last results
-                        clearErrorImage();
+
                         // show error content with a alert dialog
                         UIUtils.displayError(response.getError());
+
+                        if (response.getError().equals("Invalid credentials")) {
+                            // show API credential setting dialog for invalid credential error
+                            this.showAPICredentialSettingDialog();
+                        } else {
+                            // clear error image and last results
+                            clearErrorImage();
+                        }
 
                         return;
                     }

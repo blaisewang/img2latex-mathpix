@@ -103,7 +103,7 @@ public class Recognition implements Callable<Response> {
      * Replace the "src" value in the pre-initialised parameters JsonObject.
      *
      * @param image Image to be recognised.
-     * @return if the parameter set is successful.
+     * @return whether the parameter setting is successful.
      */
     public Boolean setSrcParameters(Image image) {
 

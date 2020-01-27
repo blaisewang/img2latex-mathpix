@@ -29,8 +29,8 @@ dependencies {
     implementation "org.openjfx:javafx-graphics:11.0.2:linux"
     implementation "org.scilab.forge:jlatexmath:1.0.7"
     implementation "org.apache.commons:commons-lang3:3.9"
-    implementation "org.apache.httpcomponents:httpcore:4.4.12"
-    implementation "org.apache.httpcomponents:httpclient:4.5.10"
+    implementation "org.apache.httpcomponents:httpcore:4.4.13"
+    implementation "org.apache.httpcomponents:httpclient:4.5.11"
 }
 
 application {

@@ -4,10 +4,10 @@ APP_NAME=Image2LaTeX.app
 
 APP_PATH=./Image2LaTeX.app/Contents
 
-if [[ ! -f deploy.sh ]]; then
-  cd build/libs || exit
-else
+if [[ ! -f build.gradle ]]; then
   cd ../build/libs || exit
+else
+  cd build/libs || exit
 fi
 
 mkdir -p $APP_PATH $APP_PATH/MacOS $APP_PATH/Resources

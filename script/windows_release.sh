@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-if [[ ! -f deploy.sh ]]; then
-  cd build/libs || exit
-else
+if [[ ! -f build.gradle ]]; then
   cd ../build/libs || exit
+else
+  cd build/libs || exit
 fi
 
 FILENAME="$(ls ./*windows.zip)"

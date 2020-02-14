@@ -45,8 +45,6 @@ public class Recognition implements Callable<Response> {
         JsonArray formatParameters = new JsonArray();
         // inline math by default
         formatParameters.add("text");
-        // block mode math when in doubt
-        formatParameters.add("text_display");
         // modified output to improve the visual appearance
         formatParameters.add("latex_styled");
         parameters.add("formats", formatParameters);
@@ -68,16 +66,6 @@ public class Recognition implements Callable<Response> {
         textFormatOptions.add("math_delims", mathDelimiterParameters);
         textFormatOptions.add("transforms", transformParameters);
 
-        // delimiters for displaymath mode
-        JsonArray displayMathDelimiterParameters = new JsonArray();
-        displayMathDelimiterParameters.add("\n$$\n ");
-        displayMathDelimiterParameters.add(" \n$$\n");
-
-        // parameters used for displaymath mode (text_display)
-        JsonObject textDisplayFormatOptions = new JsonObject();
-        textDisplayFormatOptions.add("displaymath_delims", displayMathDelimiterParameters);
-        textDisplayFormatOptions.add("transforms", transformParameters);
-
         // parameters used for styled LaTeX (latex_styled)
         JsonObject transformOptions = new JsonObject();
         transformOptions.add("transforms", transformParameters);
@@ -85,7 +73,6 @@ public class Recognition implements Callable<Response> {
         // format options combined
         JsonObject formatOptions = new JsonObject();
         formatOptions.add("text", textFormatOptions);
-        formatOptions.add("text_display", textDisplayFormatOptions);
         formatOptions.add("latex_styled", transformOptions);
 
         parameters.add("format_options", formatOptions);
@@ -99,6 +86,7 @@ public class Recognition implements Callable<Response> {
     }
 
     /**
+     * Add/Remove `rm_newlines` options to the transform parameters.
      * Convert the image to byte[] and encode the image with base64.
      * Replace the "src" value in the pre-initialised parameters JsonObject.
      *

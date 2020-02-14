@@ -19,10 +19,10 @@ import javafx.scene.paint.Color;
 public class FrontGridPane extends GridPane {
 
     private static CopiedButton copiedButton = new CopiedButton("COPIED");
-    private static PressCopyTextField latexStyledResult = new PressCopyTextField();
-    private static PressCopyTextField textResult = new PressCopyTextField();
-    private static PressCopyTextField notNumberedBlockModeResult = new PressCopyTextField();
-    private static PressCopyTextField numberedBlockModeResult = new PressCopyTextField();
+    private static PressCopyTextField firstPressCopyTextField = new PressCopyTextField();
+    private static PressCopyTextField secondPressCopyTextField = new PressCopyTextField();
+    private static PressCopyTextField thirdPressCopyTextField = new PressCopyTextField();
+    private static PressCopyTextField fourthPressCopyTextField = new PressCopyTextField();
 
     private static final Color frontBackgroundColor = new Color(0.9725, 0.9765, 0.9804, 1);
     private static final BackgroundFill frontFill = new BackgroundFill(frontBackgroundColor, CornerRadii.EMPTY, Insets.EMPTY);
@@ -34,43 +34,43 @@ public class FrontGridPane extends GridPane {
      */
     public FrontGridPane(int itemMargin, BorderStroke borderStroke) {
 
-        this.setBorder(new Border(borderStroke));
-        this.setBackground(frontPaneBackground);
-        this.setPadding(new Insets(itemMargin, 0, itemMargin, 0));
+        setBorder(new Border(borderStroke));
+        setBackground(frontPaneBackground);
+        setPadding(new Insets(itemMargin, 0, itemMargin, 0));
 
         // 5 * 2 grid layout
-        this.setVgap(5);
-        this.setHgap(2);
+        setVgap(5);
+        setHgap(2);
 
         // add "Result" textL label
         Label resultTextLabel = UIUtils.getTextLabel("Result");
         UIUtils.setDefaultNodeMargin(resultTextLabel, itemMargin, 0);
-        this.add(resultTextLabel, 0, 0);
+        add(resultTextLabel, 0, 0);
 
         // used to indicate which result on the left side has been copied, default invisible
         copiedButton.setVisible(false);
         UIUtils.setDefaultNodeMargin(copiedButton, itemMargin / 2, 0);
-        this.add(copiedButton, 1, 1);
+        add(copiedButton, 1, 1);
 
-        // add latexStyledResult
-        UIUtils.setDefaultNodeMargin(latexStyledResult, itemMargin, 0);
-        setTextFieldEvent(latexStyledResult, 1);
-        this.add(latexStyledResult, 0, 1);
+        // add the first PressCopyTextField
+        UIUtils.setDefaultNodeMargin(firstPressCopyTextField, itemMargin, 0);
+        setTextFieldEvent(firstPressCopyTextField, 1);
+        add(firstPressCopyTextField, 0, 1);
 
-        // add textResult
-        UIUtils.setDefaultNodeMargin(textResult, itemMargin, 0);
-        setTextFieldEvent(textResult, 2);
-        this.add(textResult, 0, 2);
+        // add the second PressCopyTextField
+        UIUtils.setDefaultNodeMargin(secondPressCopyTextField, itemMargin, 0);
+        setTextFieldEvent(secondPressCopyTextField, 2);
+        add(secondPressCopyTextField, 0, 2);
 
-        // add notNumberedBlockModeResult
-        UIUtils.setDefaultNodeMargin(notNumberedBlockModeResult, itemMargin, 0);
-        setTextFieldEvent(notNumberedBlockModeResult, 3);
-        this.add(notNumberedBlockModeResult, 0, 3);
+        // add the third PressCopyTextField
+        UIUtils.setDefaultNodeMargin(thirdPressCopyTextField, itemMargin, 0);
+        setTextFieldEvent(thirdPressCopyTextField, 3);
+        add(thirdPressCopyTextField, 0, 3);
 
-        // add numberedBlockModeResult
-        UIUtils.setDefaultNodeMargin(numberedBlockModeResult, itemMargin, 0);
-        setTextFieldEvent(numberedBlockModeResult, 4);
-        this.add(numberedBlockModeResult, 0, 4);
+        // add the fourth PressCopyTextField
+        UIUtils.setDefaultNodeMargin(fourthPressCopyTextField, itemMargin, 0);
+        setTextFieldEvent(fourthPressCopyTextField, 4);
+        add(fourthPressCopyTextField, 0, 4);
 
     }
 
@@ -101,31 +101,31 @@ public class FrontGridPane extends GridPane {
     }
 
     /**
-     * @return LaTeX styled result TextField.
+     * @return first PressCopyTextField.
      */
-    public PressCopyTextField getLatexStyledResult() {
-        return latexStyledResult;
+    public PressCopyTextField getFirstPressCopyTextField() {
+        return firstPressCopyTextField;
     }
 
     /**
-     * @return text result TextField.
+     * @return second PressCopyTextField.
      */
-    public PressCopyTextField getTextResult() {
-        return textResult;
+    public PressCopyTextField getSecondPressCopyTextField() {
+        return secondPressCopyTextField;
     }
 
     /**
-     * @return not numbered block mode result TextField.
+     * @return third PressCopyTextField.
      */
-    public PressCopyTextField getNotNumberedBlockModeResult() {
-        return notNumberedBlockModeResult;
+    public PressCopyTextField getThirdPressCopyTextField() {
+        return thirdPressCopyTextField;
     }
 
     /**
-     * @return numbered block mode result TextField.
+     * @return fourth PressCopyTextField.
      */
-    public PressCopyTextField getNumberedBlockModeResult() {
-        return numberedBlockModeResult;
+    public PressCopyTextField getFourthPressCopyTextField() {
+        return fourthPressCopyTextField;
     }
 
     /**

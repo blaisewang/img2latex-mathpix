@@ -2,6 +2,7 @@ package io;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpPost;
@@ -14,8 +15,11 @@ import org.apache.http.ssl.SSLContexts;
 import org.apache.http.util.EntityUtils;
 
 import javax.net.ssl.SSLContext;
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.ConnectException;
+import java.net.UnknownHostException;
 
 
 /**
@@ -44,15 +48,29 @@ public class OCRRequestHelper {
             app_key = APICredentialConfig.getAppKey();
         } else {
             // early return
-            return new Response("Invalid credentials");
+            return new Response(IOUtils.INVALID_CREDENTIALS_ERROR);
         }
 
         // workaround to resolve #26
         SSLContext context = SSLContexts.createSystemDefault();
         SSLConnectionSocketFactory sslConnectionSocketFactory = new SSLConnectionSocketFactory(context, IOUtils.SUPPORTED_PROTOCOLS, null, NoopHostnameVerifier.INSTANCE);
 
-        // maximum connection waiting time 10 seconds
-        RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(10000).build();
+        RequestConfig requestConfig;
+
+        if (IOUtils.getProxyEnabled()) {
+            // proxy enabled
+            ProxyConfig proxyConfig = IOUtils.getProxyConfig();
+            if (proxyConfig.isValid()) {
+                HttpHost proxy = new HttpHost(proxyConfig.getHostname(), proxyConfig.getPort());
+                // maximum connection waiting time 10 seconds
+                requestConfig = RequestConfig.custom().setConnectTimeout(10000).setProxy(proxy).build();
+            } else {
+                return new Response(IOUtils.INVALID_PROXY_CONFIG_ERROR);
+            }
+        } else {
+            // maximum connection waiting time 10 seconds
+            requestConfig = RequestConfig.custom().setConnectTimeout(10000).build();
+        }
 
         // build the HTTP client with above config
         CloseableHttpClient httpClient = HttpClientBuilder.create().setDefaultRequestConfig(requestConfig).setSSLSocketFactory(sslConnectionSocketFactory).build();
@@ -65,8 +83,8 @@ public class OCRRequestHelper {
             return null;
         }
 
-        // API url
-        HttpPost request = new HttpPost("https://api.mathpix.com/v3/latex");
+        // OCR API url
+        HttpPost request = new HttpPost(IOUtils.OCR_API_URL);
 
         // with app_id, app_key, and json type content as the post header
         request.addHeader("app_id", app_id);
@@ -80,6 +98,12 @@ public class OCRRequestHelper {
             HttpResponse result = httpClient.execute(request);
             // obtain the message entity of this response
             json = EntityUtils.toString(result.getEntity(), "UTF-8");
+        } catch (UnknownHostException e) {
+            return new Response(IOUtils.UNKNOWN_HOST_ERROR);
+        } catch (ConnectException e) {
+            return new Response(IOUtils.CONNECTION_REFUSED_ERROR);
+        } catch (EOFException e) {
+            return new Response(IOUtils.SSL_PEER_SHUT_DOWN_INCORRECTLY_ERROR);
         } catch (IOException e) {
             return null;
         }

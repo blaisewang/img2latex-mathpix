@@ -30,13 +30,13 @@ import java.util.Properties;
 
 
 /**
- * UI.MainAPP.java
+ * UI.App.java
  * Initialises main interface of the JavaFX application.
  * The primary stage will be initialised with 1 ImageView, 1 Button, 4 TextFields and 1 ProgressBar.
  * The app will add a tray icon to menu bar and set the window style as StageStyle.UTILITY.
  * The color of the icon dependents on the OS. White for macOS dark, black for macOS light, blue for the rest.
  */
-public class MainAPP extends Application {
+public class App extends Application {
 
     private Stage stage;
 
@@ -56,14 +56,14 @@ public class MainAPP extends Application {
 
         // show API key dialog if the config is invalid
         if (!IOUtils.isAPICredentialConfigValid()) {
-            backGridPane.showAPICredentialSettingDialog();
+            backGridPane.showPreferencesDialog(1);
         }
 
         // indicate whether the tray icon was successfully added to the menu bar
         boolean hasAddIconToTray = false;
 
         // store the reference of the primaryStage
-        this.stage = primaryStage;
+        stage = primaryStage;
 
         try {
             // call add icon to menu bar method, get a boolean result
@@ -80,32 +80,32 @@ public class MainAPP extends Application {
         scene.onKeyReleasedProperty().bind(backGridPane.onKeyReleasedProperty());
 
         // add scene to the primary stage
-        this.stage.setScene(scene);
+        stage.setScene(scene);
 
         // set app title
-        this.stage.setTitle(APPLICATION_TITLE);
+        stage.setTitle(APPLICATION_TITLE);
 
         // load icon resources
         InputStream iconInputStream = getClass().getClassLoader().getResourceAsStream("icon-other.png");
         assert iconInputStream != null;
 
         // set the title bar app icon
-        this.stage.getIcons().add(new Image(iconInputStream));
+        stage.getIcons().add(new Image(iconInputStream));
 
         if (hasAddIconToTray) {
             // set the JavaFX app not to shutdown when the last window is closed
             Platform.setImplicitExit(false);
             // set the app window with minimal platform decorations
-            this.stage.initStyle(StageStyle.UTILITY);
+            stage.initStyle(StageStyle.UTILITY);
         } else {
             // right click to show API credential setting dialog
             scene.setOnMouseReleased(event -> {
                 if (event.getButton() == MouseButton.SECONDARY) {
-                    backGridPane.showAPICredentialSettingDialog();
+                    backGridPane.showPreferencesDialog(0);
                 }
             });
             // set the app shutdown when the window is closed
-            this.stage.setOnCloseRequest(e -> {
+            stage.setOnCloseRequest(e -> {
                 Platform.exit();
                 System.exit(0);
             });
@@ -113,18 +113,92 @@ public class MainAPP extends Application {
         }
 
         // set the app window always on top
-        this.stage.setAlwaysOnTop(true);
+        stage.setAlwaysOnTop(true);
 
         // show the primary stage
-        this.stage.show();
+        stage.show();
 
         // set the app window in the upper right corner of the screen
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
-        this.stage.setX(primaryScreenBounds.getMinX() + primaryScreenBounds.getWidth() - this.stage.getWidth() - 80);
-        this.stage.setY(primaryScreenBounds.getMinY() + 80);
+        stage.setX(primaryScreenBounds.getMinX() + primaryScreenBounds.getWidth() - stage.getWidth() - 80);
+        stage.setY(primaryScreenBounds.getMinY() + 80);
 
         // set the app window is not resizable
-        this.stage.setResizable(false);
+        stage.setResizable(false);
+
+    }
+
+    /**
+     * Tray icon handler.
+     */
+    private void trayIconHandler(InputStream iconInputStream) throws IOException, AWTException {
+
+        // set up the system tray
+        SystemTray tray = SystemTray.getSystemTray();
+        BufferedImage image = ImageIO.read(iconInputStream);
+        // use the loaded icon as tray icon
+        TrayIcon trayIcon = new TrayIcon(image);
+
+        // show the primary stage if the icon is right clicked
+        trayIcon.addActionListener(event -> Platform.runLater(this::showStage));
+
+        // add app name as a menu item
+        MenuItem openItem = new MenuItem(APPLICATION_TITLE);
+        // show the primary stage if the app name item is clicked
+        openItem.addActionListener(event -> Platform.runLater(this::showStage));
+
+        // add Preferences menu item
+        MenuItem settingItem = new MenuItem("Preferences");
+        settingItem.addActionListener(event -> Platform.runLater(() -> backGridPane.showPreferencesDialog(0)));
+
+        String currentVersion = properties.getProperty("version");
+        String latestVersion = IOUtils.getLatestVersion();
+
+        // add check for updates menu item
+        MenuItem updateCheckItem = new MenuItem("Check for Updates");
+
+        if (latestVersion != null && !latestVersion.equals(currentVersion)) {
+            // new version found
+            updateCheckItem.setLabel("New Version: " + latestVersion);
+        }
+
+        // add current version info menu item
+        MenuItem versionItem = new MenuItem("Version: " + currentVersion);
+
+        // add click action listener
+        updateCheckItem.addActionListener(event -> {
+            try {
+                Desktop.getDesktop().browse(new URI(IOUtils.I2L_GITHUB_RELEASES_URL));
+            } catch (IOException | URISyntaxException ignored) {
+            }
+        });
+
+        // add quit option as the app cannot be closed by clicking the window close button
+        MenuItem exitItem = new MenuItem("Quit");
+
+        // add action listener for cleanup
+        exitItem.addActionListener(event -> {
+            // remove the icon
+            tray.remove(trayIcon);
+
+            Platform.exit();
+            System.exit(0);
+        });
+
+        // set up the popup menu
+        final PopupMenu popup = new PopupMenu();
+        popup.add(openItem);
+        popup.addSeparator();
+        popup.add(settingItem);
+        popup.addSeparator();
+        popup.add(versionItem);
+        popup.add(updateCheckItem);
+        popup.addSeparator();
+        popup.add(exitItem);
+        trayIcon.setPopupMenu(popup);
+
+        // add icon to the system
+        tray.add(trayIcon);
 
     }
 
@@ -167,72 +241,7 @@ public class MainAPP extends Application {
         }
         assert iconInputStream != null;
 
-        // set up the system tray
-        SystemTray tray = SystemTray.getSystemTray();
-        BufferedImage image = ImageIO.read(iconInputStream);
-        // use the loaded icon as tray icon
-        TrayIcon trayIcon = new TrayIcon(image);
-
-        // show the primary stage if the icon is right clicked
-        trayIcon.addActionListener(event -> Platform.runLater(this::showStage));
-
-        // add app name as a menu item
-        MenuItem openItem = new MenuItem(APPLICATION_TITLE);
-        // show the primary stage if the app name item is clicked
-        openItem.addActionListener(event -> Platform.runLater(this::showStage));
-
-        // add change API Credentials setting menu item
-        MenuItem settingItem = new MenuItem("API Credentials");
-        settingItem.addActionListener(event -> Platform.runLater(this.backGridPane::showAPICredentialSettingDialog));
-
-        String currentVersion = properties.getProperty("version");
-        String latestVersion = IOUtils.getLatestVersion();
-
-        // add check for updates menu item
-        MenuItem updateCheckItem = new MenuItem("Check for Updates");
-
-        if (latestVersion != null && !latestVersion.equals(currentVersion)) {
-            // new version found
-            updateCheckItem.setLabel("New Version: " + latestVersion);
-        }
-
-        // add current version info menu item
-        MenuItem versionItem = new MenuItem("Version: " + currentVersion);
-
-        // add click action listener
-        updateCheckItem.addActionListener(event -> {
-            try {
-                Desktop.getDesktop().browse(new URI("https://github.com/blaisewang/img2latex-mathpix/releases"));
-            } catch (IOException | URISyntaxException ignored) {
-            }
-        });
-
-        // add quit option as the app cannot be closed by clicking the window close button
-        MenuItem exitItem = new MenuItem("Quit");
-
-        // add action listener for cleanup
-        exitItem.addActionListener(event -> {
-            // remove the icon
-            tray.remove(trayIcon);
-
-            Platform.exit();
-            System.exit(0);
-        });
-
-        // set up the popup menu
-        final PopupMenu popup = new PopupMenu();
-        popup.add(openItem);
-        popup.addSeparator();
-        popup.add(settingItem);
-        popup.addSeparator();
-        popup.add(versionItem);
-        popup.add(updateCheckItem);
-        popup.addSeparator();
-        popup.add(exitItem);
-        trayIcon.setPopupMenu(popup);
-
-        // add icon to the system
-        tray.add(trayIcon);
+        trayIconHandler(iconInputStream);
 
         // return as successful
         return true;
@@ -257,7 +266,7 @@ public class MainAPP extends Application {
     public static void main(String[] args) throws IOException {
 
         // load application name
-        properties.load(Objects.requireNonNull(MainAPP.class.getClassLoader().getResourceAsStream("project.properties")));
+        properties.load(Objects.requireNonNull(App.class.getClassLoader().getResourceAsStream("project.properties")));
         APPLICATION_TITLE = properties.getProperty("applicationName");
 
         // font smoothing

@@ -23,7 +23,9 @@ Image2LaTeX 是空闲时间的个人项目，仅保留了 Snip 的核心功能�
 
 ### 新功能
 
-- 适用于 macOS 的独立可执行应用程序.
+- 新 `Preferences` 面板。
+- 第三和第四个结果的多种格式选项。
+- 支持使用 HTTP 代理发出 OCR 请求。
 
 ## 使用要求
 
@@ -34,9 +36,9 @@ Image2LaTeX 是空闲时间的个人项目，仅保留了 Snip 的核心功能�
 
 在程序第一次启动时输入你的 API keys（不含单引号）。
 
-macOS 和 Windows 用户可以在系统托盘找到 `API Credentials` 选项来修改你的 API keys。
+macOS 和 Windows 用户可以在系统托盘找到 `Preferences` 菜单项中的 `API Credentials` 来修改你的 API keys。
 
-Linux 用户可以通过在应用内任意位置右键单击的方式打开 `API Credentials` 对话框。
+Linux 用户可以通过在应用内任意位置右键单击的方式打开 `Preferences` 对话框。
 
 **注意，**，应用不会将你的 API keys 发送给除 MathpixOCR API 服务器之外的任何人（查看 [OCRRequestHelper.java](https://github.com/blaisewang/img2latex-mathpix/blob/master/src/main/java/io/OCRRequestHelper.java) 了解你的 API keys 是如何被使用的）。
 
@@ -90,10 +92,6 @@ java -jar Image2LaTeX-x.x.x.jar
 ### 第一时间获取新版本的发布
 
 查看GitHub这篇关于关注和取消关注仓库的发行版的[文章](https://help.github.com/cn/github/receiving-notifications-about-activity-on-github/watching-and-unwatching-releases-for-a-repository)。
-
-### 开发计划
-
-- 增加多种结果格式选项。
 
 ## 问题
 

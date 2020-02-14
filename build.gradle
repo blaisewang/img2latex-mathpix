@@ -6,7 +6,7 @@ plugins {
 }
 
 group "blaise.img2latex"
-version "0.4.3"
+version "0.5.0"
 
 compileJava {
     sourceCompatibility = 11

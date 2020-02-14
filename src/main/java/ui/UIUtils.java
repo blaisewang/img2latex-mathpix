@@ -51,6 +51,7 @@ public class UIUtils {
      * @return a customised Label
      */
     public static Label getTextLabel(String text) {
+
         Label label = new Label(text);
         // set font size
         label.setFont(Font.font(12));
@@ -58,6 +59,7 @@ public class UIUtils {
         label.setTextFill(new Color(0.149, 0.149, 0.149, 1));
 
         return label;
+
     }
 
     /**
@@ -83,28 +85,6 @@ public class UIUtils {
         stage.setAlwaysOnTop(true);
         stage.showAndWait();
 
-    }
-
-    /**
-     * Wrap the original recognised result with $$ ... $$.
-     *
-     * @param originalResult recognised result.
-     * @return recognised result with $$ wrapped.
-     */
-    public static String addDoubleDollarWrapper(String originalResult) {
-        // return null if the original result is null
-        return originalResult == null ? null : "$$\n " + originalResult + " \n$$";
-    }
-
-    /**
-     * Wrap the original recognised result with \begin{equation} ... \end{equation}.
-     *
-     * @param originalResult recognised result.
-     * @return recognised result with {equation} wrapped.
-     */
-    public static String addEquationWrapper(String originalResult) {
-        // return null if the original result is null
-        return originalResult == null ? null : "\\begin{equation}\n " + originalResult + " \n\\end{equation}";
     }
 
 }

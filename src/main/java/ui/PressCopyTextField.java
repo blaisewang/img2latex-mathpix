@@ -28,30 +28,30 @@ public class PressCopyTextField extends TextField {
 
     public PressCopyTextField() {
 
-        this.setPrefWidth(220);
-        this.setPrefHeight(20);
+        setPrefWidth(220);
+        setPrefHeight(20);
 
         // UI.PressCopyTextField is not editable
-        this.setEditable(false);
+        setEditable(false);
 
-        this.setBorder(new Border(BORDER_STROKE));
+        setBorder(new Border(BORDER_STROKE));
 
-        this.setFont(Font.font(14));
+        setFont(Font.font(14));
 
         // initialise with black text colour
-        this.setStyle("-fx-text-inner-color: black;");
+        setStyle("-fx-text-inner-color: black;");
 
         // text colour turns to light blue when mouse enters the UI.PressCopyTextField
-        this.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> this.setStyle("-fx-text-inner-color: #3d93f7;"));
+        addEventHandler(MouseEvent.MOUSE_ENTERED, event -> setStyle("-fx-text-inner-color: #3d93f7;"));
 
         // text colour turns back to black when mouse exits the UI.PressCopyTextField
-        this.addEventHandler(MouseEvent.MOUSE_EXITED, event -> this.setStyle("-fx-text-inner-color: black;"));
+        addEventHandler(MouseEvent.MOUSE_EXITED, event -> setStyle("-fx-text-inner-color: black;"));
 
         // put the formatted text into clipboard when the UI.PressCopyTextField is clicked
-        this.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+        addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (getLength() > 0) {
                 // copy text if there is text
-                UIUtils.putStringIntoClipboard(this.formattedText);
+                UIUtils.putStringIntoClipboard(formattedText);
             }
         });
 
@@ -62,9 +62,9 @@ public class PressCopyTextField extends TextField {
      */
     public final void setFormattedText(String text) {
         // display text without formatted by the supertype method
-        this.setText(text);
+        setText(text);
         // store the formatted text in this object
-        this.formattedText = text;
+        formattedText = text;
     }
 
     /**
@@ -79,7 +79,7 @@ public class PressCopyTextField extends TextField {
             super.copy();
         } else {
             // copy formatted text
-            UIUtils.putStringIntoClipboard(this.formattedText);
+            UIUtils.putStringIntoClipboard(formattedText);
         }
     }
 

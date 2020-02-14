@@ -22,13 +22,13 @@ public class CopiedButton extends Button {
 
     public CopiedButton(String text) {
 
-        this.setText(text);
-        this.setPrefHeight(20);
+        setText(text);
+        setPrefHeight(20);
         // white text colour
-        this.setTextFill(Color.WHITE);
-        this.setFont(Font.font("Arial Black", FontWeight.BOLD, 10));
+        setTextFill(Color.WHITE);
+        setFont(Font.font("Arial Black", FontWeight.BOLD, 10));
         // blue background
-        this.setBackground(new Background(new BackgroundFill(COLOR, RADII, Insets.EMPTY)));
+        setBackground(new Background(new BackgroundFill(COLOR, RADII, Insets.EMPTY)));
 
     }
 

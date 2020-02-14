@@ -22,7 +22,9 @@ See the [features](https://mathpix.com/ocr#features) section on MathpixOCR websi
 
 ### New Features
 
-- Self-contained executable application for macOS.
+- New `Preferences` panel.
+- Multiple formatting options for 3rd and 4th results.
+- HTTP proxy support for making OCR request.
 
 ## Requirements
 
@@ -33,9 +35,9 @@ See the [features](https://mathpix.com/ocr#features) section on MathpixOCR websi
 
 Enter your API keys (without single quotes) at the first launch of this app.
 
-To change your API keys, macOS and Windows users will find a menu item called `API Credentials` by clicking this app's menu bar icon.
+To change your API keys, macOS and Windows users will find the `API Credentials` tab in the `Preferences` menu item by clicking this app's menu bar icon.
 
-Linux users can open the `API Credentials` dialogue by right-clicking anywhere inside the application.
+Linux users can open the `Preferences` panel by right-clicking anywhere inside the application.
 
 **Note**, this app will not send your API keys to others except for MathpixOCR API server (see [OCRRequestHelper.java](https://github.com/blaisewang/img2latex-mathpix/blob/master/src/main/java/io/OCRRequestHelper.java) to learn how your API keys are used).
 
@@ -93,10 +95,6 @@ Therefore, a smaller size Fat JAR `Image2LaTeX-x.x.x.jar` has also released.
 ### Getting updates on new releases ASAP
 
 See this [article](https://help.github.com/en/github/receiving-notifications-about-activity-on-github/watching-and-unwatching-releases-for-a-repository) about watching and unwatching releases for a repository by GitHub.
-
-### Development plans
-
-- Add multiple result formatting option.
 
 ## Issues
 

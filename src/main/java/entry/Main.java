@@ -1,6 +1,6 @@
 package entry;
 
-import org.apache.commons.lang3.SystemUtils;
+import io.IOUtils;
 import ui.App;
 
 import java.awt.Toolkit;
@@ -19,7 +19,7 @@ public class Main {
      */
     public static void main(String[] args) throws IOException {
 
-        if (SystemUtils.IS_OS_MAC_OSX) {
+        if (IOUtils.isOSMacOSX()) {
             // hide icon in the Dock of macOS
             System.setProperty("apple.awt.UIElement", "true");
             Toolkit.getDefaultToolkit();

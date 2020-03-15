@@ -1,5 +1,6 @@
 package ui;
 
+import javafx.application.Platform;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Border;
@@ -55,6 +56,13 @@ public class PressCopyTextField extends TextField {
             }
         });
 
+        // moves the caret before the first char of the text
+        focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                Platform.runLater(this::home);
+            }
+        });
+
     }
 
     /**
@@ -62,7 +70,7 @@ public class PressCopyTextField extends TextField {
      */
     public final void setFormattedText(String text) {
         // display text without formatted by the supertype method
-        setText(text);
+        setText(text.replace("\n", " "));
         // store the formatted text in this object
         formattedText = text;
     }

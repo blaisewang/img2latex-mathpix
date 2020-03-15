@@ -21,7 +21,7 @@ import javafx.scene.text.FontWeight;
 public class HTTPTab extends Tab {
 
     private static final int PANEL_MARGIN = 20;
-    private static final int MINIMUM_MARGIN = 10;
+    private static final int MINIMUM_MARGIN = 12;
 
     public HTTPTab() {
 
@@ -30,8 +30,8 @@ public class HTTPTab extends Tab {
         // non-closable
         setClosable(false);
 
-        // load initial proxy enabled option
-        boolean proxyEnabled = IOUtils.getProxyEnabled();
+        // load initial proxy enable option
+        boolean proxyEnableOption = IOUtils.getProxyEnableOption();
         // load initial proxy config
         ProxyConfig proxyConfig = IOUtils.getProxyConfig();
 
@@ -47,22 +47,22 @@ public class HTTPTab extends Tab {
         GridPane.setMargin(headerLabel, new Insets(0, MINIMUM_MARGIN, MINIMUM_MARGIN, 0));
         gridPane.add(headerLabel, 0, 0, 2, 1);
 
-        CheckBox proxyEnabledCheckBox = new CheckBox("Enable HTTP Proxy");
+        CheckBox proxyEnableOptionCheckBox = new CheckBox("HTTP Proxy");
         TextField hostnameTextField = new TextField();
         TextField portTextField = new TextField();
 
-        proxyEnabledCheckBox.setSelected(proxyEnabled);
-        hostnameTextField.setDisable(!proxyEnabled);
-        portTextField.setDisable(!proxyEnabled);
+        proxyEnableOptionCheckBox.setSelected(proxyEnableOption);
+        hostnameTextField.setDisable(!proxyEnableOption);
+        portTextField.setDisable(!proxyEnableOption);
 
-        proxyEnabledCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            IOUtils.setProxyEnabled(newValue);
+        proxyEnableOptionCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            IOUtils.setProxyEnableOption(newValue);
             hostnameTextField.setDisable(!newValue);
             portTextField.setDisable(!newValue);
         });
 
-        GridPane.setMargin(proxyEnabledCheckBox, new Insets(MINIMUM_MARGIN));
-        gridPane.add(proxyEnabledCheckBox, 0, 1, 2, 1);
+        GridPane.setMargin(proxyEnableOptionCheckBox, new Insets(MINIMUM_MARGIN));
+        gridPane.add(proxyEnableOptionCheckBox, 0, 1, 2, 1);
 
         // add "Host:" label
         Label hostLabel = new Label("Host:");
@@ -78,7 +78,7 @@ public class HTTPTab extends Tab {
         // save to Java Preferences API when hostname is changed
         hostnameTextField.textProperty().addListener((observable, oldValue, newValue) -> IOUtils.setProxyHostname(newValue));
 
-        // moves the caret to after the last char of the text
+        // moves the caret after the last char of the text
         hostnameTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
                 Platform.runLater(hostnameTextField::end);
@@ -107,7 +107,7 @@ public class HTTPTab extends Tab {
             }
         });
 
-        // moves the caret to after the last char of the text
+        // moves the caret after the last char of the text
         portTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
                 Platform.runLater(portTextField::end);

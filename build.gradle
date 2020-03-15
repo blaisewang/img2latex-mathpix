@@ -6,7 +6,7 @@ plugins {
 }
 
 group "blaise.img2latex"
-version "0.5.0"
+version "0.6.0"
 
 compileJava {
     sourceCompatibility = 11
@@ -28,9 +28,6 @@ dependencies {
     implementation "org.openjfx:javafx-graphics:11.0.2:mac"
     implementation "org.openjfx:javafx-graphics:11.0.2:win"
     implementation "org.openjfx:javafx-graphics:11.0.2:linux"
-    implementation "org.apache.commons:commons-lang3:3.9"
-    implementation "org.apache.httpcomponents:httpcore:4.4.13"
-    implementation "org.apache.httpcomponents:httpclient:4.5.11"
 }
 
 application {
@@ -59,6 +56,7 @@ jar.dependsOn(addInformation)
 runtime {
     options = ["--strip-debug", "--compress", "2", "--no-header-files", "--no-man-pages"]
     imageZip = file("$buildDir/libs/Image2LaTeX-" + version + ".zip")
+    modules = ["java.base", "java.datatransfer", "java.desktop", "java.logging", "java.net.http", "java.prefs", "java.sql", "java.transaction.xa", "jdk.unsupported", "jdk.unsupported.desktop", "java.xml"]
     targetPlatform("linux", "jdk/linux-jdk")
     targetPlatform("windows", "jdk/windows-jdk")
     targetPlatform("macos", "jdk/osx-jdk.jdk/Contents/Home")

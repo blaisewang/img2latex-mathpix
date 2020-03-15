@@ -1,20 +1,7 @@
 package io;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import javafx.scene.image.Image;
-import org.apache.http.HttpHost;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.conn.ssl.NoopHostnameVerifier;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.ssl.SSLContexts;
-import org.apache.http.util.EntityUtils;
 
-import javax.net.ssl.SSLContext;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -30,33 +17,55 @@ import java.util.prefs.Preferences;
  */
 public class IOUtils {
 
-
-    public final static String UNKNOWN_HOST_ERROR = "Unknown host";
-    public final static String CONNECTION_REFUSED_ERROR = "Connection refused";
+    public final static String UNEXPECTED_ERROR = "Unexpected error";
     public final static String INVALID_CREDENTIALS_ERROR = "Invalid credentials";
     public final static String INVALID_PROXY_CONFIG_ERROR = "Invalid proxy config";
-    public final static String SSL_PEER_SHUT_DOWN_INCORRECTLY_ERROR = "SSL peer shut down incorrectly";
+    public final static String NO_IMAGE_FOUND_IN_THE_CLIPBOARD_ERROR = "No image found in the clipboard";
 
-    public final static String OCR_API_URL = "https://api.mathpix.com/v3/latex";
-    public final static String I2L_GITHUB_RELEASES_URL = "https://github.com/blaisewang/img2latex-mathpix/releases";
-
-    private final static String I2L_LATEST_RELEASE_API_URL = "https://api.github.com/repos/blaisewang/img2latex-mathpix/releases/latest";
+    public final static String TEXT_API_URL = "https://api.mathpix.com/v3/text";
+    public final static String LEGACY_API_URL = "https://api.mathpix.com/v3/latex";
+    public final static String MATHPIX_DASHBOARD_URL = "https://dashboard.mathpix.com/";
+    public final static String GITHUB_RELEASES_URL = "https://github.com/blaisewang/img2latex-mathpix/releases";
 
     private final static String I2L_APP_ID = "I2L_APP_ID";
     private final static String I2L_APP_KEY = "I2L_APP_KEY";
-    private final static String I2L_THIRD_RESULT_WRAPPER = "I2L_THIRD_RESULT_WRAPPER";
-    private final static String I2L_FOURTH_RESULT_WRAPPER = "I2L_FOURTH_RESULT_WRAPPER";
-    private final static String I2L_PROXY_ENABLED = "I2L_PROXY_ENABLED";
+    private final static String I2L_THIRD_RESULT_FORMATTING_OPTION = "I2L_THIRD_RESULT_FORMATTING_OPTION";
+    private final static String I2L_FOURTH_RESULT_FORMATTING_OPTION = "I2L_FOURTH_RESULT_FORMATTING_OPTION";
+    private final static String I2L_PROXY_ENABLE_OPTION = "I2L_PROXY_ENABLE_OPTION";
     private final static String I2L_PROXY_HOSTNAME = "I2L_PROXY_HOSTNAME";
     private final static String I2L_PROXY_PORT = "I2L_PROXY_PORT";
+    private final static String I2L_IMPROVED_OCR_ENABLE_OPTION = "I2L_IMPROVED_OCR_ENABLE_OPTION";
 
     private final static String CONFIG_NODE_PATH = "I2L_API_CREDENTIAL_CONFIG";
     private static Preferences preferences = Preferences.userRoot().node(CONFIG_NODE_PATH);
 
-    public final static String[] SUPPORTED_PROTOCOLS = new String[]{"TLSv1.2"};
+    /**
+     * @return if os is macOS.
+     */
+    public static boolean isOSMacOSX() {
 
-    // IO.Recognition object initialisation
-    private static Recognition recognition = new Recognition();
+        String osName = System.getProperty("os.name");
+        if (osName == null) {
+            return false;
+        }
+
+        return osName.startsWith("Mac OS X");
+
+    }
+
+    /**
+     * @return if os is Windows.
+     */
+    public static boolean isOSWindows() {
+
+        String osName = System.getProperty("os.name");
+        if (osName == null) {
+            return false;
+        }
+
+        return osName.startsWith("Windows");
+
+    }
 
     /**
      * Original source: https://stackoverflow.com/a/33477375/4658633
@@ -82,7 +91,7 @@ public class IOUtils {
      * @param image image to be recognised.
      * @return recognised result.
      */
-    public static Response concurrentCall(Image image) {
+    public static Response concurrentCall(Recognition recognition, Image image) {
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
 
@@ -96,58 +105,6 @@ public class IOUtils {
         }
 
         return null;
-
-    }
-
-    /**
-     * Get latest release version via GitHub API.
-     *
-     * @return latest released version.
-     */
-    public static String getLatestVersion() {
-
-        // workaround to resolve #26
-        SSLContext context = SSLContexts.createSystemDefault();
-        SSLConnectionSocketFactory sslConnectionSocketFactory = new SSLConnectionSocketFactory(context, SUPPORTED_PROTOCOLS, null, NoopHostnameVerifier.INSTANCE);
-
-        // maximum connection waiting time 1 second
-        RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(1000).build();
-
-        if (IOUtils.getProxyEnabled()) {
-            // proxy enabled
-            ProxyConfig proxyConfig = IOUtils.getProxyConfig();
-            if (proxyConfig.isValid()) {
-                HttpHost proxy = new HttpHost(proxyConfig.getHostname(), proxyConfig.getPort());
-                // maximum connection waiting time 1 second
-                requestConfig = RequestConfig.custom().setConnectTimeout(1000).setProxy(proxy).build();
-            }
-        }
-
-        // build the HTTP client with above config
-        CloseableHttpClient httpClient = HttpClientBuilder.create().setDefaultRequestConfig(requestConfig).setSSLSocketFactory(sslConnectionSocketFactory).build();
-
-        // API url
-        HttpGet request = new HttpGet(I2L_LATEST_RELEASE_API_URL);
-
-        try {
-
-            // get the raw result from the execution
-            HttpResponse result = httpClient.execute(request);
-            // obtain the message entity of this response
-            String json = EntityUtils.toString(result.getEntity(), "UTF-8");
-            // parse json string to Json object
-            JsonObject jsonObject = new Gson().fromJson(json, JsonObject.class);
-            // close and release resources
-            httpClient.close();
-
-            String[] tag = jsonObject.get("tag_name").getAsString().split("v");
-            return tag[tag.length - 1];
-
-        } catch (IOException ignored) {
-
-            return null;
-
-        }
 
     }
 
@@ -186,109 +143,133 @@ public class IOUtils {
     }
 
     /**
-     * Set third result wrapper option.
+     * Set third result formatting option.
      *
      * @param option option to be written.
      */
-    public static void setThirdResultWrapper(int option) {
-        preferences.putInt(I2L_THIRD_RESULT_WRAPPER, option);
+    public static void setThirdResultFormattingOption(int option) {
+        preferences.putInt(I2L_THIRD_RESULT_FORMATTING_OPTION, option);
     }
 
     /**
-     * Get third result wrapper option.
+     * Get third result formatting option.
      *
-     * @return third result wrapper option.
+     * @return third result formatting option.
      */
-    public static int getThirdResultWrapper() {
-        return preferences.getInt(I2L_THIRD_RESULT_WRAPPER, 2);
+    public static int getThirdResultFormattingOption() {
+        return preferences.getInt(I2L_THIRD_RESULT_FORMATTING_OPTION, 2);
     }
 
     /**
-     * Set fourth result wrapper option.
+     * Set fourth result Formatting option.
      *
      * @param option option to be written.
      */
-    public static void setFourthResultWrapper(int option) {
-        preferences.putInt(I2L_FOURTH_RESULT_WRAPPER, option);
+    public static void setFourthResultFormattingOption(int option) {
+        preferences.putInt(I2L_FOURTH_RESULT_FORMATTING_OPTION, option);
     }
 
     /**
-     * Get fourth result wrapper option.
+     * Get fourth result formatting option.
      *
-     * @return fourth result wrapper option.
+     * @return fourth result formatting option.
      */
-    public static int getFourthResultWrapper() {
-        return preferences.getInt(I2L_FOURTH_RESULT_WRAPPER, 0);
+    public static int getFourthResultFormattingOption() {
+        return preferences.getInt(I2L_FOURTH_RESULT_FORMATTING_OPTION, 0);
     }
 
     /**
-     * Wrap the original recognised result with the selected formatting options.
+     * @param string          string to be formatted.
+     * @param left_delimiter  prefix.
+     * @param right_delimiter postfix.
+     * @return formatted string.
+     */
+    public static String formatHelper(String string, String left_delimiter, String right_delimiter) {
+
+        String formatted_left_delimiter = left_delimiter + "\n ";
+        String formatted_right_delimiter = "\n" + right_delimiter;
+
+        if (string.startsWith("\\(") && string.split("\\u005C\\u0028").length == 2) {
+
+            return string.replace("\\(", formatted_left_delimiter).replace("\\)", formatted_right_delimiter);
+
+        }
+
+        return string.replace("\\(", "$").replace("\\)", "$").
+                replace("\\[\n", "\\[").replace("\n\\]", "\\]").
+                replace("\\[", formatted_left_delimiter).replace("\\]", formatted_right_delimiter);
+
+    }
+
+    /**
+     * Format the original recognised result with the selected formatting options.
      *
      * @param result recognised result.
-     * @return the wrapped result.
+     * @return the formatted result.
      */
-    public static String thirdResultWrapper(String result) {
+    public static String thirdResultFormatter(String result) {
 
         // return null if the original result is null
         if (result == null) {
             return null;
         }
 
-        int option = getThirdResultWrapper();
+        int option = getThirdResultFormattingOption();
 
         switch (option) {
             case 0:
-                return "\\begin{equation*}\n " + result + " \n\\end{equation*}";
+                return formatHelper(result, "\\begin{equation*}", "\\end{equation*}");
             case 1:
-                return "\\begin{align*}\n " + result + " \n\\end{align*}";
+                return formatHelper(result, "\\begin{align*}", "\\end{align*}");
             case 3:
-                return "\\[\n " + result + " \n\\]";
+                return formatHelper(result, "\\[", "\\]");
             default:
                 // default for option 2 and others
-                return "$$\n " + result + " \n$$";
+                return formatHelper(result, "$$", "$$");
         }
 
     }
 
     /**
-     * Wrap the original recognised result with the selected formatting options.
+     * Format the original recognised result with the selected formatting options.
      *
      * @param result recognised result.
-     * @return the wrapped result.
+     * @return the formatted result.
      */
-    public static String fourthResultWrapper(String result) {
+    public static String fourthResultFormatter(String result) {
 
         // return null if the original result is null
         if (result == null) {
             return null;
         }
 
-        int option = getFourthResultWrapper();
+        int option = getFourthResultFormattingOption();
+
 
         if (option == 1) {
-            return "\\begin{align}\n " + result + " \n\\end{align}";
+            return formatHelper(result, "\\begin{align}", "\\end{align}");
         }
 
-        return "\\begin{equation}\n " + result + " \n\\end{equation}";
+        return formatHelper(result, "\\begin{equation}", "\\end{equation}");
 
     }
 
     /**
-     * Set using proxy or not.
+     * Set proxy enable option.
      *
      * @param option option to be written.
      */
-    public static void setProxyEnabled(boolean option) {
-        preferences.putBoolean(I2L_PROXY_ENABLED, option);
+    public static void setProxyEnableOption(boolean option) {
+        preferences.putBoolean(I2L_PROXY_ENABLE_OPTION, option);
     }
 
     /**
-     * Get using proxy or not.
+     * Get proxy option enabled or not.
      *
-     * @return proxy enabled option.
+     * @return proxy enable option.
      */
-    public static boolean getProxyEnabled() {
-        return preferences.getBoolean(I2L_PROXY_ENABLED, false);
+    public static boolean getProxyEnableOption() {
+        return preferences.getBoolean(I2L_PROXY_ENABLE_OPTION, false);
     }
 
     /**
@@ -324,6 +305,24 @@ public class IOUtils {
         }
 
         return new ProxyConfig(preferences.get(I2L_PROXY_HOSTNAME, ""), port);
+    }
+
+    /**
+     * Set improved OCR enable option.
+     *
+     * @param option option to be written.
+     */
+    public static void setImprovedOCREnableOption(Boolean option) {
+        preferences.putBoolean(I2L_IMPROVED_OCR_ENABLE_OPTION, option);
+    }
+
+    /**
+     * Get improved OCR option enabled or not.
+     *
+     * @return improved OCR enable option.
+     */
+    public static boolean getImprovedOCREnableOption() {
+        return preferences.getBoolean(I2L_IMPROVED_OCR_ENABLE_OPTION, true);
     }
 
 }

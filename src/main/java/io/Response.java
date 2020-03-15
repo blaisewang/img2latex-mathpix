@@ -10,6 +10,7 @@ public class Response {
     private String error;
     private String text;
     private String latex_styled;
+    private double confidence;
     private double latex_confidence;
 
     public Response(String error) {
@@ -18,11 +19,12 @@ public class Response {
 
     }
 
-    public Response(String error, String text, String latex_styled, double latex_confidence) {
+    public Response(String error, String text, String latex_styled, double confidence, double latex_confidence) {
 
         this.error = error;
         this.text = text;
         this.latex_styled = latex_styled;
+        this.confidence = confidence;
         this.latex_confidence = latex_confidence;
 
     }
@@ -42,6 +44,13 @@ public class Response {
     }
 
     /**
+     * @param text text to be set.
+     */
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    /**
      * @return LaTeX format result.
      */
     public String getLatexStyled() {
@@ -49,10 +58,24 @@ public class Response {
     }
 
     /**
-     * @return confidence of the correctness.
+     * @return confidence of the latex correctness.
      */
     public Double getLatexConfidence() {
         return latex_confidence;
+    }
+
+    /**
+     * @param latex_confidence latex confidence to be set.
+     */
+    public void setLatexConfidence(double latex_confidence) {
+        this.latex_confidence = latex_confidence;
+    }
+
+    /**
+     * @return confidence of the correctness.
+     */
+    public double getConfidence() {
+        return confidence;
     }
 
 }

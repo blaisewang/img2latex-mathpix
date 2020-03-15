@@ -19,11 +19,11 @@ script:
   - "./gradlew build"
 
 before_deploy:
-  - "bash ./script/jdk_setup.sh"
+  - "bash ./scripts/jdk_setup.sh"
   - "./gradlew clean"
   - "./gradlew runtimeZip"
-  - "bash ./script/macos_release.sh"
-  - "bash ./script/windows_release.sh"
+  - "bash ./scripts/macos_release.sh"
+  - "bash ./scripts/windows_release.sh"
 
 deploy:
   provider: releases

@@ -22,8 +22,7 @@ See the [features](https://mathpix.com/ocr#features) section on MathpixOCR websi
 
 ### New Features
 
-- New `Preferences` panel.
-- Multiple formatting options for 3rd and 4th results.
+- New `Improved OCR` option for [multiple choice](https://mathpix.com/blog/mathpix-text-endpoint), [paragraphs](https://mathpix.com/blog/snip-2.0), [basic table](https://mathpix.com/blog/v1-table-recognition) OCRs, and more.
 - HTTP proxy support for making OCR request.
 
 ## Requirements
@@ -83,14 +82,10 @@ See [demo](#Demo) section below.
 ### Native self-contained executable application for Windows and Linux
 
 Not yet. But, with the GA release of Java 14 in 2020, [jpackage](https://jdk.java.net/jpackage/) should be available for packaging self-contained JavaFX application.
-At that time, I will drop the release of `.jar` and `.zip` files and no one (except me) needs to install JDK anymore.
 
 ### Difference between released `*.jar` and `*.zip` files
 
 You don't need to have JDK 11 installed for running `*.zip` versions.
-
-Considering the people using similar apps, I assumed that a large percentage of users should have JDK installed.
-Therefore, a smaller size Fat JAR `Image2LaTeX-x.x.x.jar` has also released.
 
 ### Getting updates on new releases ASAP
 

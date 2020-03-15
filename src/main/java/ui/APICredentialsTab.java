@@ -4,12 +4,19 @@ import io.APICredentialConfig;
 import io.IOUtils;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+
+import java.awt.Desktop;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 
 /**
@@ -18,12 +25,12 @@ import javafx.scene.text.FontWeight;
  */
 public class APICredentialsTab extends Tab {
 
-    private static final int MINIMUM_MARGIN = 12;
+    private static final int MINIMUM_MARGIN = 14;
 
     public APICredentialsTab() {
 
         // tab header
-        setText("API Credentials");
+        setText(" API Credentials ");
         // non-closable
         setClosable(false);
 
@@ -37,11 +44,24 @@ public class APICredentialsTab extends Tab {
         // 30 px padding
         gridPane.setPadding(new Insets(MINIMUM_MARGIN * 2));
 
-        // add header label
-        Label headerLabel = new Label("MathpixOCR API Credentials");
-        headerLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
-        GridPane.setMargin(headerLabel, new Insets(0, MINIMUM_MARGIN, MINIMUM_MARGIN, 0));
-        gridPane.add(headerLabel, 0, 0, 2, 1);
+        // add header hyperlink
+        Hyperlink hyperlink = new Hyperlink("MathpixOCR API Credentials");
+        hyperlink.setVisited(true);
+        hyperlink.setUnderline(false);
+        hyperlink.setBorder(Border.EMPTY);
+        hyperlink.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+
+        hyperlink.setOnAction(e -> {
+            if (Desktop.isDesktopSupported()) {
+                try {
+                    Desktop.getDesktop().browse(new URI(IOUtils.MATHPIX_DASHBOARD_URL));
+                } catch (IOException | URISyntaxException ignored) {
+                }
+            }
+        });
+
+        GridPane.setMargin(hyperlink, new Insets(0, MINIMUM_MARGIN, MINIMUM_MARGIN, 0));
+        gridPane.add(hyperlink, 0, 0, 2, 1);
 
         // add "App ID:" label
         Label appIdLabel = new Label("App ID:");
@@ -58,7 +78,7 @@ public class APICredentialsTab extends Tab {
         // save to Java Preferences API when text is changed
         idTextField.textProperty().addListener((observable, oldValue, newValue) -> IOUtils.setAppId(newValue));
 
-        // moves the caret to after the last char of the text
+        // moves the caret after the last char of the text
         idTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
                 Platform.runLater(idTextField::end);
@@ -82,7 +102,7 @@ public class APICredentialsTab extends Tab {
         // save to Java Preferences API when text is changed
         keyTextField.textProperty().addListener((observable, oldValue, newValue) -> IOUtils.setAppKey(newValue));
 
-        // moves the caret to after the last char of the text
+        // moves the caret after the last char of the text
         keyTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
                 Platform.runLater(keyTextField::end);

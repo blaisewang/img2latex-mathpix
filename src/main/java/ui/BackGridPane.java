@@ -1,7 +1,9 @@
 package ui;
 
 import io.IOUtils;
+import io.LegacyRecognition;
 import io.Response;
+import io.TextRecognition;
 import javafx.concurrent.Task;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -24,6 +26,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 import java.time.Instant;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 
 /**
@@ -36,6 +41,9 @@ public class BackGridPane extends GridPane {
     private static final int PREFERRED_WIDTH = 300;
     private static final int PREFERRED_HEIGHT = 100;
     private static final int PREFERRED_MARGIN = 10;
+
+    private static TextRecognition textRecognition = new TextRecognition();
+    private static LegacyRecognition legacyRecognition = new LegacyRecognition();
 
     private static ImageView clipboardImageView = new ImageView();
     private static ImageView renderedImageView = new ImageView();
@@ -60,10 +68,12 @@ public class BackGridPane extends GridPane {
 
     // get components from UI.FrontGridPane instance
     private static CopiedButton copiedButton = frontGridPane.getCopiedButton();
-    private static PressCopyTextField firstResult = frontGridPane.getFirstPressCopyTextField();
-    private static PressCopyTextField secondResult = frontGridPane.getSecondPressCopyTextField();
-    private static PressCopyTextField thirdResult = frontGridPane.getThirdPressCopyTextField();
-    private static PressCopyTextField fourthResult = frontGridPane.getFourthPressCopyTextField();
+    private List<PressCopyTextField> resultTextFiledList = Arrays.asList(
+            frontGridPane.getFirstPressCopyTextField(),
+            frontGridPane.getSecondPressCopyTextField(),
+            frontGridPane.getThirdPressCopyTextField(),
+            frontGridPane.getFourthPressCopyTextField()
+    );
 
     /**
      * UI.BackGridPane Initialisation.
@@ -192,10 +202,9 @@ public class BackGridPane extends GridPane {
         renderedImageView.setImage(null);
 
         // clear result TextFields
-        firstResult.setText("");
-        secondResult.setText("");
-        thirdResult.setText("");
-        fourthResult.setText("");
+        for (PressCopyTextField pressCopyTextField : resultTextFiledList) {
+            pressCopyTextField.setFormattedText("");
+        }
 
         // set 0 confidence
         confidenceProgressBar.setProgress(0);
@@ -231,12 +240,6 @@ public class BackGridPane extends GridPane {
                         // show proxy setting dialog for invalid proxy config
                         showPreferencesDialog(2);
                         break;
-                    case IOUtils.CONNECTION_REFUSED_ERROR:
-                        if (IOUtils.getProxyEnabled()) {
-                            // show proxy setting dialog for possible invalid proxy config
-                            showPreferencesDialog(2);
-                        }
-                        break;
                     default:
                         // clear error image and last results
                         clearErrorImage();
@@ -244,23 +247,38 @@ public class BackGridPane extends GridPane {
                 }
 
                 return;
+
             }
 
+            String[] resultList = new String[]{
+                    response.getLatexStyled(),
+                    response.getText(),
+                    IOUtils.thirdResultFormatter(response.getText()),
+                    IOUtils.fourthResultFormatter(response.getText()),
+            };
+
             // put default result into the system clipboard
-            UIUtils.putStringIntoClipboard(response.getLatexStyled());
+            UIUtils.putStringIntoClipboard(resultList[0]);
             // set UI.CopiedButton to the corresponded location
             frontGridPane.setCopiedButtonRowIndex();
 
             // set rendered image to renderedImageView
-            renderedImageView.setImage(JLaTeXMathRenderingHelper.render(response.getLatexStyled()));
+            renderedImageView.setImage(JLaTeXMathRenderingHelper.render(resultList[0]));
 
             // set results to corresponded TextFields.
-            firstResult.setFormattedText(response.getLatexStyled());
-            secondResult.setFormattedText(response.getText());
-            // wrap the result
-            thirdResult.setFormattedText(IOUtils.thirdResultWrapper(response.getLatexStyled()));
-            // wrap the result
-            fourthResult.setFormattedText(IOUtils.fourthResultWrapper(response.getLatexStyled()));
+            resultTextFiledList.get(0).setFormattedText(resultList[0]);
+            resultTextFiledList.get(1).setFormattedText(resultList[1]);
+
+            if (resultList[2].equals(resultList[1])) {
+                resultTextFiledList.get(2).setDisable(true);
+                resultTextFiledList.get(3).setDisable(true);
+            } else if (resultList[3].equals(resultList[2])) {
+                resultTextFiledList.get(2).setFormattedText(resultList[2]);
+                resultTextFiledList.get(3).setDisable(true);
+            } else {
+                resultTextFiledList.get(2).setFormattedText(resultList[2]);
+                resultTextFiledList.get(3).setFormattedText(resultList[3]);
+            }
 
             double confidence = response.getLatexConfidence();
 
@@ -274,7 +292,7 @@ public class BackGridPane extends GridPane {
         } else {
 
             // no response received
-            UIUtils.displayError("Unexpected error occurred");
+            UIUtils.displayError(IOUtils.UNEXPECTED_ERROR);
             clearErrorImage();
 
         }
@@ -300,34 +318,57 @@ public class BackGridPane extends GridPane {
 
         if (clipboardImageView.getImage() != null) {
 
+            for (PressCopyTextField pressCopyTextField : resultTextFiledList) {
+                pressCopyTextField.setFormattedText("");
+                pressCopyTextField.setDisable(false);
+            }
+
             // clear last location
             copiedButton.setVisible(false);
 
             // show waiting label
             waitingTextLabel.setVisible(true);
 
-            Task<Response> task = new Task<>() {
+            var ref = new Object() {
+                Task<Response> textOCRTask = null;
+            };
+
+            if (IOUtils.getImprovedOCREnableOption()) {
+                ref.textOCRTask = new Task<>() {
+                    @Override
+                    protected Response call() {
+                        return IOUtils.concurrentCall(textRecognition, clipboardImageView.getImage());
+                    }
+                };
+                new Thread(ref.textOCRTask).start();
+            }
+
+            Task<Response> legacyOCRTask = new Task<>() {
                 @Override
                 protected Response call() {
-                    return IOUtils.concurrentCall(clipboardImageView.getImage());
+                    return IOUtils.concurrentCall(legacyRecognition, clipboardImageView.getImage());
                 }
             };
-            task.setOnSucceeded(event -> {
-
+            legacyOCRTask.setOnSucceeded(event -> {
+                Response response = legacyOCRTask.getValue();
+                if (ref.textOCRTask != null) {
+                    try {
+                        Response textOCRResponse = ref.textOCRTask.get();
+                        response.setText(textOCRResponse.getText());
+                        response.setLatexConfidence(textOCRResponse.getConfidence());
+                    } catch (InterruptedException | ExecutionException ignored) {
+                    }
+                }
+                responseHandler(response);
                 // hide waiting label
                 waitingTextLabel.setVisible(false);
-
-                Response response = task.getValue();
-
-                responseHandler(response);
-
             });
-            new Thread(task).start();
+            new Thread(legacyOCRTask).start();
 
         } else {
 
             // no image in the system clipboard
-            UIUtils.displayError("No image found in the clipboard");
+            UIUtils.displayError(IOUtils.NO_IMAGE_FOUND_IN_THE_CLIPBOARD_ERROR);
 
         }
 

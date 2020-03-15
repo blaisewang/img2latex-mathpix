@@ -10,7 +10,6 @@ import javafx.scene.input.MouseButton;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import org.apache.commons.lang3.SystemUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.AWTException;
@@ -151,24 +150,16 @@ public class App extends Application {
         MenuItem settingItem = new MenuItem("Preferences");
         settingItem.addActionListener(event -> Platform.runLater(() -> backGridPane.showPreferencesDialog(0)));
 
-        String currentVersion = properties.getProperty("version");
-        String latestVersion = IOUtils.getLatestVersion();
-
         // add check for updates menu item
         MenuItem updateCheckItem = new MenuItem("Check for Updates");
 
-        if (latestVersion != null && !latestVersion.equals(currentVersion)) {
-            // new version found
-            updateCheckItem.setLabel("New Version: " + latestVersion);
-        }
-
         // add current version info menu item
-        MenuItem versionItem = new MenuItem("Version: " + currentVersion);
+        MenuItem versionItem = new MenuItem("Version: " + properties.getProperty("version"));
 
         // add click action listener
         updateCheckItem.addActionListener(event -> {
             try {
-                Desktop.getDesktop().browse(new URI(IOUtils.I2L_GITHUB_RELEASES_URL));
+                Desktop.getDesktop().browse(new URI(IOUtils.GITHUB_RELEASES_URL));
             } catch (IOException | URISyntaxException ignored) {
             }
         });
@@ -223,7 +214,7 @@ public class App extends Application {
         InputStream iconInputStream;
 
         // macOS
-        if (SystemUtils.IS_OS_MAC_OSX) {
+        if (IOUtils.isOSMacOSX()) {
             // dark mode
             if (IOUtils.isMacDarkMode()) {
                 // load the white colour icon
@@ -232,7 +223,7 @@ public class App extends Application {
                 // load the black colour icon
                 iconInputStream = getClass().getClassLoader().getResourceAsStream("icon-mac.png");
             }
-        } else if (SystemUtils.IS_OS_WINDOWS) {
+        } else if (IOUtils.isOSWindows()) {
             // while colour icon for windows
             iconInputStream = getClass().getClassLoader().getResourceAsStream("icon-windows.png");
         } else {

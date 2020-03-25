@@ -10,8 +10,9 @@ English | [中文](https://github.com/blaisewang/img2latex-mathpix/blob/master/R
 [![License](https://img.shields.io/github/license/blaisewang/img2latex-mathpix?style=flat-square)](https://github.com/blaisewang/img2latex-mathpix/blob/master/LICENSE)
 
 [Snip](https://mathpix.com/) is an amazing app built by Mathpix to help you extract LaTeX (also text) from documents.
-It gives you the first 50 snips for free every single month.
-With the help of [MathpixOCR](https://mathpix.com/ocr/) and this supplementary app, you can now make up to 1000 OCR requests per month for free.
+It gives you the first 50 snips for free every single month. **200 Extra Snips** for both when you [invite](https://accounts.mathpix.com/referrals) a friend with a **.edu** domain email.
+
+With the help of [MathpixOCR API](https://mathpix.com/ocr/) and this supplementary app, you can now make up to 1000 OCR requests per month for free.
 
 [Image2LaTeX](https://github.com/blaisewang/img2latex-mathpix/) is a personal side project that keeps only core functions of the Snip such as convert images to certain LaTeX equation formats and OCR.
 For other advanced functions and unlimited snips, subscribe to the Snip for $4.99 per month.

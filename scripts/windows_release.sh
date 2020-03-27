@@ -1,19 +1,19 @@
 #!/usr/bin/env bash
 
 if [[ ! -f build.gradle ]]; then
-  cd ../build/libs || exit
+  cd ../releases || exit
 else
-  cd build/libs || exit
+  cd ./releases || exit
 fi
 
-FILENAME="$(ls ./*windows.zip)"
+FILENAME="$(echo ./*windows)"
 
-unzip -q "$FILENAME"
+cp -r ../jdk/windows/jre ./"$FILENAME"/jre
 
-rm -f "$FILENAME"
+VERSION="$(echo "$FILENAME" | cut -d'-' -f2)"
 
-printf 'set ws=WScript.CreateObject("WScript.Shell")\r\nws.Run "bin\Image2LaTeX.bat",hide' >./Image2LaTeX-windows/Image2LaTeX.vbs
+mv "$FILENAME" ./Image2LaTeX-windows
 
-zip -r -q "$FILENAME" ./Image2LaTeX-windows
+zip -r -q Image2LaTeX-"$VERSION"-windows.zip ./Image2LaTeX-windows
 
 rm -rf ./Image2LaTeX-windows

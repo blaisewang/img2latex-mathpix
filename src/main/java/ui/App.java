@@ -39,9 +39,9 @@ public class App extends Application {
 
     private Stage stage;
 
-    private BackGridPane backGridPane = new BackGridPane();
+    private final BackGridPane backGridPane = new BackGridPane();
 
-    private static Properties properties = new Properties();
+    private static final Properties properties = new Properties();
 
     private static String APPLICATION_TITLE;
 

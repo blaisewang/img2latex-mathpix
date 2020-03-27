@@ -7,8 +7,8 @@ package io;
  */
 public class APICredentialConfig {
 
-    private String appId;
-    private String appKey;
+    private final String appId;
+    private final String appKey;
 
     public APICredentialConfig(String appId, String appKey) {
         this.appId = appId;

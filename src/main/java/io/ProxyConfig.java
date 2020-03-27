@@ -7,8 +7,8 @@ package io;
  */
 public class ProxyConfig {
 
-    private String hostname;
-    private int port;
+    private final String hostname;
+    private final int port;
 
     ProxyConfig(String hostname, int port) {
         this.hostname = hostname;

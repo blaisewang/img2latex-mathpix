@@ -53,5 +53,8 @@ gradle-app.setting
 # JDK directory
 jdk
 
+# releases directory
+releases
+
 # .DS_Store
 .DS_Store

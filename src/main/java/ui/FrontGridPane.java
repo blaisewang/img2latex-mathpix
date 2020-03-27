@@ -18,11 +18,11 @@ import javafx.scene.paint.Color;
  */
 public class FrontGridPane extends GridPane {
 
-    private static CopiedButton copiedButton = new CopiedButton("COPIED");
-    private static PressCopyTextField firstPressCopyTextField = new PressCopyTextField();
-    private static PressCopyTextField secondPressCopyTextField = new PressCopyTextField();
-    private static PressCopyTextField thirdPressCopyTextField = new PressCopyTextField();
-    private static PressCopyTextField fourthPressCopyTextField = new PressCopyTextField();
+    private static final CopiedButton copiedButton = new CopiedButton("COPIED");
+    private static final PressCopyTextField firstPressCopyTextField = new PressCopyTextField();
+    private static final PressCopyTextField secondPressCopyTextField = new PressCopyTextField();
+    private static final PressCopyTextField thirdPressCopyTextField = new PressCopyTextField();
+    private static final PressCopyTextField fourthPressCopyTextField = new PressCopyTextField();
 
     private static final Color frontBackgroundColor = new Color(0.9725, 0.9765, 0.9804, 1);
     private static final BackgroundFill frontFill = new BackgroundFill(frontBackgroundColor, CornerRadii.EMPTY, Insets.EMPTY);

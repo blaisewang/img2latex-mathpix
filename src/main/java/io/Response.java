@@ -7,7 +7,7 @@ package io;
  */
 public class Response {
 
-    private String error;
+    private final String error;
     private String text;
     private String latex_styled;
     private double confidence;

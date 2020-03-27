@@ -2,15 +2,16 @@ plugins {
     id "java"
     id "application"
     id "org.beryx.runtime" version "1.8.0"
+    id 'edu.sc.seis.launch4j' version '2.4.6'
     id "org.openjfx.javafxplugin" version "0.0.8"
 }
 
 group "blaise.img2latex"
-version "0.6.0"
+version "0.7.0"
 
 compileJava {
-    sourceCompatibility = 11
-    targetCompatibility = 11
+    sourceCompatibility = 14
+    targetCompatibility = 14
 }
 
 repositories {
@@ -18,46 +19,64 @@ repositories {
 }
 
 javafx {
-    version = "11.0.2"
-    modules = ["javafx.controls", "javafx.swing"]
+    version = "14"
 }
 
-dependencies {
-    implementation "com.google.code.gson:gson:2.8.6"
-    implementation "org.scilab.forge:jlatexmath:1.0.7"
-    implementation "org.openjfx:javafx-graphics:11.0.2:mac"
-    implementation "org.openjfx:javafx-graphics:11.0.2:win"
-    implementation "org.openjfx:javafx-graphics:11.0.2:linux"
-}
 
 application {
     mainClassName = "entry.Main"
     applicationName = "Image2LaTeX"
 }
 
-task("addInformation") {
+task("addVersion") {
     doLast {
         file("src/main/resources/project.properties").write("applicationName=$applicationName\nversion=$version\n")
     }
 }
 
-jar {
-    from {
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+jar.dependsOn(addVersion)
+
+dependencies {
+    implementation "com.google.code.gson:gson:2.8.6"
+    implementation "org.scilab.forge:jlatexmath:1.0.7"
+    if (project.hasProperty("windows")) {
+        implementation "org.openjfx:javafx-base:14:win"
+        implementation "org.openjfx:javafx-swing:14:win"
+        implementation "org.openjfx:javafx-graphics:14:win"
+        implementation "org.openjfx:javafx-controls:14:win"
+    } else {
+        if (project.hasProperty("linux")) {
+            implementation "org.openjfx:javafx-base:14:linux"
+            implementation "org.openjfx:javafx-swing:14:linux"
+            implementation "org.openjfx:javafx-graphics:14:linux"
+            implementation "org.openjfx:javafx-controls:14:linux"
+        } else {
+            implementation "org.openjfx:javafx-base:14:mac"
+            implementation "org.openjfx:javafx-swing:14:mac"
+            implementation "org.openjfx:javafx-graphics:14:mac"
+            implementation "org.openjfx:javafx-controls:14:mac"
+        }
     }
-    manifest {
-        attributes "Main-Class": "entry.Main"
-    }
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
-jar.dependsOn(addInformation)
-
 runtime {
-    options = ["--strip-debug", "--compress", "2", "--no-header-files", "--no-man-pages"]
-    imageZip = file("$buildDir/libs/Image2LaTeX-" + version + ".zip")
-    modules = ["java.base", "java.datatransfer", "java.desktop", "java.logging", "java.net.http", "java.prefs", "java.sql", "java.transaction.xa", "jdk.unsupported", "jdk.unsupported.desktop", "java.xml"]
-    targetPlatform("linux", "jdk/linux-jdk")
-    targetPlatform("windows", "jdk/windows-jdk")
-    targetPlatform("macos", "jdk/osx-jdk.jdk/Contents/Home")
+    imageZip = file("${buildDir}/../releases/Image2LaTeX-${version}.zip")
+    addOptions("--strip-debug", "--compress", "2", "--no-header-files", "--no-man-pages")
+    addModules("java.base", "java.datatransfer", "java.desktop", "java.logging", "java.net.http", "java.prefs", "java.sql", "java.transaction.xa", "jdk.unsupported", "jdk.unsupported.desktop", "java.xml")
+    if (project.hasProperty("linux")) {
+        targetPlatform("linux", "jdk/linux-jdk")
+    } else {
+        targetPlatform("macos", "jdk/osx-jdk.jdk/Contents/Home")
+    }
+}
+
+launch4j {
+    mainClassName = "entry.Main"
+    bundledJrePath = "jre"
+    bundledJre64Bit = true
+    version = project.version
+    textVersion = project.version
+    copyright = "github/blaisewang/img2latex-mathpix"
+    icon = "${projectDir}/src/main/resources/windows.ico"
+    outputDir = "../releases/${applicationName}-${project.version}-windows"
 }

@@ -42,13 +42,13 @@ public class BackGridPane extends GridPane {
     private static final int PREFERRED_HEIGHT = 100;
     private static final int PREFERRED_MARGIN = 10;
 
-    private static TextRecognition textRecognition = new TextRecognition();
-    private static LegacyRecognition legacyRecognition = new LegacyRecognition();
+    private static final TextRecognition textRecognition = new TextRecognition();
+    private static final LegacyRecognition legacyRecognition = new LegacyRecognition();
 
-    private static ImageView clipboardImageView = new ImageView();
-    private static ImageView renderedImageView = new ImageView();
-    private static Label waitingTextLabel = new Label("Waiting...");
-    private static ProgressBar confidenceProgressBar = new ProgressBar(0);
+    private static final ImageView clipboardImageView = new ImageView();
+    private static final ImageView renderedImageView = new ImageView();
+    private static final Label waitingTextLabel = new Label("Waiting...");
+    private static final ProgressBar confidenceProgressBar = new ProgressBar(0);
 
     private final Clipboard clipboard = Clipboard.getSystemClipboard();
 
@@ -62,13 +62,13 @@ public class BackGridPane extends GridPane {
     private static final BackgroundFill BACKGROUND_FILL = new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY);
     private static final Background BACKGROUND = new Background(BACKGROUND_FILL);
 
-    private static FrontGridPane frontGridPane = new FrontGridPane(PREFERRED_MARGIN, PANE_BORDER_STROKE);
+    private static final FrontGridPane frontGridPane = new FrontGridPane(PREFERRED_MARGIN, PANE_BORDER_STROKE);
 
-    private PreferencesDialog preferencesDialog = new PreferencesDialog();
+    private final PreferencesDialog preferencesDialog = new PreferencesDialog();
 
     // get components from UI.FrontGridPane instance
-    private static CopiedButton copiedButton = frontGridPane.getCopiedButton();
-    private List<PressCopyTextField> resultTextFiledList = Arrays.asList(
+    private static final CopiedButton copiedButton = frontGridPane.getCopiedButton();
+    private final List<PressCopyTextField> resultTextFiledList = Arrays.asList(
             frontGridPane.getFirstPressCopyTextField(),
             frontGridPane.getSecondPressCopyTextField(),
             frontGridPane.getThirdPressCopyTextField(),
@@ -218,6 +218,24 @@ public class BackGridPane extends GridPane {
     }
 
     /**
+     * Error Handler.
+     */
+    private void errorHandler(Response response) {
+        // show error content with a alert dialog
+        UIUtils.displayError(response.getError());
+
+        switch (response.getError()) {
+            // show API credential setting dialog for invalid credential error
+            case IOUtils.INVALID_CREDENTIALS_ERROR -> showPreferencesDialog(1);
+            // show proxy setting dialog for invalid proxy config
+            case IOUtils.INVALID_PROXY_CONFIG_ERROR -> showPreferencesDialog(2);
+            // clear error image and last results
+            default -> clearErrorImage();
+        }
+
+    }
+
+    /**
      * Response handler.
      */
     private void responseHandler(Response response) {
@@ -227,27 +245,8 @@ public class BackGridPane extends GridPane {
 
             // error occurred
             if (response.getError() != null) {
-
-                // show error content with a alert dialog
-                UIUtils.displayError(response.getError());
-
-                switch (response.getError()) {
-                    case IOUtils.INVALID_CREDENTIALS_ERROR:
-                        // show API credential setting dialog for invalid credential error
-                        showPreferencesDialog(1);
-                        break;
-                    case IOUtils.INVALID_PROXY_CONFIG_ERROR:
-                        // show proxy setting dialog for invalid proxy config
-                        showPreferencesDialog(2);
-                        break;
-                    default:
-                        // clear error image and last results
-                        clearErrorImage();
-                        break;
-                }
-
+                errorHandler(response);
                 return;
-
             }
 
             String[] resultList = new String[]{

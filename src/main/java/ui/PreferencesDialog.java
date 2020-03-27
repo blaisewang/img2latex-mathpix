@@ -14,11 +14,11 @@ import javafx.stage.Stage;
  */
 public class PreferencesDialog {
 
-    private Stage stage;
+    private final Stage stage;
 
-    private Dialog<Boolean> dialog = new Dialog<>();
+    private final Dialog<Boolean> dialog = new Dialog<>();
 
-    private SingleSelectionModel<Tab> selectionModel;
+    private final SingleSelectionModel<Tab> selectionModel;
 
     public PreferencesDialog() {
 

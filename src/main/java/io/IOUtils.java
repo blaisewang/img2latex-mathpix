@@ -37,7 +37,7 @@ public class IOUtils {
     private final static String I2L_IMPROVED_OCR_ENABLE_OPTION = "I2L_IMPROVED_OCR_ENABLE_OPTION";
 
     private final static String CONFIG_NODE_PATH = "I2L_API_CREDENTIAL_CONFIG";
-    private static Preferences preferences = Preferences.userRoot().node(CONFIG_NODE_PATH);
+    private static final Preferences preferences = Preferences.userRoot().node(CONFIG_NODE_PATH);
 
     /**
      * @return if os is macOS.
@@ -216,17 +216,13 @@ public class IOUtils {
 
         int option = getThirdResultFormattingOption();
 
-        switch (option) {
-            case 0:
-                return formatHelper(result, "\\begin{equation*}", "\\end{equation*}");
-            case 1:
-                return formatHelper(result, "\\begin{align*}", "\\end{align*}");
-            case 3:
-                return formatHelper(result, "\\[", "\\]");
-            default:
-                // default for option 2 and others
-                return formatHelper(result, "$$", "$$");
-        }
+        // default for option 2 and others
+        return switch (option) {
+            case 0 -> formatHelper(result, "\\begin{equation*}", "\\end{equation*}");
+            case 1 -> formatHelper(result, "\\begin{align*}", "\\end{align*}");
+            case 3 -> formatHelper(result, "\\[", "\\]");
+            default -> formatHelper(result, "$$", "$$");
+        };
 
     }
 

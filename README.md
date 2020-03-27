@@ -29,7 +29,6 @@ See the [features](https://mathpix.com/ocr#features) section on MathpixOCR websi
 ## Requirements
 
 - Your API keys in your [MathpixOCR dashboard](https://dashboard.mathpix.com/) (different from the Mathpix account used in the Snip app)
-- JDK 11 or higher version ([OpenJDK](https://openjdk.java.net/) is highly recommended) if you plan to use `Image2LaTeX-x.x.x.jar`
 
 ## Run
 
@@ -49,7 +48,7 @@ Run `Image2LaTeX.app`.
 
 ### Windows
 
-Run `Image2LaTeX.vbs` at `Image2LaTeX-windows/`.
+Run `Image2LaTeX.exe`.
 
 ### Linux
 
@@ -57,14 +56,6 @@ Run `Image2LaTeX` at `Image2LaTeX-linux/bin/` or with:
 
 ```bash
 ./Image2LaTeX
-```
-
-### JAR
-
-With a JAR launcher installed, run `Image2LaTeX-x.x.x.jar` or with:
-
-```bash
-java -jar Image2LaTeX-x.x.x.jar
 ```
 
 Use your operating system's default methods (or other tools) to take a screenshot of equations or text (Shift (⇧)-Control (⌃)-Command (⌘)-4 on macOS by default).
@@ -80,15 +71,7 @@ See [demo](#Demo) section below.
 
 ## FAQ
 
-### Native self-contained executable application for Windows and Linux
-
-Not yet. But, with the GA release of Java 14 in 2020, [jpackage](https://jdk.java.net/jpackage/) should be available for packaging self-contained JavaFX application.
-
-### Difference between released `*.jar` and `*.zip` files
-
-You don't need to have JDK 11 installed for running `*.zip` versions.
-
-### Getting updates on new releases ASAP
+### Subscribe to new releases
 
 See this [article](https://help.github.com/en/github/receiving-notifications-about-activity-on-github/watching-and-unwatching-releases-for-a-repository) about watching and unwatching releases for a repository by GitHub.
 

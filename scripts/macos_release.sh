@@ -5,20 +5,20 @@ APP_NAME=Image2LaTeX.app
 APP_PATH=./Image2LaTeX.app/Contents
 
 if [[ ! -f build.gradle ]]; then
-  cd ../build/libs || exit
+  cd ../releases || exit
 else
-  cd build/libs || exit
+  cd ./releases || exit
 fi
 
 mkdir -p $APP_PATH $APP_PATH/MacOS $APP_PATH/Resources
 
-cp ../../macOS/Info.plist.template $APP_PATH/Info.plist
+cp ../macOS/Info.plist.template $APP_PATH/Info.plist
 
-cp ../../macOS/AppIcon.icns $APP_PATH/Resources/AppIcon.icns
+cp ../macOS/AppIcon.icns $APP_PATH/Resources/AppIcon.icns
 
-cp ../../macOS/Assets.car $APP_PATH/Resources/Assets.car
+cp ../macOS/Assets.car $APP_PATH/Resources/Assets.car
 
-FILENAME="$(ls ./*macos.zip)"
+FILENAME="$(echo ./*macos.zip)"
 
 unzip -q "$FILENAME"
 

@@ -328,6 +328,12 @@ public class BackGridPane extends GridPane {
             return;
         }
 
+        // no image displayed
+        if (clipboard.hasImage()) {
+            // update the ImageView
+            CLIPBOARD_IMAGE_VIEW.setImage(clipboard.getImage());
+        }
+
         if (CLIPBOARD_IMAGE_VIEW.getImage() != null) {
 
             for (PressCopyTextField pressCopyTextField : resultTextFiledList) {

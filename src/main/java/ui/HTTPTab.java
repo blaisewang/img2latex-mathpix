@@ -2,7 +2,6 @@ package ui;
 
 
 import io.IOUtils;
-import io.ProxyConfig;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.control.CheckBox;
@@ -31,25 +30,25 @@ public class HTTPTab extends Tab {
         setClosable(false);
 
         // load initial proxy enable option
-        boolean proxyEnableOption = IOUtils.getProxyEnableOption();
+        var proxyEnableOption = IOUtils.getProxyEnableOption();
         // load initial proxy config
-        ProxyConfig proxyConfig = IOUtils.getProxyConfig();
+        var proxyConfig = IOUtils.getProxyConfig();
 
         // 4 * 2 layout
-        GridPane gridPane = new GridPane();
+        var gridPane = new GridPane();
         gridPane.setHgap(4);
         gridPane.setVgap(2);
         gridPane.setPadding(new Insets(PANEL_MARGIN, PANEL_MARGIN + MINIMUM_MARGIN, PANEL_MARGIN, PANEL_MARGIN));
 
         // add header label
-        Label headerLabel = new Label("HTTP Proxy");
+        var headerLabel = new Label("HTTP Proxy");
         headerLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         GridPane.setMargin(headerLabel, new Insets(0, MINIMUM_MARGIN, MINIMUM_MARGIN, 0));
         gridPane.add(headerLabel, 0, 0, 2, 1);
 
-        CheckBox proxyEnableOptionCheckBox = new CheckBox("HTTP Proxy");
-        TextField hostnameTextField = new TextField();
-        TextField portTextField = new TextField();
+        var proxyEnableOptionCheckBox = new CheckBox("HTTP Proxy");
+        var hostnameTextField = new TextField();
+        var portTextField = new TextField();
 
         proxyEnableOptionCheckBox.setSelected(proxyEnableOption);
         hostnameTextField.setDisable(!proxyEnableOption);
@@ -65,7 +64,7 @@ public class HTTPTab extends Tab {
         gridPane.add(proxyEnableOptionCheckBox, 0, 1, 2, 1);
 
         // add "Host:" label
-        Label hostLabel = new Label("Host:");
+        var hostLabel = new Label("Host:");
         GridPane.setMargin(hostLabel, new Insets(MINIMUM_MARGIN));
         gridPane.add(hostLabel, 0, 2);
 
@@ -88,7 +87,7 @@ public class HTTPTab extends Tab {
         gridPane.add(hostnameTextField, 1, 2);
 
         // add "Port" label
-        Label portLabel = new Label("Port:");
+        var portLabel = new Label("Port:");
         GridPane.setMargin(portLabel, new Insets(MINIMUM_MARGIN));
         gridPane.add(portLabel, 0, 3);
 

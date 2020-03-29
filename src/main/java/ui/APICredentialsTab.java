@@ -1,6 +1,5 @@
 package ui;
 
-import io.APICredentialConfig;
 import io.IOUtils;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -35,17 +34,17 @@ public class APICredentialsTab extends Tab {
         setClosable(false);
 
         // load initial API credential config
-        APICredentialConfig apiCredentialConfig = IOUtils.getAPICredentialConfig();
+        var apiCredentialConfig = IOUtils.getAPICredentialConfig();
 
         // 3 * 2 layout
-        GridPane gridPane = new GridPane();
+        var gridPane = new GridPane();
         gridPane.setHgap(3);
         gridPane.setVgap(2);
         // 30 px padding
         gridPane.setPadding(new Insets(MINIMUM_MARGIN * 2));
 
         // add header hyperlink
-        Hyperlink hyperlink = new Hyperlink("MathpixOCR API Credentials");
+        var hyperlink = new Hyperlink("MathpixOCR API Credentials");
         hyperlink.setVisited(true);
         hyperlink.setUnderline(false);
         hyperlink.setBorder(Border.EMPTY);
@@ -64,12 +63,12 @@ public class APICredentialsTab extends Tab {
         gridPane.add(hyperlink, 0, 0, 2, 1);
 
         // add "App ID:" label
-        Label appIdLabel = new Label("App ID:");
+        var appIdLabel = new Label("App ID:");
         GridPane.setMargin(appIdLabel, new Insets(MINIMUM_MARGIN));
         gridPane.add(appIdLabel, 0, 1);
 
         // add app id TextFiled
-        TextField idTextField = new TextField();
+        var idTextField = new TextField();
         idTextField.setPromptText("App ID");
         idTextField.setText(apiCredentialConfig.getAppId());
         idTextField.setPrefWidth(280);
@@ -88,12 +87,12 @@ public class APICredentialsTab extends Tab {
         gridPane.add(idTextField, 1, 1);
 
         // add "App Key:" label
-        Label appKeyLabel = new Label("App Key:");
+        var appKeyLabel = new Label("App Key:");
         GridPane.setMargin(appKeyLabel, new Insets(MINIMUM_MARGIN));
         gridPane.add(appKeyLabel, 0, 2);
 
         // add app key TextFiled
-        TextField keyTextField = new TextField();
+        var keyTextField = new TextField();
         keyTextField.setPromptText("App Key");
         keyTextField.setText(apiCredentialConfig.getAppKey());
         keyTextField.setPrefWidth(280);

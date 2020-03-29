@@ -4,9 +4,7 @@ import javafx.scene.image.Image;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.prefs.Preferences;
 
@@ -17,34 +15,36 @@ import java.util.prefs.Preferences;
  */
 public class IOUtils {
 
-    public final static String UNEXPECTED_ERROR = "Unexpected error";
-    public final static String INVALID_CREDENTIALS_ERROR = "Invalid credentials";
-    public final static String INVALID_PROXY_CONFIG_ERROR = "Invalid proxy config";
-    public final static String NO_IMAGE_FOUND_IN_THE_CLIPBOARD_ERROR = "No image found in the clipboard";
+    public static final String EXCEPTION_MARK = "Exception:";
 
-    public final static String TEXT_API_URL = "https://api.mathpix.com/v3/text";
-    public final static String LEGACY_API_URL = "https://api.mathpix.com/v3/latex";
-    public final static String MATHPIX_DASHBOARD_URL = "https://dashboard.mathpix.com/";
-    public final static String GITHUB_RELEASES_URL = "https://github.com/blaisewang/img2latex-mathpix/releases";
+    public static final String UNEXPECTED_ERROR = "Unexpected error";
+    public static final String INVALID_CREDENTIALS_ERROR = "Invalid credentials";
+    public static final String INVALID_PROXY_CONFIG_ERROR = "Invalid proxy config";
+    public static final String NO_IMAGE_FOUND_IN_THE_CLIPBOARD_ERROR = "No image found in the clipboard";
 
-    private final static String I2L_APP_ID = "I2L_APP_ID";
-    private final static String I2L_APP_KEY = "I2L_APP_KEY";
-    private final static String I2L_THIRD_RESULT_FORMATTING_OPTION = "I2L_THIRD_RESULT_FORMATTING_OPTION";
-    private final static String I2L_FOURTH_RESULT_FORMATTING_OPTION = "I2L_FOURTH_RESULT_FORMATTING_OPTION";
-    private final static String I2L_PROXY_ENABLE_OPTION = "I2L_PROXY_ENABLE_OPTION";
-    private final static String I2L_PROXY_HOSTNAME = "I2L_PROXY_HOSTNAME";
-    private final static String I2L_PROXY_PORT = "I2L_PROXY_PORT";
-    private final static String I2L_IMPROVED_OCR_ENABLE_OPTION = "I2L_IMPROVED_OCR_ENABLE_OPTION";
+    public static final String TEXT_API_URL = "https://api.mathpix.com/v3/text";
+    public static final String LEGACY_API_URL = "https://api.mathpix.com/v3/latex";
+    public static final String MATHPIX_DASHBOARD_URL = "https://dashboard.mathpix.com/";
+    public static final String GITHUB_RELEASES_URL = "https://github.com/blaisewang/img2latex-mathpix/releases";
 
-    private final static String CONFIG_NODE_PATH = "I2L_API_CREDENTIAL_CONFIG";
-    private static final Preferences preferences = Preferences.userRoot().node(CONFIG_NODE_PATH);
+    private static final String I2L_APP_ID = "I2L_APP_ID";
+    private static final String I2L_APP_KEY = "I2L_APP_KEY";
+    private static final String I2L_THIRD_RESULT_FORMATTING_OPTION = "I2L_THIRD_RESULT_FORMATTING_OPTION";
+    private static final String I2L_FOURTH_RESULT_FORMATTING_OPTION = "I2L_FOURTH_RESULT_FORMATTING_OPTION";
+    private static final String I2L_PROXY_ENABLE_OPTION = "I2L_PROXY_ENABLE_OPTION";
+    private static final String I2L_PROXY_HOSTNAME = "I2L_PROXY_HOSTNAME";
+    private static final String I2L_PROXY_PORT = "I2L_PROXY_PORT";
+    private static final String I2L_IMPROVED_OCR_ENABLE_OPTION = "I2L_IMPROVED_OCR_ENABLE_OPTION";
+
+    private static final String CONFIG_NODE_PATH = "I2L_API_CREDENTIAL_CONFIG";
+    private static final Preferences PREFERENCES = Preferences.userRoot().node(CONFIG_NODE_PATH);
 
     /**
      * @return if os is macOS.
      */
     public static boolean isOSMacOSX() {
 
-        String osName = System.getProperty("os.name");
+        var osName = System.getProperty("os.name");
         if (osName == null) {
             return false;
         }
@@ -58,7 +58,7 @@ public class IOUtils {
      */
     public static boolean isOSWindows() {
 
-        String osName = System.getProperty("os.name");
+        var osName = System.getProperty("os.name");
         if (osName == null) {
             return false;
         }
@@ -76,7 +76,7 @@ public class IOUtils {
 
         try {
             // process will exit with 0 if dark mode enabled
-            final Process process = Runtime.getRuntime().exec(new String[]{"defaults", "read", "-g", "AppleInterfaceStyle"});
+            final var process = Runtime.getRuntime().exec(new String[]{"defaults", "read", "-g", "AppleInterfaceStyle"});
             process.waitFor(100, TimeUnit.MILLISECONDS);
             return process.exitValue() == 0;
         } catch (IOException | InterruptedException | IllegalThreadStateException e) {
@@ -93,10 +93,10 @@ public class IOUtils {
      */
     public static Response concurrentCall(Recognition recognition, Image image) {
 
-        ExecutorService executor = Executors.newSingleThreadExecutor();
+        var executor = Executors.newSingleThreadExecutor();
 
         if (recognition.setSrcParameters(image)) {
-            Future<Response> result = executor.submit(recognition);
+            var result = executor.submit(recognition);
             try {
                 return result.get();
             } catch (InterruptedException | ExecutionException e) {
@@ -121,7 +121,7 @@ public class IOUtils {
      * @param appId App ID to be written.
      */
     public static void setAppId(String appId) {
-        preferences.put(I2L_APP_ID, appId);
+        PREFERENCES.put(I2L_APP_ID, appId);
     }
 
     /**
@@ -130,7 +130,7 @@ public class IOUtils {
      * @param appKey App key to be written.
      */
     public static void setAppKey(String appKey) {
-        preferences.put(I2L_APP_KEY, appKey);
+        PREFERENCES.put(I2L_APP_KEY, appKey);
     }
 
     /**
@@ -139,7 +139,7 @@ public class IOUtils {
      * @return IO.APICredentialConfig object.
      */
     public static APICredentialConfig getAPICredentialConfig() {
-        return new APICredentialConfig(preferences.get(I2L_APP_ID, ""), preferences.get(I2L_APP_KEY, ""));
+        return new APICredentialConfig(PREFERENCES.get(I2L_APP_ID, ""), PREFERENCES.get(I2L_APP_KEY, ""));
     }
 
     /**
@@ -148,7 +148,7 @@ public class IOUtils {
      * @param option option to be written.
      */
     public static void setThirdResultFormattingOption(int option) {
-        preferences.putInt(I2L_THIRD_RESULT_FORMATTING_OPTION, option);
+        PREFERENCES.putInt(I2L_THIRD_RESULT_FORMATTING_OPTION, option);
     }
 
     /**
@@ -157,7 +157,7 @@ public class IOUtils {
      * @return third result formatting option.
      */
     public static int getThirdResultFormattingOption() {
-        return preferences.getInt(I2L_THIRD_RESULT_FORMATTING_OPTION, 2);
+        return PREFERENCES.getInt(I2L_THIRD_RESULT_FORMATTING_OPTION, 2);
     }
 
     /**
@@ -166,7 +166,7 @@ public class IOUtils {
      * @param option option to be written.
      */
     public static void setFourthResultFormattingOption(int option) {
-        preferences.putInt(I2L_FOURTH_RESULT_FORMATTING_OPTION, option);
+        PREFERENCES.putInt(I2L_FOURTH_RESULT_FORMATTING_OPTION, option);
     }
 
     /**
@@ -175,7 +175,20 @@ public class IOUtils {
      * @return fourth result formatting option.
      */
     public static int getFourthResultFormattingOption() {
-        return preferences.getInt(I2L_FOURTH_RESULT_FORMATTING_OPTION, 0);
+        return PREFERENCES.getInt(I2L_FOURTH_RESULT_FORMATTING_OPTION, 0);
+    }
+
+    /**
+     * @param exception exception message.
+     * @return formatted exception message.
+     */
+    public static String exceptionFormatter(String exception) {
+
+        var splitArray = exception.split(EXCEPTION_MARK, 2);
+        var result = splitArray[splitArray.length - 1].trim();
+
+        return result.substring(0, 1).toUpperCase() + result.substring(1);
+
     }
 
     /**
@@ -186,13 +199,11 @@ public class IOUtils {
      */
     public static String formatHelper(String string, String left_delimiter, String right_delimiter) {
 
-        String formatted_left_delimiter = left_delimiter + "\n ";
-        String formatted_right_delimiter = "\n" + right_delimiter;
+        var formatted_left_delimiter = left_delimiter + "\n ";
+        var formatted_right_delimiter = "\n" + right_delimiter;
 
         if (string.startsWith("\\(") && string.split("\\u005C\\u0028").length == 2) {
-
             return string.replace("\\(", formatted_left_delimiter).replace("\\)", formatted_right_delimiter);
-
         }
 
         return string.replace("\\(", "$").replace("\\)", "$").
@@ -214,15 +225,17 @@ public class IOUtils {
             return null;
         }
 
-        int option = getThirdResultFormattingOption();
+        var option = getThirdResultFormattingOption();
 
         // default for option 2 and others
-        return switch (option) {
-            case 0 -> formatHelper(result, "\\begin{equation*}", "\\end{equation*}");
-            case 1 -> formatHelper(result, "\\begin{align*}", "\\end{align*}");
-            case 3 -> formatHelper(result, "\\[", "\\]");
-            default -> formatHelper(result, "$$", "$$");
-        };
+        if (option == 0) {
+            return formatHelper(result, "\\begin{equation*}", "\\end{equation*}");
+        } else if (option == 1) {
+            return formatHelper(result, "\\begin{align*}", "\\end{align*}");
+        } else if (option == 3) {
+            return formatHelper(result, "\\[", "\\]");
+        }
+        return formatHelper(result, "$$", "$$");
 
     }
 
@@ -239,8 +252,7 @@ public class IOUtils {
             return null;
         }
 
-        int option = getFourthResultFormattingOption();
-
+        var option = getFourthResultFormattingOption();
 
         if (option == 1) {
             return formatHelper(result, "\\begin{align}", "\\end{align}");
@@ -256,7 +268,7 @@ public class IOUtils {
      * @param option option to be written.
      */
     public static void setProxyEnableOption(boolean option) {
-        preferences.putBoolean(I2L_PROXY_ENABLE_OPTION, option);
+        PREFERENCES.putBoolean(I2L_PROXY_ENABLE_OPTION, option);
     }
 
     /**
@@ -265,7 +277,7 @@ public class IOUtils {
      * @return proxy enable option.
      */
     public static boolean getProxyEnableOption() {
-        return preferences.getBoolean(I2L_PROXY_ENABLE_OPTION, false);
+        return PREFERENCES.getBoolean(I2L_PROXY_ENABLE_OPTION, false);
     }
 
     /**
@@ -274,7 +286,7 @@ public class IOUtils {
      * @param host host to be written.
      */
     public static void setProxyHostname(String host) {
-        preferences.put(I2L_PROXY_HOSTNAME, host);
+        PREFERENCES.put(I2L_PROXY_HOSTNAME, host);
     }
 
     /**
@@ -283,7 +295,7 @@ public class IOUtils {
      * @param port port to be written.
      */
     public static void setProxyPort(String port) {
-        preferences.put(I2L_PROXY_PORT, port);
+        PREFERENCES.put(I2L_PROXY_PORT, port);
     }
 
     /**
@@ -295,12 +307,13 @@ public class IOUtils {
 
         int port;
         try {
-            port = Integer.parseInt(preferences.get(I2L_PROXY_PORT, ""));
+            port = Integer.parseInt(PREFERENCES.get(I2L_PROXY_PORT, ""));
         } catch (NumberFormatException e) {
             port = -1;
         }
 
-        return new ProxyConfig(preferences.get(I2L_PROXY_HOSTNAME, ""), port);
+        return new ProxyConfig(PREFERENCES.get(I2L_PROXY_HOSTNAME, ""), port);
+
     }
 
     /**
@@ -309,7 +322,7 @@ public class IOUtils {
      * @param option option to be written.
      */
     public static void setImprovedOCREnableOption(Boolean option) {
-        preferences.putBoolean(I2L_IMPROVED_OCR_ENABLE_OPTION, option);
+        PREFERENCES.putBoolean(I2L_IMPROVED_OCR_ENABLE_OPTION, option);
     }
 
     /**
@@ -318,7 +331,7 @@ public class IOUtils {
      * @return improved OCR enable option.
      */
     public static boolean getImprovedOCREnableOption() {
-        return preferences.getBoolean(I2L_IMPROVED_OCR_ENABLE_OPTION, true);
+        return PREFERENCES.getBoolean(I2L_IMPROVED_OCR_ENABLE_OPTION, true);
     }
 
 }

@@ -10,7 +10,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 
@@ -33,7 +32,7 @@ public class OCRRequestHelper {
         String app_id;
         String app_key;
 
-        APICredentialConfig APICredentialConfig = IOUtils.getAPICredentialConfig();
+        var APICredentialConfig = IOUtils.getAPICredentialConfig();
 
         if (APICredentialConfig.isValid()) {
             app_id = APICredentialConfig.getAppId();
@@ -49,7 +48,7 @@ public class OCRRequestHelper {
         // HTTP version 2 first, then HTTP version 1.1
         if (IOUtils.getProxyEnableOption()) {
             // proxy enabled
-            ProxyConfig config = IOUtils.getProxyConfig();
+            var config = IOUtils.getProxyConfig();
             if (config.isValid()) {
                 httpClient = HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).
                         proxy(ProxySelector.of(new InetSocketAddress(config.getHostname(), config.getPort()))).build();
@@ -61,19 +60,18 @@ public class OCRRequestHelper {
         }
 
         // URI
-        String uri = parameters.has("skip_recrop") ? IOUtils.LEGACY_API_URL : IOUtils.TEXT_API_URL;
+        var uri = parameters.has("skip_recrop") ? IOUtils.LEGACY_API_URL : IOUtils.TEXT_API_URL;
         // request body
-        HttpRequest.BodyPublisher requestBody = HttpRequest.BodyPublishers.ofString(parameters.toString());
+        var requestBody = HttpRequest.BodyPublishers.ofString(parameters.toString());
         // wait up to 15 seconds
-        HttpRequest httpRequest = HttpRequest.newBuilder().uri(URI.create(uri)).
+        var httpRequest = HttpRequest.newBuilder().uri(URI.create(uri)).
                 headers("app_id", app_id, "app_key", app_key, "Content-type", "application/json").
                 POST(requestBody).timeout(Duration.ofSeconds(15)).build();
 
-        CompletableFuture<String> future = httpClient.sendAsync(httpRequest, HttpResponse.BodyHandlers.ofString()).
-                thenApply(HttpResponse::body);
+        var completableFuture = httpClient.sendAsync(httpRequest, HttpResponse.BodyHandlers.ofString()).thenApply(HttpResponse::body);
 
         try {
-            return new Gson().fromJson(future.get(), Response.class);
+            return new Gson().fromJson(completableFuture.get(), Response.class);
         } catch (InterruptedException | ExecutionException e) {
             return new Response(e.getMessage());
         }

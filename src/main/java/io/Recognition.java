@@ -5,11 +5,11 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 
 import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.concurrent.Callable;
+
 
 /**
  * IO.Recognition.java
@@ -30,18 +30,18 @@ public class Recognition implements Callable<Response> {
     public Boolean setSrcParameters(Image image) {
 
         // output stream in byte array
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        var byteArrayOutputStream = new ByteArrayOutputStream();
 
         // convert javafx.scene.image.Image to java.awt.image.BufferedImage
-        BufferedImage bufferedImage = SwingFXUtils.fromFXImage(image, null);
+        var bufferedImage = SwingFXUtils.fromFXImage(image, null);
 
         try {
             // BufferedImage to byte array output stream
             ImageIO.write(bufferedImage, "png", byteArrayOutputStream);
             // byte array output stream to byte[]
-            byte[] imageInByte = byteArrayOutputStream.toByteArray();
+            var imageInByte = byteArrayOutputStream.toByteArray();
             // add header of "src"
-            String src = "data:image/jpg;base64," + Base64.getEncoder().encodeToString(imageInByte);
+            var src = "data:image/jpg;base64," + Base64.getEncoder().encodeToString(imageInByte);
             // replace original "src" with new encoded value
             parameters.addProperty("src", src);
             return true;

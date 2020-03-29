@@ -28,11 +28,11 @@ public class PreferencesDialog {
         stage = (Stage) dialog.getDialogPane().getScene().getWindow();
 
         // add GeneralTab (index: 0) and APICredentialsTab (index: 1) to the TabPane
-        TabPane tabPane = new TabPane(new GeneralTab(), new APICredentialsTab(), new HTTPTab());
+        var tabPane = new TabPane(new GeneralTab(), new APICredentialsTab(), new HTTPTab());
 
         selectionModel = tabPane.getSelectionModel();
 
-        Scene scene = new Scene(tabPane);
+        var scene = new Scene(tabPane);
 
         // set the app preferences dialog always on top
         stage.setAlwaysOnTop(true);

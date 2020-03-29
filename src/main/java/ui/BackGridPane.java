@@ -42,13 +42,13 @@ public class BackGridPane extends GridPane {
     private static final int PREFERRED_HEIGHT = 100;
     private static final int PREFERRED_MARGIN = 10;
 
-    private static final TextRecognition textRecognition = new TextRecognition();
-    private static final LegacyRecognition legacyRecognition = new LegacyRecognition();
+    private static final TextRecognition TEXT_RECOGNITION = new TextRecognition();
+    private static final LegacyRecognition LEGACY_RECOGNITION = new LegacyRecognition();
 
-    private static final ImageView clipboardImageView = new ImageView();
-    private static final ImageView renderedImageView = new ImageView();
-    private static final Label waitingTextLabel = new Label("Waiting...");
-    private static final ProgressBar confidenceProgressBar = new ProgressBar(0);
+    private static final ImageView CLIPBOARD_IMAGE_VIEW = new ImageView();
+    private static final ImageView RENDERED_IMAGE_VIEW = new ImageView();
+    private static final Label WAITING_TEXT_LABEL = new Label("Waiting...");
+    private static final ProgressBar CONFIDENCE_PROGRESS_BAR = new ProgressBar(0);
 
     private final Clipboard clipboard = Clipboard.getSystemClipboard();
 
@@ -62,17 +62,19 @@ public class BackGridPane extends GridPane {
     private static final BackgroundFill BACKGROUND_FILL = new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY);
     private static final Background BACKGROUND = new Background(BACKGROUND_FILL);
 
-    private static final FrontGridPane frontGridPane = new FrontGridPane(PREFERRED_MARGIN, PANE_BORDER_STROKE);
+    private static final FrontGridPane FRONT_GRID_PANE = new FrontGridPane(PREFERRED_MARGIN, PANE_BORDER_STROKE);
 
     private final PreferencesDialog preferencesDialog = new PreferencesDialog();
 
     // get components from UI.FrontGridPane instance
-    private static final CopiedButton copiedButton = frontGridPane.getCopiedButton();
+    private static final CopiedButton COPIED_BUTTON = FRONT_GRID_PANE.getCopiedButton();
+    private static final CopyMathMLButton COPY_MATH_ML_BUTTON = FRONT_GRID_PANE.getCopyMathMLButton();
+
     private final List<PressCopyTextField> resultTextFiledList = Arrays.asList(
-            frontGridPane.getFirstPressCopyTextField(),
-            frontGridPane.getSecondPressCopyTextField(),
-            frontGridPane.getThirdPressCopyTextField(),
-            frontGridPane.getFourthPressCopyTextField()
+            FRONT_GRID_PANE.getFirstPressCopyTextField(),
+            FRONT_GRID_PANE.getSecondPressCopyTextField(),
+            FRONT_GRID_PANE.getThirdPressCopyTextField(),
+            FRONT_GRID_PANE.getFourthPressCopyTextField()
     );
 
     /**
@@ -88,34 +90,34 @@ public class BackGridPane extends GridPane {
         setHgap(2);
 
         // add "Clipboard Image" text label
-        Label clipboardTextLabel = UIUtils.getTextLabel("Clipboard Image");
+        var clipboardTextLabel = UIUtils.getTextLabel("Clipboard Image");
         UIUtils.setDefaultNodeMargin(clipboardTextLabel, PREFERRED_MARGIN, 0);
         add(clipboardTextLabel, 0, 0);
 
-        waitingTextLabel.setFont(Font.font("Arial Black", FontWeight.BOLD, 12));
-        waitingTextLabel.setTextFill(new Color(0.3882, 0.7882, 0.3373, 1));
-        waitingTextLabel.setVisible(false);
-        GridPane.setHalignment(waitingTextLabel, HPos.RIGHT);
-        UIUtils.setDefaultNodeMargin(waitingTextLabel, 0, PREFERRED_MARGIN);
-        add(waitingTextLabel, 1, 0);
+        WAITING_TEXT_LABEL.setFont(Font.font("Arial Black", FontWeight.BOLD, 12));
+        WAITING_TEXT_LABEL.setTextFill(new Color(0.3882, 0.7882, 0.3373, 1));
+        WAITING_TEXT_LABEL.setVisible(false);
+        GridPane.setHalignment(WAITING_TEXT_LABEL, HPos.RIGHT);
+        UIUtils.setDefaultNodeMargin(WAITING_TEXT_LABEL, 0, PREFERRED_MARGIN);
+        add(WAITING_TEXT_LABEL, 1, 0);
 
         // get bordered ImageView
-        BorderPane clipboardBorderPane = setImageViewBorder(clipboardImageView);
+        var clipboardBorderPane = setImageViewBorder(CLIPBOARD_IMAGE_VIEW);
         add(clipboardBorderPane, 0, 1, 2, 1);
 
         // add "Rendered Equation" text label
-        Label renderedTextLabel = UIUtils.getTextLabel("Rendered Equation");
+        var renderedTextLabel = UIUtils.getTextLabel("Rendered Equation");
         UIUtils.setDefaultNodeMargin(renderedTextLabel, PREFERRED_MARGIN, 0);
         add(renderedTextLabel, 0, 2, 2, 1);
 
         // get bordered ImageView
-        BorderPane renderedBorderPane = setImageViewBorder(renderedImageView);
+        var renderedBorderPane = setImageViewBorder(RENDERED_IMAGE_VIEW);
         add(renderedBorderPane, 0, 3, 2, 1);
 
-        frontGridPane.setOnKeyReleased(event -> {
+        FRONT_GRID_PANE.setOnKeyReleased(event -> {
 
             // space key to update image
-            if (event.getCode() == KeyCode.SPACE) {
+            if (event.getCode() == KeyCode.BACK_SPACE) {
 
                 // prevent multiple image updates in a short time
                 if (Instant.now().getEpochSecond() - lastUpdateCompletionTimestamp < 1) {
@@ -126,7 +128,7 @@ public class BackGridPane extends GridPane {
                 // an Image has been registered on the clipboard
                 if (clipboard.hasImage()) {
                     // update the ImageView
-                    clipboardImageView.setImage(clipboard.getImage());
+                    CLIPBOARD_IMAGE_VIEW.setImage(clipboard.getImage());
                 }
 
                 lastUpdateCompletionTimestamp = Instant.now().getEpochSecond();
@@ -140,21 +142,24 @@ public class BackGridPane extends GridPane {
 
         });
         // add front grid panel
-        add(frontGridPane, 0, 4, 2, 1);
+        add(FRONT_GRID_PANE, 0, 4, 2, 1);
 
         // enter key pressed event binding to the UI.FrontGridPane
-        onKeyReleasedProperty().bind(frontGridPane.onKeyReleasedProperty());
+        onKeyReleasedProperty().bind(FRONT_GRID_PANE.onKeyReleasedProperty());
+
+        // hide copied button if copy MathML button is clicked.
+        COPY_MATH_ML_BUTTON.setOnMouseClicked(event -> COPIED_BUTTON.setVisible(false));
 
         // add "Confidence" label text
-        Label confidenceText = UIUtils.getTextLabel("Confidence");
+        var confidenceText = UIUtils.getTextLabel("Confidence");
         UIUtils.setDefaultNodeMargin(confidenceText, PREFERRED_MARGIN, 0);
         add(confidenceText, 0, 5, 2, 1);
 
         // confidence progress bar
-        UIUtils.setDefaultNodeMargin(confidenceProgressBar, PREFERRED_MARGIN, 0);
-        confidenceProgressBar.setPrefSize(PREFERRED_WIDTH - 2 * PREFERRED_MARGIN - 1, 20);
+        UIUtils.setDefaultNodeMargin(CONFIDENCE_PROGRESS_BAR, PREFERRED_MARGIN, 0);
+        CONFIDENCE_PROGRESS_BAR.setPrefSize(PREFERRED_WIDTH - 2 * PREFERRED_MARGIN - 1, 20);
         // red for less than 20% certainty, yellow for 20% ~ 60%, and green for above 60%
-        confidenceProgressBar.progressProperty().addListener((observable, oldValue, newValue) -> {
+        CONFIDENCE_PROGRESS_BAR.progressProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.doubleValue() < 0.2) {
                 setStyle("-fx-accent: #ec4d3d;");
             } else if (newValue.doubleValue() < 0.6) {
@@ -163,7 +168,7 @@ public class BackGridPane extends GridPane {
                 setStyle("-fx-accent: #63c956;");
             }
         });
-        add(confidenceProgressBar, 0, 6, 2, 1);
+        add(CONFIDENCE_PROGRESS_BAR, 0, 6, 2, 1);
 
     }
 
@@ -181,7 +186,7 @@ public class BackGridPane extends GridPane {
         imageView.setFitWidth(PREFERRED_WIDTH);
         imageView.setFitHeight(PREFERRED_HEIGHT);
 
-        BorderPane borderPane = new BorderPane(imageView);
+        var borderPane = new BorderPane(imageView);
 
         // use BorderPane to add a border stroke to the ImageView
         borderPane.setBorder(new Border(PANE_BORDER_STROKE));
@@ -198,8 +203,8 @@ public class BackGridPane extends GridPane {
         UIUtils.putStringIntoClipboard("");
 
         // set empty image
-        clipboardImageView.setImage(null);
-        renderedImageView.setImage(null);
+        CLIPBOARD_IMAGE_VIEW.setImage(null);
+        RENDERED_IMAGE_VIEW.setImage(null);
 
         // clear result TextFields
         for (PressCopyTextField pressCopyTextField : resultTextFiledList) {
@@ -207,7 +212,7 @@ public class BackGridPane extends GridPane {
         }
 
         // set 0 confidence
-        confidenceProgressBar.setProgress(0);
+        CONFIDENCE_PROGRESS_BAR.setProgress(0);
     }
 
     /**
@@ -221,16 +226,24 @@ public class BackGridPane extends GridPane {
      * Error Handler.
      */
     private void errorHandler(Response response) {
-        // show error content with a alert dialog
-        UIUtils.displayError(response.getError());
 
-        switch (response.getError()) {
+        var error = response.getError();
+
+        if (IOUtils.INVALID_CREDENTIALS_ERROR.equals(error)) {
             // show API credential setting dialog for invalid credential error
-            case IOUtils.INVALID_CREDENTIALS_ERROR -> showPreferencesDialog(1);
+            UIUtils.displayError(error);
+            showPreferencesDialog(1);
+        } else if (IOUtils.INVALID_PROXY_CONFIG_ERROR.equals(error)) {
             // show proxy setting dialog for invalid proxy config
-            case IOUtils.INVALID_PROXY_CONFIG_ERROR -> showPreferencesDialog(2);
+            UIUtils.displayError(error);
+            showPreferencesDialog(2);
+        } else if (error.contains(IOUtils.EXCEPTION_MARK)) {
+            // display exception error
+            UIUtils.displayError(IOUtils.exceptionFormatter(error));
+        } else {
             // clear error image and last results
-            default -> clearErrorImage();
+            UIUtils.displayError(error);
+            clearErrorImage();
         }
 
     }
@@ -249,7 +262,7 @@ public class BackGridPane extends GridPane {
                 return;
             }
 
-            String[] resultList = new String[]{
+            var resultList = new String[]{
                     response.getLatexStyled(),
                     response.getText(),
                     IOUtils.thirdResultFormatter(response.getText()),
@@ -259,10 +272,16 @@ public class BackGridPane extends GridPane {
             // put default result into the system clipboard
             UIUtils.putStringIntoClipboard(resultList[0]);
             // set UI.CopiedButton to the corresponded location
-            frontGridPane.setCopiedButtonRowIndex();
+            FRONT_GRID_PANE.setCopiedButtonRowIndex();
+
+            var mathML = response.getMathML();
+            if (mathML != null && !"".equals(mathML)) {
+                COPY_MATH_ML_BUTTON.setResult(mathML);
+                COPY_MATH_ML_BUTTON.setVisible(true);
+            }
 
             // set rendered image to renderedImageView
-            renderedImageView.setImage(JLaTeXMathRenderingHelper.render(resultList[0]));
+            RENDERED_IMAGE_VIEW.setImage(JLaTeXMathRenderingHelper.render(resultList[0]));
 
             // set results to corresponded TextFields.
             resultTextFiledList.get(0).setFormattedText(resultList[0]);
@@ -279,14 +298,14 @@ public class BackGridPane extends GridPane {
                 resultTextFiledList.get(3).setFormattedText(resultList[3]);
             }
 
-            double confidence = response.getLatexConfidence();
+            var confidence = response.getLatexConfidence();
 
             // minimal confidence is set to 1%
             if (confidence > 0 && confidence < 0.01) {
                 confidence = 0.01;
             }
 
-            confidenceProgressBar.setProgress(confidence);
+            CONFIDENCE_PROGRESS_BAR.setProgress(confidence);
 
         } else {
 
@@ -309,13 +328,7 @@ public class BackGridPane extends GridPane {
             return;
         }
 
-        // no image displayed
-        if (clipboard.hasImage()) {
-            // update the ImageView
-            clipboardImageView.setImage(clipboard.getImage());
-        }
-
-        if (clipboardImageView.getImage() != null) {
+        if (CLIPBOARD_IMAGE_VIEW.getImage() != null) {
 
             for (PressCopyTextField pressCopyTextField : resultTextFiledList) {
                 pressCopyTextField.setFormattedText("");
@@ -323,10 +336,11 @@ public class BackGridPane extends GridPane {
             }
 
             // clear last location
-            copiedButton.setVisible(false);
+            COPIED_BUTTON.setVisible(false);
+            COPY_MATH_ML_BUTTON.setVisible(false);
 
             // show waiting label
-            waitingTextLabel.setVisible(true);
+            WAITING_TEXT_LABEL.setVisible(true);
 
             var ref = new Object() {
                 Task<Response> textOCRTask = null;
@@ -336,7 +350,7 @@ public class BackGridPane extends GridPane {
                 ref.textOCRTask = new Task<>() {
                     @Override
                     protected Response call() {
-                        return IOUtils.concurrentCall(textRecognition, clipboardImageView.getImage());
+                        return IOUtils.concurrentCall(TEXT_RECOGNITION, CLIPBOARD_IMAGE_VIEW.getImage());
                     }
                 };
                 new Thread(ref.textOCRTask).start();
@@ -345,7 +359,7 @@ public class BackGridPane extends GridPane {
             Task<Response> legacyOCRTask = new Task<>() {
                 @Override
                 protected Response call() {
-                    return IOUtils.concurrentCall(legacyRecognition, clipboardImageView.getImage());
+                    return IOUtils.concurrentCall(LEGACY_RECOGNITION, CLIPBOARD_IMAGE_VIEW.getImage());
                 }
             };
             legacyOCRTask.setOnSucceeded(event -> {
@@ -354,13 +368,14 @@ public class BackGridPane extends GridPane {
                     try {
                         Response textOCRResponse = ref.textOCRTask.get();
                         response.setText(textOCRResponse.getText());
+                        response.setMathML(textOCRResponse.getDataAsMathML());
                         response.setLatexConfidence(textOCRResponse.getConfidence());
                     } catch (InterruptedException | ExecutionException ignored) {
                     }
                 }
                 responseHandler(response);
                 // hide waiting label
-                waitingTextLabel.setVisible(false);
+                WAITING_TEXT_LABEL.setVisible(false);
             });
             new Thread(legacyOCRTask).start();
 

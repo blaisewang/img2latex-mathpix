@@ -3,7 +3,6 @@ package ui;
 import io.IOUtils;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
@@ -19,7 +18,6 @@ import java.awt.PopupMenu;
 import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.awt.TrayIcon;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -41,7 +39,7 @@ public class App extends Application {
 
     private final BackGridPane backGridPane = new BackGridPane();
 
-    private static final Properties properties = new Properties();
+    private static final Properties PROPERTIES = new Properties();
 
     private static String APPLICATION_TITLE;
 
@@ -59,7 +57,7 @@ public class App extends Application {
         }
 
         // indicate whether the tray icon was successfully added to the menu bar
-        boolean hasAddIconToTray = false;
+        var hasAddIconToTray = false;
 
         // store the reference of the primaryStage
         stage = primaryStage;
@@ -73,7 +71,7 @@ public class App extends Application {
         }
 
         // initialise scene with the UI.BackGridPane
-        Scene scene = new Scene(backGridPane);
+        var scene = new Scene(backGridPane);
 
         // enter key pressed event binding to the Scene
         scene.onKeyReleasedProperty().bind(backGridPane.onKeyReleasedProperty());
@@ -85,7 +83,7 @@ public class App extends Application {
         stage.setTitle(APPLICATION_TITLE);
 
         // load icon resources
-        InputStream iconInputStream = getClass().getClassLoader().getResourceAsStream("icon-other.png");
+        var iconInputStream = getClass().getClassLoader().getResourceAsStream("icon-other.png");
         assert iconInputStream != null;
 
         // set the title bar app icon
@@ -118,7 +116,7 @@ public class App extends Application {
         stage.show();
 
         // set the app window in the upper right corner of the screen
-        Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+        var primaryScreenBounds = Screen.getPrimary().getVisualBounds();
         stage.setX(primaryScreenBounds.getMinX() + primaryScreenBounds.getWidth() - stage.getWidth() - 80);
         stage.setY(primaryScreenBounds.getMinY() + 80);
 
@@ -133,28 +131,28 @@ public class App extends Application {
     private void trayIconHandler(InputStream iconInputStream) throws IOException, AWTException {
 
         // set up the system tray
-        SystemTray tray = SystemTray.getSystemTray();
-        BufferedImage image = ImageIO.read(iconInputStream);
+        var tray = SystemTray.getSystemTray();
+        var image = ImageIO.read(iconInputStream);
         // use the loaded icon as tray icon
-        TrayIcon trayIcon = new TrayIcon(image);
+        var trayIcon = new TrayIcon(image);
 
         // show the primary stage if the icon is right clicked
         trayIcon.addActionListener(event -> Platform.runLater(this::showStage));
 
         // add app name as a menu item
-        MenuItem openItem = new MenuItem(APPLICATION_TITLE);
+        var openItem = new MenuItem(APPLICATION_TITLE);
         // show the primary stage if the app name item is clicked
         openItem.addActionListener(event -> Platform.runLater(this::showStage));
 
         // add Preferences menu item
-        MenuItem settingItem = new MenuItem("Preferences");
+        var settingItem = new MenuItem("Preferences");
         settingItem.addActionListener(event -> Platform.runLater(() -> backGridPane.showPreferencesDialog(0)));
 
         // add check for updates menu item
-        MenuItem updateCheckItem = new MenuItem("Check for Updates");
+        var updateCheckItem = new MenuItem("Check for Updates");
 
         // add current version info menu item
-        MenuItem versionItem = new MenuItem("Version: " + properties.getProperty("version"));
+        var versionItem = new MenuItem("Version: " + PROPERTIES.getProperty("version"));
 
         // add click action listener
         updateCheckItem.addActionListener(event -> {
@@ -165,7 +163,7 @@ public class App extends Application {
         });
 
         // add quit option as the app cannot be closed by clicking the window close button
-        MenuItem exitItem = new MenuItem("Quit");
+        var exitItem = new MenuItem("Quit");
 
         // add action listener for cleanup
         exitItem.addActionListener(event -> {
@@ -177,7 +175,7 @@ public class App extends Application {
         });
 
         // set up the popup menu
-        final PopupMenu popup = new PopupMenu();
+        final var popup = new PopupMenu();
         popup.add(openItem);
         popup.addSeparator();
         popup.add(settingItem);
@@ -257,8 +255,8 @@ public class App extends Application {
     public static void main(String[] args) throws IOException {
 
         // load application name
-        properties.load(Objects.requireNonNull(App.class.getClassLoader().getResourceAsStream("project.properties")));
-        APPLICATION_TITLE = properties.getProperty("applicationName");
+        PROPERTIES.load(Objects.requireNonNull(App.class.getClassLoader().getResourceAsStream("project.properties")));
+        APPLICATION_TITLE = PROPERTIES.getProperty("applicationName");
 
         // font smoothing
         System.setProperty("prism.lcdtext", "false");

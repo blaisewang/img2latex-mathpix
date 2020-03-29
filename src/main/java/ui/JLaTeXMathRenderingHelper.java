@@ -21,18 +21,17 @@ package ui;
  */
 
 /*
-  Modified by Blaise Wang on 7 November 2019
+  Modified by Blaise Wang on 29 March 2020
  */
 
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
+import org.scilab.forge.jlatexmath.ParseException;
 import org.scilab.forge.jlatexmath.TeXConstants;
 import org.scilab.forge.jlatexmath.TeXFormula;
-import org.scilab.forge.jlatexmath.TeXIcon;
 
 import javax.swing.JLabel;
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.image.BufferedImage;
 
@@ -50,21 +49,27 @@ public class JLaTeXMathRenderingHelper {
      * @return rendered formula image.
      */
     public static Image render(String latexSource) {
-        // create a formula
-        TeXFormula teXFormula = new TeXFormula(latexSource);
+
+        TeXFormula teXFormula;
+        try {
+            // create a formula
+            teXFormula = new TeXFormula(latexSource);
+        } catch (ParseException ignored) {
+            return null;
+        }
 
         // render the formula to an icon of the same size as the formula.
-        TeXIcon icon = teXFormula.createTeXIcon(TeXConstants.STYLE_DISPLAY, 20);
+        var icon = teXFormula.createTeXIcon(TeXConstants.STYLE_DISPLAY, 20);
 
         // insert a border
         icon.setInsets(new Insets(5, 5, 5, 5));
 
         // create an image of the rendered formula
-        BufferedImage bufferedImage = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
-        Graphics2D graphics2D = bufferedImage.createGraphics();
+        var bufferedImage = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
+        var graphics2D = bufferedImage.createGraphics();
         graphics2D.setColor(Color.white);
         graphics2D.fillRect(0, 0, icon.getIconWidth(), icon.getIconHeight());
-        JLabel jLabel = new JLabel();
+        var jLabel = new JLabel();
         jLabel.setForeground(new Color(0, 0, 0));
         icon.paintIcon(jLabel, graphics2D, 0, 0);
 

@@ -20,6 +20,9 @@ import javafx.stage.Stage;
  */
 public class UIUtils {
 
+    public static final Color DARK_GREY = new Color(0.149, 0.149, 0.149, 1);
+    public static final Color LIGHT_BLUE = new Color(0.2392, 0.5765, 0.9686, 1);
+
     /**
      * Put text into clipboard.
      *
@@ -27,7 +30,7 @@ public class UIUtils {
      */
     public static void putStringIntoClipboard(String text) {
 
-        ClipboardContent content = new ClipboardContent();
+        var content = new ClipboardContent();
         content.putString(text);
         Clipboard.getSystemClipboard().setContent(content);
 
@@ -52,11 +55,11 @@ public class UIUtils {
      */
     public static Label getTextLabel(String text) {
 
-        Label label = new Label(text);
+        var label = new Label(text);
         // set font size
         label.setFont(Font.font(12));
         // set text color
-        label.setTextFill(new Color(0.149, 0.149, 0.149, 1));
+        label.setTextFill(DARK_GREY);
 
         return label;
 
@@ -69,19 +72,19 @@ public class UIUtils {
      */
     public static void displayError(String error) {
 
-        Alert alert = new Alert(Alert.AlertType.ERROR);
+        var alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
 
         // Clear default OK button
         alert.getButtonTypes().clear();
-        ButtonType okButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        var okButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
         alert.getButtonTypes().addAll(okButtonType);
 
         // set no header area in the dialog
         alert.setHeaderText(null);
         alert.setContentText(error);
 
-        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        var stage = (Stage) alert.getDialogPane().getScene().getWindow();
         stage.setAlwaysOnTop(true);
         stage.showAndWait();
 

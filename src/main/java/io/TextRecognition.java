@@ -20,16 +20,23 @@ public class TextRecognition extends Recognition {
         parameters.addProperty("src", "");
 
         // formats
-        JsonArray formatsParameters = new JsonArray();
+        var formatsParameters = new JsonArray();
         formatsParameters.add("text");
+        formatsParameters.add("data");
 
         parameters.add("formats", formatsParameters);
 
-        // privacy option for not helping to improve
-        JsonObject privacyOption = new JsonObject();
-        privacyOption.addProperty("improve_mathpix", false);
+        // data options for including mathml result
+        var dataOptions = new JsonObject();
+        dataOptions.addProperty("include_mathml", true);
 
-        parameters.add("metadata", privacyOption);
+        parameters.add("data_options", dataOptions);
+
+        // metadata option for not helping to improve
+        var metadataOption = new JsonObject();
+        metadataOption.addProperty("improve_mathpix", false);
+
+        parameters.add("metadata", metadataOption);
 
     }
 

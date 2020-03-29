@@ -20,7 +20,7 @@ public class LegacyRecognition extends Recognition {
         parameters.addProperty("src", "");
 
         // process both math and text OCR
-        JsonArray ocrParameters = new JsonArray();
+        var ocrParameters = new JsonArray();
         ocrParameters.add("math");
         ocrParameters.add("text");
         parameters.add("ocr", ocrParameters);
@@ -29,7 +29,7 @@ public class LegacyRecognition extends Recognition {
         parameters.addProperty("skip_recrop", true);
 
         // string postprocessing formats
-        JsonArray formatParameters = new JsonArray();
+        var formatParameters = new JsonArray();
         // inline math by default
         formatParameters.add("text");
         // modified output to improve the visual appearance
@@ -37,35 +37,35 @@ public class LegacyRecognition extends Recognition {
         parameters.add("formats", formatParameters);
 
         // transforms
-        JsonArray transformParameters = new JsonArray();
+        var transformParameters = new JsonArray();
         // omit spaces around LaTeX groups and other places where spaces are superfluous
         transformParameters.add("rm_spaces");
         // convert longdiv to frac as longdiv is not a non-valid LaTeX markup
         transformParameters.add("long_frac");
 
         // delimiters for math mode
-        JsonArray mathDelimiterParameters = new JsonArray();
+        var mathDelimiterParameters = new JsonArray();
         mathDelimiterParameters.add("\\(");
         mathDelimiterParameters.add("\\)");
 
         // parameters used for math mode (text)
-        JsonObject textFormatOptions = new JsonObject();
+        var textFormatOptions = new JsonObject();
         textFormatOptions.add("math_delims", mathDelimiterParameters);
         textFormatOptions.add("transforms", transformParameters);
 
         // parameters used for styled LaTeX (latex_styled)
-        JsonObject transformOptions = new JsonObject();
+        var transformOptions = new JsonObject();
         transformOptions.add("transforms", transformParameters);
 
         // format options combined
-        JsonObject formatOptions = new JsonObject();
+        var formatOptions = new JsonObject();
         formatOptions.add("text", textFormatOptions);
         formatOptions.add("latex_styled", transformOptions);
 
         parameters.add("format_options", formatOptions);
 
         // privacy option for not helping to improve
-        JsonObject privacyOption = new JsonObject();
+        var privacyOption = new JsonObject();
         privacyOption.addProperty("improve_mathpix", false);
 
         parameters.add("metadata", privacyOption);

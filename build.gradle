@@ -7,7 +7,7 @@ plugins {
 }
 
 group "blaise.img2latex"
-version "0.7.0"
+version "0.7.1"
 
 compileJava {
     sourceCompatibility = 14
@@ -21,7 +21,6 @@ repositories {
 javafx {
     version = "14"
 }
-
 
 application {
     mainClassName = "entry.Main"

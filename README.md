@@ -23,6 +23,7 @@ See the [features](https://mathpix.com/ocr#features) section on MathpixOCR websi
 
 ### New Features
 
+- New TSV OCR for Microsoft Excel and more.
 - New MathML OCR for Microsoft Word and more.
 - New `Improved OCR` option for [multiple choice](https://mathpix.com/blog/mathpix-text-endpoint), [paragraphs](https://mathpix.com/blog/snip-2.0), [basic table](https://mathpix.com/blog/v1-table-recognition) OCRs, and more.
 - HTTP proxy support for making OCR request.
@@ -64,10 +65,6 @@ Use your operating system's default methods (or other tools) to take a screensho
 Then, press the `BackSpace` key (`delete` key on macOS) to preview the screenshot.
 Or, press the `Return` or `Enter` key to send the OCR request.
 
-### Microsoft Word with MathML
-
-To fix the brackets and parentheses around matrices or fractions, click the `Professional` option from the right-hand side dropdown menu of the equation.
-
 See [demo](#Demo) section below.
 
 ## Demo
@@ -75,6 +72,10 @@ See [demo](#Demo) section below.
 ![demo](demo/demo.gif)
 
 ## FAQ
+
+### Microsoft Word with MathML
+
+To fix the brackets and parentheses around matrices or fractions, click the `Professional` option from the right-hand side dropdown menu of the equation.
 
 ### Subscribe to new releases
 

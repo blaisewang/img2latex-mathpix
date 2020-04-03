@@ -10,6 +10,8 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
+import java.util.List;
+
 
 /**
  * UI.FrontGridPane.java
@@ -19,7 +21,8 @@ import javafx.scene.paint.Color;
 public class FrontGridPane extends GridPane {
 
     private static final CopiedButton COPIED_BUTTON = new CopiedButton();
-    private static final CopyMathMLButton COPY_MATH_ML_BUTTON = new CopyMathMLButton();
+    private static final CopyResultButton COPY_TSV_BUTTON = new CopyResultButton("TSV");
+    private static final CopyResultButton COPY_MATH_ML_BUTTON = new CopyResultButton("MathML");
     private static final PressCopyTextField FIRST_PRESS_COPY_TEXT_FIELD = new PressCopyTextField();
     private static final PressCopyTextField SECOND_PRESS_COPY_TEXT_FIELD = new PressCopyTextField();
     private static final PressCopyTextField THIRD_PRESS_COPY_TEXT_FIELD = new PressCopyTextField();
@@ -41,43 +44,49 @@ public class FrontGridPane extends GridPane {
 
         // 5 * 2 grid layout
         setVgap(5);
-        setHgap(2);
+        setHgap(3);
 
         // add "Result" textL label
         var resultTextLabel = UIUtils.getTextLabel("Result");
         UIUtils.setDefaultNodeMargin(resultTextLabel, itemMargin, 0);
         add(resultTextLabel, 0, 0);
 
-        // used to trigger copy text to clipboard event
-        COPY_MATH_ML_BUTTON.setVisible(false);
+        // copy TSV result to clipboard event
+        COPY_TSV_BUTTON.setVisible(false);
+        GridPane.setHalignment(COPY_TSV_BUTTON, HPos.RIGHT);
+        UIUtils.setDefaultNodeMargin(COPY_TSV_BUTTON, 0, itemMargin);
+        add(COPY_TSV_BUTTON, 1, 0);
+
+        // copy MathML result to clipboard event
+        COPY_MATH_ML_BUTTON.setVisible(true);
         GridPane.setHalignment(COPY_MATH_ML_BUTTON, HPos.RIGHT);
         UIUtils.setDefaultNodeMargin(COPY_MATH_ML_BUTTON, 0, 0);
-        add(COPY_MATH_ML_BUTTON, 1, 0);
+        add(COPY_MATH_ML_BUTTON, 2, 0);
 
         // used to indicate which result on the left side has been copied, default invisible
         COPIED_BUTTON.setVisible(false);
         UIUtils.setDefaultNodeMargin(COPIED_BUTTON, itemMargin / 2, 0);
-        add(COPIED_BUTTON, 1, 1);
+        add(COPIED_BUTTON, 2, 1);
 
         // add the first PressCopyTextField
         UIUtils.setDefaultNodeMargin(FIRST_PRESS_COPY_TEXT_FIELD, itemMargin, 0);
         setTextFieldEvent(FIRST_PRESS_COPY_TEXT_FIELD, 1);
-        add(FIRST_PRESS_COPY_TEXT_FIELD, 0, 1);
+        add(FIRST_PRESS_COPY_TEXT_FIELD, 0, 1, 2, 1);
 
         // add the second PressCopyTextField
         UIUtils.setDefaultNodeMargin(SECOND_PRESS_COPY_TEXT_FIELD, itemMargin, 0);
         setTextFieldEvent(SECOND_PRESS_COPY_TEXT_FIELD, 2);
-        add(SECOND_PRESS_COPY_TEXT_FIELD, 0, 2);
+        add(SECOND_PRESS_COPY_TEXT_FIELD, 0, 2, 2, 1);
 
         // add the third PressCopyTextField
         UIUtils.setDefaultNodeMargin(THIRD_PRESS_COPY_TEXT_FIELD, itemMargin, 0);
         setTextFieldEvent(THIRD_PRESS_COPY_TEXT_FIELD, 3);
-        add(THIRD_PRESS_COPY_TEXT_FIELD, 0, 3);
+        add(THIRD_PRESS_COPY_TEXT_FIELD, 0, 3, 2, 1);
 
         // add the fourth PressCopyTextField
         UIUtils.setDefaultNodeMargin(FOURTH_PRESS_COPY_TEXT_FIELD, itemMargin, 0);
         setTextFieldEvent(FOURTH_PRESS_COPY_TEXT_FIELD, 4);
-        add(FOURTH_PRESS_COPY_TEXT_FIELD, 0, 4);
+        add(FOURTH_PRESS_COPY_TEXT_FIELD, 0, 4, 2, 1);
 
     }
 
@@ -108,9 +117,16 @@ public class FrontGridPane extends GridPane {
     }
 
     /**
+     * @return UI.CopyTSVButton object used to be controlled by UI.BackGridPane event.
+     */
+    public CopyResultButton getCopyTSVButton() {
+        return COPY_TSV_BUTTON;
+    }
+
+    /**
      * @return UI.CopyMathMLButton object used to be controlled by UI.BackGridPane event.
      */
-    public CopyMathMLButton getCopyMathMLButton() {
+    public CopyResultButton getCopyMathMLButton() {
         return COPY_MATH_ML_BUTTON;
     }
 
@@ -148,6 +164,21 @@ public class FrontGridPane extends GridPane {
     public void setCopiedButtonRowIndex() {
         COPIED_BUTTON.setVisible(true);
         GridPane.setRowIndex(COPIED_BUTTON, 1);
+    }
+
+    /**
+     * Method to set the column index of UI.CopyResultButton in UI.BackGridPane.
+     */
+    public void setCopyResultButtonColumnIndex(List<CopyResultButton> buttonList) {
+
+        var columnIndex = 2;
+
+        for (CopyResultButton copyResultButton : buttonList) {
+            copyResultButton.setVisible(true);
+            GridPane.setColumnIndex(copyResultButton, columnIndex);
+            columnIndex -= 1;
+        }
+
     }
 
 }

@@ -55,7 +55,7 @@ public class GeneralTab extends Tab {
         gridPane.add(headerLabel, 0, 1, 4, 1);
 
         // initial third example result
-        var initialThirdResult = IOUtils.thirdResultFormatter("\\(" + ORIGINAL_RESULT + " \\)").replace("\n", "");
+        var initialThirdResult = IOUtils.thirdResultFormatter("\\( " + ORIGINAL_RESULT + " \\)").replace("\n", "");
         var thirdResult = new Label(initialThirdResult);
         thirdResult.setFont(Font.font(14));
         GridPane.setMargin(thirdResult, new Insets(MINIMUM_MARGIN, MINIMUM_MARGIN, MINIMUM_MARGIN, 0));
@@ -77,7 +77,7 @@ public class GeneralTab extends Tab {
         thirdFormattingOptions.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
             thirdOption.set(thirdFormattingOptions.getToggles().indexOf(thirdFormattingOptions.getSelectedToggle()));
             IOUtils.setThirdResultFormattingOption(thirdOption.get());
-            thirdResult.setText(IOUtils.thirdResultFormatter("\\(" + ORIGINAL_RESULT + " \\)").replace("\n", ""));
+            thirdResult.setText(IOUtils.thirdResultFormatter("\\( " + ORIGINAL_RESULT + " \\)").replace("\n", ""));
         });
 
         // add all radio buttons to the same toggle group
@@ -89,7 +89,7 @@ public class GeneralTab extends Tab {
         }
 
         // initial fourth example result
-        var initialFourthResult = IOUtils.fourthResultFormatter("\\(" + ORIGINAL_RESULT + " \\)").replace("\n", "");
+        var initialFourthResult = IOUtils.fourthResultFormatter("\\( " + ORIGINAL_RESULT + " \\)").replace("\n", "");
         var fourthResult = new Label(initialFourthResult);
         fourthResult.setFont(Font.font(14));
         GridPane.setMargin(fourthResult, new Insets(MINIMUM_MARGIN, MINIMUM_MARGIN, MINIMUM_MARGIN, 0));
@@ -97,7 +97,8 @@ public class GeneralTab extends Tab {
 
         var fourthFormattingOptionList = Arrays.asList(
                 new RadioButton("\\begin{equation}.."),
-                new RadioButton("\\begin{align}..")
+                new RadioButton("\\begin{align}.."),
+                new RadioButton("$ .. $")
         );
 
         // load initial fourth formatting option
@@ -109,7 +110,7 @@ public class GeneralTab extends Tab {
         fourthFormattingOptions.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
             fourthOption.set(fourthFormattingOptions.getToggles().indexOf(fourthFormattingOptions.getSelectedToggle()));
             IOUtils.setFourthResultFormattingOption(fourthOption.get());
-            fourthResult.setText(IOUtils.fourthResultFormatter("\\(" + ORIGINAL_RESULT + " \\)").replace("\n", ""));
+            fourthResult.setText(IOUtils.fourthResultFormatter("\\( " + ORIGINAL_RESULT + " \\)").replace("\n", ""));
         });
 
         // add all radio buttons to the same toggle group

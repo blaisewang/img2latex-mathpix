@@ -23,6 +23,7 @@ Image2LaTeX 是一个个人项目，仅保留了 Snip 的核心功能——将�
 
 ### 新功能
 
+- 新 TSV OCR 格式用于 Microsoft Excel 等应用。
 - 新 MathML OCR 格式用于 Microsoft Word 等应用。
 - 新 `Improved OCR` 选项支持[多选](https://mathpix.com/blog/mathpix-text-endpoint)、[段落](https://mathpix.com/blog/snip-2.0)、[基础表格](https://mathpix.com/blog/v1-table-recognition)的识别。
 - 支持使用 HTTP 代理发出 OCR 请求。
@@ -62,10 +63,6 @@ Linux 用户可以通过在应用内任意位置右键单击的方式打开 `Pre
 使用操作系统默认的方式（或者其他工具）对公式或文本进行截取（macOS 默认为 Shift (⇧)-Control (⌃)-Command (⌘)-4）后，
 按下 `退格` 键（macOS 为 `delete` 键）预览截图，或者直接按下 `回车` 键发送 OCR 请求。
 
-### 在 Microsoft Word 中 使用 MathML
-
-要在矩阵或分数周围修复括号或括号，从公式右侧的下拉菜单中单击 `Professional` 选项。
-
 查看下面的[展示](#展示)章节了解使用流程。
 
 ## 展示
@@ -73,6 +70,10 @@ Linux 用户可以通过在应用内任意位置右键单击的方式打开 `Pre
 ![demo](demo/demo.gif)
 
 ## 常见问题
+
+### 在 Microsoft Word 中 使用 MathML
+
+要修复矩阵或分数周围的括号，从公式右侧的下拉菜单中单击 `Professional` 选项。
 
 ### 订阅新版本的发布
 

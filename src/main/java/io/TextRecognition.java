@@ -28,6 +28,7 @@ public class TextRecognition extends Recognition {
 
         // data options for including mathml result
         var dataOptions = new JsonObject();
+        dataOptions.addProperty("include_tsv", true);
         dataOptions.addProperty("include_mathml", true);
 
         parameters.add("data_options", dataOptions);

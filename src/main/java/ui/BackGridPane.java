@@ -27,6 +27,7 @@ import javafx.scene.text.FontWeight;
 
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -68,7 +69,8 @@ public class BackGridPane extends GridPane {
 
     // get components from UI.FrontGridPane instance
     private static final CopiedButton COPIED_BUTTON = FRONT_GRID_PANE.getCopiedButton();
-    private static final CopyMathMLButton COPY_MATH_ML_BUTTON = FRONT_GRID_PANE.getCopyMathMLButton();
+    private static final CopyResultButton COPY_TSV_BUTTON = FRONT_GRID_PANE.getCopyTSVButton();
+    private static final CopyResultButton COPY_MATH_ML_BUTTON = FRONT_GRID_PANE.getCopyMathMLButton();
 
     private final List<PressCopyTextField> resultTextFiledList = Arrays.asList(
             FRONT_GRID_PANE.getFirstPressCopyTextField(),
@@ -147,7 +149,8 @@ public class BackGridPane extends GridPane {
         // enter key pressed event binding to the UI.FrontGridPane
         onKeyReleasedProperty().bind(FRONT_GRID_PANE.onKeyReleasedProperty());
 
-        // hide copied button if copy MathML button is clicked.
+        // hide copied button if copy MathML button or copy TSV button is clicked.
+        COPY_TSV_BUTTON.setOnMouseClicked(event -> COPIED_BUTTON.setVisible(false));
         COPY_MATH_ML_BUTTON.setOnMouseClicked(event -> COPIED_BUTTON.setVisible(false));
 
         // add "Confidence" label text
@@ -274,11 +277,21 @@ public class BackGridPane extends GridPane {
             // set UI.CopiedButton to the corresponded location
             FRONT_GRID_PANE.setCopiedButtonRowIndex();
 
+            List<CopyResultButton> buttonList = new LinkedList<>();
+
             var mathML = response.getMathML();
             if (mathML != null && !"".equals(mathML)) {
                 COPY_MATH_ML_BUTTON.setResult(mathML);
-                COPY_MATH_ML_BUTTON.setVisible(true);
+                buttonList.add(COPY_MATH_ML_BUTTON);
             }
+
+            var tsv = response.getTSV();
+            if (tsv != null && !"".equals(tsv)) {
+                COPY_TSV_BUTTON.setResult(tsv);
+                buttonList.add(COPY_TSV_BUTTON);
+            }
+
+            FRONT_GRID_PANE.setCopyResultButtonColumnIndex(buttonList);
 
             // set rendered image to renderedImageView
             RENDERED_IMAGE_VIEW.setImage(JLaTeXMathRenderingHelper.render(resultList[0]));
@@ -300,9 +313,9 @@ public class BackGridPane extends GridPane {
 
             var confidence = response.getLatexConfidence();
 
-            // minimal confidence is set to 1%
-            if (confidence > 0 && confidence < 0.01) {
-                confidence = 0.01;
+            // minimal confidence is set to 3%
+            if (confidence > 0 && confidence < 0.03) {
+                confidence = 0.03;
             }
 
             CONFIDENCE_PROGRESS_BAR.setProgress(confidence);
@@ -341,8 +354,11 @@ public class BackGridPane extends GridPane {
                 pressCopyTextField.setDisable(false);
             }
 
+            RENDERED_IMAGE_VIEW.setImage(null);
+
             // clear last location
             COPIED_BUTTON.setVisible(false);
+            COPY_TSV_BUTTON.setVisible(false);
             COPY_MATH_ML_BUTTON.setVisible(false);
 
             // show waiting label
@@ -374,7 +390,8 @@ public class BackGridPane extends GridPane {
                     try {
                         Response textOCRResponse = ref.textOCRTask.get();
                         response.setText(textOCRResponse.getText());
-                        response.setMathML(textOCRResponse.getDataAsMathML());
+                        response.setTSV(textOCRResponse.getTypeFromData("tsv"));
+                        response.setMathML(textOCRResponse.getTypeFromData("mathml"));
                         response.setLatexConfidence(textOCRResponse.getConfidence());
                     } catch (InterruptedException | ExecutionException ignored) {
                     }

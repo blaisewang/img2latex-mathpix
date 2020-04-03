@@ -13,6 +13,7 @@ public class Response {
 
     private final String error;
     private String text;
+    private String tsv;
     private String mathML;
     private ArrayList<JsonObject> data;
     private String latex_styled;
@@ -56,7 +57,7 @@ public class Response {
     /**
      * @return MathML result from data;
      */
-    public String getDataAsMathML() {
+    public String getTypeFromData(String type) {
 
         if (data == null) {
             return "";
@@ -65,7 +66,9 @@ public class Response {
         var result = new StringBuilder();
 
         for (JsonObject jsonObject : data) {
-            result.append(jsonObject.get("value").getAsString()).append("\n\n");
+            if (type.equals(jsonObject.get("type").getAsString())) {
+                result.append(jsonObject.get("value").getAsString()).append("\n\n");
+            }
         }
 
         if (result.length() > 1) {
@@ -74,6 +77,20 @@ public class Response {
 
         return result.toString();
 
+    }
+
+    /**
+     * @return TSV result.
+     */
+    public String getTSV() {
+        return tsv;
+    }
+
+    /**
+     * @param tsv tsv to be set.
+     */
+    public void setTSV(String tsv) {
+        this.tsv = tsv;
     }
 
     /**

@@ -203,12 +203,26 @@ public class IOUtils {
         var formatted_right_delimiter = "\n" + right_delimiter;
 
         if (string.startsWith("\\(") && string.split("\\u005C\\u0028").length == 2) {
-            return string.replace("\\(", formatted_left_delimiter).replace("\\)", formatted_right_delimiter);
+
+            if ("$".equals(left_delimiter)) {
+                return string.replace("\\(", left_delimiter).replace("\\)", right_delimiter).
+                        replace("  ", " ");
+            }
+
+            return string.replace("\\(", formatted_left_delimiter).replace("\\)", formatted_right_delimiter).
+                    replace("  ", " ");
+
+        }
+
+        if ("$".equals(left_delimiter)) {
+            formatted_left_delimiter = "\\[\n ";
+            formatted_right_delimiter = "\n\\]";
         }
 
         return string.replace("\\(", "$").replace("\\)", "$").
                 replace("\\[\n", "\\[").replace("\n\\]", "\\]").
-                replace("\\[", formatted_left_delimiter).replace("\\]", formatted_right_delimiter);
+                replace("\\[", formatted_left_delimiter).replace("\\]", formatted_right_delimiter).
+                replace("  ", " ");
 
     }
 
@@ -256,6 +270,8 @@ public class IOUtils {
 
         if (option == 1) {
             return formatHelper(result, "\\begin{align}", "\\end{align}");
+        } else if (option == 2) {
+            return formatHelper(result, "$", "$");
         }
 
         return formatHelper(result, "\\begin{equation}", "\\end{equation}");

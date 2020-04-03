@@ -5,19 +5,19 @@ import javafx.scene.text.Font;
 
 
 /**
- * UI.CopyMathMLButton.java
+ * UI.CopyResultButton.java
  * javafx.scene.control.Button with customised border stroke and layout style.
  * Used to trigger copy text to clipboard event.
  */
-public class CopyMathMLButton extends Button {
+public class CopyResultButton extends Button {
 
     private String result;
 
-    public CopyMathMLButton() {
+    public CopyResultButton(String text) {
 
         result = "";
 
-        setText("MathML");
+        setText(text);
         setFont(Font.font(12));
         setBackground(null);
         setTextFill(UIUtils.DARK_GREY);

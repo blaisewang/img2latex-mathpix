@@ -6,12 +6,16 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+
+import java.util.Objects;
 
 
 /**
@@ -20,8 +24,12 @@ import javafx.stage.Stage;
  */
 public class UIUtils {
 
+    private static final Clipboard clipboard = Clipboard.getSystemClipboard();
+
     public static final Color DARK_GREY = new Color(0.149, 0.149, 0.149, 1);
     public static final Color LIGHT_BLUE = new Color(0.2392, 0.5765, 0.9686, 1);
+
+    public static Image RENDER_ERROR_IMAGE = new Image(Objects.requireNonNull(BackGridPane.class.getClassLoader().getResourceAsStream("images/render-error.png")));
 
     /**
      * Put text into clipboard.
@@ -63,6 +71,19 @@ public class UIUtils {
 
         return label;
 
+    }
+
+    /**
+     * Display clipboard image inside an ImageView.
+     *
+     * @param imageView ImageView to be set.
+     */
+    public static void displayClipboardImage(ImageView imageView) {
+        // an Image has been registered on the clipboard
+        if (clipboard.hasImage()) {
+            // update the ImageView
+            imageView.setImage(clipboard.getImage());
+        }
     }
 
     /**

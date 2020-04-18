@@ -10,7 +10,7 @@
 [![License](https://img.shields.io/github/license/blaisewang/img2latex-mathpix?style=flat-square)](https://github.com/blaisewang/img2latex-mathpix/blob/master/LICENSE)
 
 [Snip](https://mathpix.com/) 是由 Mathpix 打造的一款出色的应用。
-它可以帮助你提取文档中的公式、基本表格、或者文本将其转换为 LaTeX 和 MathML 格式，并每月免费提供给所有用户 50 次识别。[邀请](https://accounts.mathpix.com/referrals)拥有 **.edu** 域名电子邮件的朋友，你们都将获得**额外 200 次识别**。
+它可以帮助你提取文档中的公式、基本表格、或者文本将其转换为 LaTeX 和 MathML 格式，并每月提供给所有用户免费 50 次识别（通过 **.edu** 或 **.ac.uk** 邮箱注册每月获得 100 次识别）。
 
 在 [MathpixOCR API](https://mathpix.com/ocr/) 以及 [Image2LaTeX](https://github.com/blaisewang/img2latex-mathpix/) 这款补充应用的帮助下，你可以每月免费进行 1000 次的 OCR 识别。
 
@@ -25,7 +25,7 @@ Image2LaTeX 是一个个人项目，仅保留了 Snip 的核心功能——将�
 
 - 新 TSV OCR 格式用于 Microsoft Excel 等应用。
 - 新 MathML OCR 格式用于 Microsoft Word 等应用。
-- 新 `Improved OCR` 选项支持[多选](https://mathpix.com/blog/mathpix-text-endpoint)、[段落](https://mathpix.com/blog/snip-2.0)、[基础表格](https://mathpix.com/blog/v1-table-recognition)的识别。
+- 支持[多选](https://mathpix.com/blog/mathpix-text-endpoint)、[段落](https://mathpix.com/blog/snip-2.0)、[基础表格](https://mathpix.com/blog/v1-table-recognition)的识别。
 - 支持使用 HTTP 代理发出 OCR 请求。
 
 ## 使用要求
@@ -61,7 +61,7 @@ Linux 用户可以通过在应用内任意位置右键单击的方式打开 `Pre
 ```
 
 使用操作系统默认的方式（或者其他工具）对公式或文本进行截取（macOS 默认为 Shift (⇧)-Control (⌃)-Command (⌘)-4）后，
-按下 `退格` 键（macOS 为 `delete` 键）预览截图，或者直接按下 `回车` 键发送 OCR 请求。
+按下 `空格` 键 （或 `退格` 键）预览截图，或者直接按下 `回车` 键发送 OCR 请求。
 
 查看下面的[展示](#展示)章节了解使用流程。
 

@@ -29,14 +29,14 @@ public class OCRRequestHelper {
      */
     public static Response getResult(JsonObject parameters) {
 
-        String app_id;
-        String app_key;
+        String appId;
+        String appKey;
 
         var APICredentialConfig = IOUtils.getAPICredentialConfig();
 
         if (APICredentialConfig.isValid()) {
-            app_id = APICredentialConfig.getAppId();
-            app_key = APICredentialConfig.getAppKey();
+            appId = APICredentialConfig.getAppId();
+            appKey = APICredentialConfig.getAppKey();
         } else {
             // early return
             return new Response(IOUtils.INVALID_CREDENTIALS_ERROR);
@@ -59,13 +59,11 @@ public class OCRRequestHelper {
             httpClient = HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).build();
         }
 
-        // URI
-        var uri = parameters.has("skip_recrop") ? IOUtils.LEGACY_API_URL : IOUtils.TEXT_API_URL;
         // request body
         var requestBody = HttpRequest.BodyPublishers.ofString(parameters.toString());
         // wait up to 15 seconds
-        var httpRequest = HttpRequest.newBuilder().uri(URI.create(uri)).
-                headers("app_id", app_id, "app_key", app_key, "Content-type", "application/json").
+        var httpRequest = HttpRequest.newBuilder().uri(URI.create(IOUtils.API_URL)).
+                headers("app_id", appId, "app_key", appKey, "Content-type", "application/json").
                 POST(requestBody).timeout(Duration.ofSeconds(15)).build();
 
         var completableFuture = httpClient.sendAsync(httpRequest, HttpResponse.BodyHandlers.ofString()).thenApply(HttpResponse::body);

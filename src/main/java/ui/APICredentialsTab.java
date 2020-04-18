@@ -24,7 +24,7 @@ import java.net.URISyntaxException;
  */
 public class APICredentialsTab extends Tab {
 
-    private static final int MINIMUM_MARGIN = 14;
+    private static final int MINIMUM_MARGIN = 10;
 
     public APICredentialsTab() {
 

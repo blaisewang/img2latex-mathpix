@@ -12,25 +12,20 @@ import java.util.ArrayList;
 public class Response {
 
     private final String error;
+
     private String text;
-    private String tsv;
-    private String mathML;
-    private ArrayList<JsonObject> data;
-    private String latex_styled;
     private double confidence;
-    private double latex_confidence;
+    private ArrayList<JsonObject> data;
 
     public Response(String error) {
         this.error = error;
     }
 
-    public Response(String error, String text, ArrayList<JsonObject> data, String latex_styled, double confidence, double latex_confidence) {
+    public Response(String error, String text, double confidence, ArrayList<JsonObject> data) {
         this.error = error;
         this.text = text;
         this.data = data;
-        this.latex_styled = latex_styled;
         this.confidence = confidence;
-        this.latex_confidence = latex_confidence;
     }
 
     /**
@@ -48,10 +43,10 @@ public class Response {
     }
 
     /**
-     * @param text text to be set.
+     * @return confidence of the correctness.
      */
-    public void setText(String text) {
-        this.text = text;
+    public double getConfidence() {
+        return confidence;
     }
 
     /**
@@ -83,56 +78,14 @@ public class Response {
      * @return TSV result.
      */
     public String getTSV() {
-        return tsv;
-    }
-
-    /**
-     * @param tsv tsv to be set.
-     */
-    public void setTSV(String tsv) {
-        this.tsv = tsv;
+        return getTypeFromData("tsv");
     }
 
     /**
      * @return MathML result;
      */
     public String getMathML() {
-        return mathML;
-    }
-
-    /**
-     * @param text text to be set.
-     */
-    public void setMathML(String text) {
-        mathML = text;
-    }
-
-    /**
-     * @return LaTeX format result.
-     */
-    public String getLatexStyled() {
-        return latex_styled;
-    }
-
-    /**
-     * @return confidence of the latex correctness.
-     */
-    public Double getLatexConfidence() {
-        return latex_confidence;
-    }
-
-    /**
-     * @param latex_confidence latex confidence to be set.
-     */
-    public void setLatexConfidence(double latex_confidence) {
-        this.latex_confidence = latex_confidence;
-    }
-
-    /**
-     * @return confidence of the correctness.
-     */
-    public double getConfidence() {
-        return confidence;
+        return getTypeFromData("mathml");
     }
 
 }

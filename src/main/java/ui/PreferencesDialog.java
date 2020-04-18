@@ -27,8 +27,8 @@ public class PreferencesDialog {
 
         stage = (Stage) dialog.getDialogPane().getScene().getWindow();
 
-        // add GeneralTab (index: 0) and APICredentialsTab (index: 1) to the TabPane
-        var tabPane = new TabPane(new GeneralTab(), new APICredentialsTab(), new HTTPTab());
+        // add FormattingTab (index: 0) and APICredentialsTab (index: 1) to the TabPane
+        var tabPane = new TabPane(new FormattingTab(), new APICredentialsTab(), new ProxyTab());
 
         selectionModel = tabPane.getSelectionModel();
 
@@ -48,15 +48,10 @@ public class PreferencesDialog {
      * Show dialog stage with the given index.
      */
     public void show(int index) {
-
         if (!stage.isShowing()) {
-
             selectionModel.select(index);
-
             dialog.showAndWait();
-
         }
-
     }
 
 }

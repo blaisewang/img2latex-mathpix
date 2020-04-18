@@ -1,16 +1,14 @@
 package ui;
 
 import io.IOUtils;
-import io.LegacyRecognition;
+import io.Recognition;
 import io.Response;
-import io.TextRecognition;
 import javafx.concurrent.Task;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.Clipboard;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -29,7 +27,6 @@ import java.time.Instant;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 
 /**
@@ -39,19 +36,16 @@ import java.util.concurrent.ExecutionException;
  */
 public class BackGridPane extends GridPane {
 
+    private static final int PREFERRED_MARGIN = 10;
     private static final int PREFERRED_WIDTH = 300;
     private static final int PREFERRED_HEIGHT = 100;
-    private static final int PREFERRED_MARGIN = 10;
 
-    private static final TextRecognition TEXT_RECOGNITION = new TextRecognition();
-    private static final LegacyRecognition LEGACY_RECOGNITION = new LegacyRecognition();
+    private static final Recognition RECOGNITION = new Recognition();
 
     private static final ImageView CLIPBOARD_IMAGE_VIEW = new ImageView();
     private static final ImageView RENDERED_IMAGE_VIEW = new ImageView();
     private static final Label WAITING_TEXT_LABEL = new Label("Waiting...");
     private static final ProgressBar CONFIDENCE_PROGRESS_BAR = new ProgressBar(0);
-
-    private final Clipboard clipboard = Clipboard.getSystemClipboard();
 
     private long lastUpdateCompletionTimestamp = Instant.now().getEpochSecond();
     private long lastRequestCompletionTimestamp = Instant.now().getEpochSecond();
@@ -75,8 +69,7 @@ public class BackGridPane extends GridPane {
     private final List<PressCopyTextField> resultTextFiledList = Arrays.asList(
             FRONT_GRID_PANE.getFirstPressCopyTextField(),
             FRONT_GRID_PANE.getSecondPressCopyTextField(),
-            FRONT_GRID_PANE.getThirdPressCopyTextField(),
-            FRONT_GRID_PANE.getFourthPressCopyTextField()
+            FRONT_GRID_PANE.getThirdPressCopyTextField()
     );
 
     /**
@@ -118,23 +111,15 @@ public class BackGridPane extends GridPane {
 
         FRONT_GRID_PANE.setOnKeyReleased(event -> {
 
-            // space key to update image
-            if (event.getCode() == KeyCode.BACK_SPACE) {
-
+            // space key or backspace key to preview image
+            if (event.getCode() == KeyCode.SPACE || event.getCode() == KeyCode.BACK_SPACE) {
                 // prevent multiple image updates in a short time
                 if (Instant.now().getEpochSecond() - lastUpdateCompletionTimestamp < 1) {
                     lastUpdateCompletionTimestamp = Instant.now().getEpochSecond();
                     return;
                 }
-
-                // an Image has been registered on the clipboard
-                if (clipboard.hasImage()) {
-                    // update the ImageView
-                    CLIPBOARD_IMAGE_VIEW.setImage(clipboard.getImage());
-                }
-
+                UIUtils.displayClipboardImage(CLIPBOARD_IMAGE_VIEW);
                 lastUpdateCompletionTimestamp = Instant.now().getEpochSecond();
-
             }
 
             // enter key to send the OCR request
@@ -172,6 +157,8 @@ public class BackGridPane extends GridPane {
             }
         });
         add(CONFIDENCE_PROGRESS_BAR, 0, 6, 2, 1);
+
+        UIUtils.displayClipboardImage(CLIPBOARD_IMAGE_VIEW);
 
     }
 
@@ -266,10 +253,9 @@ public class BackGridPane extends GridPane {
             }
 
             var resultList = new String[]{
-                    response.getLatexStyled(),
                     response.getText(),
+                    IOUtils.secondResultFormatter(response.getText()),
                     IOUtils.thirdResultFormatter(response.getText()),
-                    IOUtils.fourthResultFormatter(response.getText()),
             };
 
             // put default result into the system clipboard
@@ -280,38 +266,51 @@ public class BackGridPane extends GridPane {
             List<CopyResultButton> buttonList = new LinkedList<>();
 
             var mathML = response.getMathML();
-            if (mathML != null && !"".equals(mathML)) {
+            if (!"".equals(mathML)) {
                 COPY_MATH_ML_BUTTON.setResult(mathML);
                 buttonList.add(COPY_MATH_ML_BUTTON);
             }
 
             var tsv = response.getTSV();
-            if (tsv != null && !"".equals(tsv)) {
+            if (!"".equals(tsv)) {
                 COPY_TSV_BUTTON.setResult(tsv);
                 buttonList.add(COPY_TSV_BUTTON);
             }
 
             FRONT_GRID_PANE.setCopyResultButtonColumnIndex(buttonList);
 
-            // set rendered image to renderedImageView
-            RENDERED_IMAGE_VIEW.setImage(JLaTeXMathRenderingHelper.render(resultList[0]));
+            if (IOUtils.isTextAllWrapped(resultList[0])) {
+
+                var renderResult = JLaTeXMathRenderingHelper.render(resultList[0]);
+
+                if (renderResult != null) {
+                    // set rendered equation to renderedImageView
+                    RENDERED_IMAGE_VIEW.setImage(renderResult);
+                } else {
+                    RENDERED_IMAGE_VIEW.setImage(UIUtils.RENDER_ERROR_IMAGE);
+                }
+
+            } else {
+
+                RENDERED_IMAGE_VIEW.setImage(UIUtils.RENDER_ERROR_IMAGE);
+
+            }
 
             // set results to corresponded TextFields.
             resultTextFiledList.get(0).setFormattedText(resultList[0]);
-            resultTextFiledList.get(1).setFormattedText(resultList[1]);
 
-            if (resultList[2].equals(resultList[1])) {
+            if (resultList[1].equals(resultList[0])) {
+                resultTextFiledList.get(1).setDisable(true);
                 resultTextFiledList.get(2).setDisable(true);
-                resultTextFiledList.get(3).setDisable(true);
-            } else if (resultList[3].equals(resultList[2])) {
-                resultTextFiledList.get(2).setFormattedText(resultList[2]);
-                resultTextFiledList.get(3).setDisable(true);
+            } else if (resultList[2].equals(resultList[1])) {
+                resultTextFiledList.get(1).setFormattedText(resultList[2]);
+                resultTextFiledList.get(2).setDisable(true);
             } else {
+                resultTextFiledList.get(1).setFormattedText(resultList[1]);
                 resultTextFiledList.get(2).setFormattedText(resultList[2]);
-                resultTextFiledList.get(3).setFormattedText(resultList[3]);
             }
 
-            var confidence = response.getLatexConfidence();
+            var confidence = response.getConfidence();
 
             // minimal confidence is set to 3%
             if (confidence > 0 && confidence < 0.03) {
@@ -341,11 +340,7 @@ public class BackGridPane extends GridPane {
             return;
         }
 
-        // no image displayed
-        if (clipboard.hasImage()) {
-            // update the ImageView
-            CLIPBOARD_IMAGE_VIEW.setImage(clipboard.getImage());
-        }
+        UIUtils.displayClipboardImage(CLIPBOARD_IMAGE_VIEW);
 
         if (CLIPBOARD_IMAGE_VIEW.getImage() != null) {
 
@@ -364,43 +359,19 @@ public class BackGridPane extends GridPane {
             // show waiting label
             WAITING_TEXT_LABEL.setVisible(true);
 
-            var ref = new Object() {
-                Task<Response> textOCRTask = null;
-            };
 
-            if (IOUtils.getImprovedOCREnableOption()) {
-                ref.textOCRTask = new Task<>() {
-                    @Override
-                    protected Response call() {
-                        return IOUtils.concurrentCall(TEXT_RECOGNITION, CLIPBOARD_IMAGE_VIEW.getImage());
-                    }
-                };
-                new Thread(ref.textOCRTask).start();
-            }
-
-            Task<Response> legacyOCRTask = new Task<>() {
+            Task<Response> task = new Task<>() {
                 @Override
                 protected Response call() {
-                    return IOUtils.concurrentCall(LEGACY_RECOGNITION, CLIPBOARD_IMAGE_VIEW.getImage());
+                    return IOUtils.concurrentCall(RECOGNITION, CLIPBOARD_IMAGE_VIEW.getImage());
                 }
             };
-            legacyOCRTask.setOnSucceeded(event -> {
-                Response response = legacyOCRTask.getValue();
-                if (ref.textOCRTask != null) {
-                    try {
-                        Response textOCRResponse = ref.textOCRTask.get();
-                        response.setText(textOCRResponse.getText());
-                        response.setTSV(textOCRResponse.getTypeFromData("tsv"));
-                        response.setMathML(textOCRResponse.getTypeFromData("mathml"));
-                        response.setLatexConfidence(textOCRResponse.getConfidence());
-                    } catch (InterruptedException | ExecutionException ignored) {
-                    }
-                }
-                responseHandler(response);
+            task.setOnSucceeded(event -> {
+                responseHandler(task.getValue());
                 // hide waiting label
                 WAITING_TEXT_LABEL.setVisible(false);
             });
-            new Thread(legacyOCRTask).start();
+            new Thread(task).start();
 
         } else {
 

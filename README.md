@@ -10,7 +10,7 @@ English | [中文](https://github.com/blaisewang/img2latex-mathpix/blob/master/R
 [![License](https://img.shields.io/github/license/blaisewang/img2latex-mathpix?style=flat-square)](https://github.com/blaisewang/img2latex-mathpix/blob/master/LICENSE)
 
 [Snip](https://mathpix.com/) is an amazing app built by Mathpix to help you extract LaTeX, MathML,  basic table, and text from documents.
-It gives you the first 50 snips for free every single month. **200 Extra Snips** for both when you [invite](https://accounts.mathpix.com/referrals) a friend with a **.edu** domain email.
+It gives you the first 50 snips (**100 Snips** you sign up with a **.edu** or **.ac.uk** domain email) for free every single month.
 
 With the help of [MathpixOCR API](https://mathpix.com/ocr/) and this supplementary app, you can now make up to 1000 OCR requests per month for free.
 
@@ -25,7 +25,7 @@ See the [features](https://mathpix.com/ocr#features) section on MathpixOCR websi
 
 - New TSV OCR format for Microsoft Excel and more.
 - New MathML OCR format for Microsoft Word and more.
-- New `Improved OCR` option for [multiple choice](https://mathpix.com/blog/mathpix-text-endpoint), [paragraphs](https://mathpix.com/blog/snip-2.0), [basic table](https://mathpix.com/blog/v1-table-recognition) OCRs, and more.
+- New [multiple choice](https://mathpix.com/blog/mathpix-text-endpoint), [paragraphs](https://mathpix.com/blog/snip-2.0), [basic table](https://mathpix.com/blog/v1-table-recognition) OCRs, and more.
 - HTTP proxy support for making OCR request.
 
 ## Requirements
@@ -62,8 +62,8 @@ Run `Image2LaTeX` at `Image2LaTeX-linux/bin/` or with:
 
 Use your operating system's default methods (or other tools) to take a screenshot of equations or text (Shift (⇧)-Control (⌃)-Command (⌘)-4 on macOS by default).
 
-Then, press the `BackSpace` key (`delete` key on macOS) to preview the screenshot.
-Or, press the `Return` or `Enter` key to send the OCR request.
+Then, press the `Space` key (or `Backspace` key) to preview the screenshot.
+Or, press the `Return` or `Enter` key to send the OCR request directly.
 
 See [demo](#Demo) section below.
 

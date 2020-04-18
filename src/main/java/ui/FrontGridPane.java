@@ -26,7 +26,6 @@ public class FrontGridPane extends GridPane {
     private static final PressCopyTextField FIRST_PRESS_COPY_TEXT_FIELD = new PressCopyTextField();
     private static final PressCopyTextField SECOND_PRESS_COPY_TEXT_FIELD = new PressCopyTextField();
     private static final PressCopyTextField THIRD_PRESS_COPY_TEXT_FIELD = new PressCopyTextField();
-    private static final PressCopyTextField FOURTH_PRESS_COPY_TEXT_FIELD = new PressCopyTextField();
 
     private static final Color BACKGROUND_COLOR = new Color(0.9725, 0.9765, 0.9804, 1);
     private static final BackgroundFill BACKGROUND_FILL = new BackgroundFill(BACKGROUND_COLOR, CornerRadii.EMPTY, Insets.EMPTY);
@@ -42,8 +41,8 @@ public class FrontGridPane extends GridPane {
         setBackground(BACKGROUND);
         setPadding(new Insets(itemMargin, 0, itemMargin, 0));
 
-        // 5 * 2 grid layout
-        setVgap(5);
+        // 4 * 3 grid layout
+        setVgap(4);
         setHgap(3);
 
         // add "Result" textL label
@@ -58,7 +57,7 @@ public class FrontGridPane extends GridPane {
         add(COPY_TSV_BUTTON, 1, 0);
 
         // copy MathML result to clipboard event
-        COPY_MATH_ML_BUTTON.setVisible(true);
+        COPY_MATH_ML_BUTTON.setVisible(false);
         GridPane.setHalignment(COPY_MATH_ML_BUTTON, HPos.RIGHT);
         UIUtils.setDefaultNodeMargin(COPY_MATH_ML_BUTTON, 0, 0);
         add(COPY_MATH_ML_BUTTON, 2, 0);
@@ -82,11 +81,6 @@ public class FrontGridPane extends GridPane {
         UIUtils.setDefaultNodeMargin(THIRD_PRESS_COPY_TEXT_FIELD, itemMargin, 0);
         setTextFieldEvent(THIRD_PRESS_COPY_TEXT_FIELD, 3);
         add(THIRD_PRESS_COPY_TEXT_FIELD, 0, 3, 2, 1);
-
-        // add the fourth PressCopyTextField
-        UIUtils.setDefaultNodeMargin(FOURTH_PRESS_COPY_TEXT_FIELD, itemMargin, 0);
-        setTextFieldEvent(FOURTH_PRESS_COPY_TEXT_FIELD, 4);
-        add(FOURTH_PRESS_COPY_TEXT_FIELD, 0, 4, 2, 1);
 
     }
 
@@ -149,13 +143,6 @@ public class FrontGridPane extends GridPane {
      */
     public PressCopyTextField getThirdPressCopyTextField() {
         return THIRD_PRESS_COPY_TEXT_FIELD;
-    }
-
-    /**
-     * @return fourth PressCopyTextField.
-     */
-    public PressCopyTextField getFourthPressCopyTextField() {
-        return FOURTH_PRESS_COPY_TEXT_FIELD;
     }
 
     /**

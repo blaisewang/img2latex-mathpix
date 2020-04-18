@@ -22,19 +22,17 @@ public class IOUtils {
     public static final String INVALID_PROXY_CONFIG_ERROR = "Invalid proxy config";
     public static final String NO_IMAGE_FOUND_IN_THE_CLIPBOARD_ERROR = "No image found in the clipboard";
 
-    public static final String TEXT_API_URL = "https://api.mathpix.com/v3/text";
-    public static final String LEGACY_API_URL = "https://api.mathpix.com/v3/latex";
+    public static final String API_URL = "https://api.mathpix.com/v3/text";
     public static final String MATHPIX_DASHBOARD_URL = "https://dashboard.mathpix.com/";
     public static final String GITHUB_RELEASES_URL = "https://github.com/blaisewang/img2latex-mathpix/releases";
 
     private static final String I2L_APP_ID = "I2L_APP_ID";
     private static final String I2L_APP_KEY = "I2L_APP_KEY";
-    private static final String I2L_THIRD_RESULT_FORMATTING_OPTION = "I2L_THIRD_RESULT_FORMATTING_OPTION";
-    private static final String I2L_FOURTH_RESULT_FORMATTING_OPTION = "I2L_FOURTH_RESULT_FORMATTING_OPTION";
-    private static final String I2L_PROXY_ENABLE_OPTION = "I2L_PROXY_ENABLE_OPTION";
-    private static final String I2L_PROXY_HOSTNAME = "I2L_PROXY_HOSTNAME";
     private static final String I2L_PROXY_PORT = "I2L_PROXY_PORT";
-    private static final String I2L_IMPROVED_OCR_ENABLE_OPTION = "I2L_IMPROVED_OCR_ENABLE_OPTION";
+    private static final String I2L_PROXY_HOSTNAME = "I2L_PROXY_HOSTNAME";
+    private static final String I2L_PROXY_ENABLE_OPTION = "I2L_PROXY_ENABLE_OPTION";
+    private static final String I2L_SECOND_FORMATTING_OPTION = "I2L_SECOND_FORMATTING_OPTION";
+    private static final String I2L_THIRD_FORMATTING_OPTION = "I2L_THIRD_FORMATTING_OPTION";
 
     private static final String CONFIG_NODE_PATH = "I2L_API_CREDENTIAL_CONFIG";
     private static final Preferences PREFERENCES = Preferences.userRoot().node(CONFIG_NODE_PATH);
@@ -143,39 +141,39 @@ public class IOUtils {
     }
 
     /**
-     * Set third result formatting option.
+     * Set second formatting option.
      *
      * @param option option to be written.
      */
-    public static void setThirdResultFormattingOption(int option) {
-        PREFERENCES.putInt(I2L_THIRD_RESULT_FORMATTING_OPTION, option);
+    public static void setSecondResultFormattingOption(int option) {
+        PREFERENCES.putInt(I2L_SECOND_FORMATTING_OPTION, option);
     }
 
     /**
-     * Get third result formatting option.
+     * Get second formatting option.
      *
-     * @return third result formatting option.
+     * @return second formatting option.
+     */
+    public static int getSecondResultFormattingOption() {
+        return PREFERENCES.getInt(I2L_SECOND_FORMATTING_OPTION, 2);
+    }
+
+    /**
+     * Set third formatting option.
+     *
+     * @param option option to be written.
+     */
+    public static void setThirdFormattingOption(int option) {
+        PREFERENCES.putInt(I2L_THIRD_FORMATTING_OPTION, option);
+    }
+
+    /**
+     * Get third formatting option.
+     *
+     * @return third formatting option.
      */
     public static int getThirdResultFormattingOption() {
-        return PREFERENCES.getInt(I2L_THIRD_RESULT_FORMATTING_OPTION, 2);
-    }
-
-    /**
-     * Set fourth result Formatting option.
-     *
-     * @param option option to be written.
-     */
-    public static void setFourthResultFormattingOption(int option) {
-        PREFERENCES.putInt(I2L_FOURTH_RESULT_FORMATTING_OPTION, option);
-    }
-
-    /**
-     * Get fourth result formatting option.
-     *
-     * @return fourth result formatting option.
-     */
-    public static int getFourthResultFormattingOption() {
-        return PREFERENCES.getInt(I2L_FOURTH_RESULT_FORMATTING_OPTION, 0);
+        return PREFERENCES.getInt(I2L_THIRD_FORMATTING_OPTION, 0);
     }
 
     /**
@@ -192,38 +190,79 @@ public class IOUtils {
     }
 
     /**
-     * @param string          string to be formatted.
-     * @param left_delimiter  prefix.
-     * @param right_delimiter postfix.
-     * @return formatted string.
+     * Method to determine if there is unwrapped text in a string.
+     *
+     * @param string string to be search.
+     * @return is text all wrapped.
      */
-    public static String formatHelper(String string, String left_delimiter, String right_delimiter) {
+    public static boolean isTextAllWrapped(String string) {
 
-        var formatted_left_delimiter = left_delimiter + "\n ";
-        var formatted_right_delimiter = "\n" + right_delimiter;
+        var rIndex = string.indexOf("\\)");
 
-        if (string.startsWith("\\(") && string.split("\\u005C\\u0028").length == 2) {
+        while (rIndex < string.length() - 2) {
 
-            if ("$".equals(left_delimiter)) {
-                return string.replace("\\(", left_delimiter).replace("\\)", right_delimiter).
-                        replace("  ", " ");
+            var lIndex = string.indexOf("\\(", rIndex);
+
+            if (rIndex == -1 || lIndex == -1) {
+                return false;
             }
 
-            return string.replace("\\(", formatted_left_delimiter).replace("\\)", formatted_right_delimiter).
-                    replace("  ", " ");
+            if (string.substring(rIndex + 2, lIndex).trim().length() > 0) {
+                return false;
+            }
+
+            rIndex = string.indexOf("\\)", rIndex + 1);
 
         }
 
-        if ("$".equals(left_delimiter)) {
-            formatted_left_delimiter = "\\[\n ";
-            formatted_right_delimiter = "\n\\]";
+        return true;
+
+    }
+
+    /**
+     * Shadow method of formatHelper()
+     *
+     * @param string         string to be formatted.
+     * @param leftDelimiter  prefix.
+     * @param rightDelimiter postfix.
+     * @return formatted string.
+     */
+    private static String formatHandler(String string, String leftDelimiter, String rightDelimiter) {
+
+        String lDelimiter;
+        String rDelimiter;
+
+        if ("$".equals(leftDelimiter)) {
+            lDelimiter = leftDelimiter;
+            rDelimiter = rightDelimiter;
+        } else {
+            lDelimiter = leftDelimiter + "\n";
+            rDelimiter = "\n" + rightDelimiter;
+        }
+
+        if (isTextAllWrapped(string)) {
+            return string.replace("\\(", lDelimiter).replace("\\)", rDelimiter);
+        }
+
+        if ("$".equals(leftDelimiter)) {
+            lDelimiter = "\\[\n";
+            rDelimiter = "\n\\]";
         }
 
         return string.replace("\\(", "$").replace("\\)", "$").
                 replace("\\[\n", "\\[").replace("\n\\]", "\\]").
-                replace("\\[", formatted_left_delimiter).replace("\\]", formatted_right_delimiter).
-                replace("  ", " ");
+                replace("\\[", lDelimiter).replace("\\]", rDelimiter);
 
+    }
+
+    /**
+     * @param string         string to be formatted.
+     * @param leftDelimiter  prefix.
+     * @param rightDelimiter postfix.
+     * @return formatted string with multiple spaces replaced with single spaces.
+     */
+    public static String formatHelper(String string, String leftDelimiter, String rightDelimiter) {
+        return formatHandler(string, leftDelimiter, rightDelimiter).replaceAll("( )+", " ");
     }
 
     /**
@@ -232,14 +271,14 @@ public class IOUtils {
      * @param result recognised result.
      * @return the formatted result.
      */
-    public static String thirdResultFormatter(String result) {
+    public static String secondResultFormatter(String result) {
 
         // return null if the original result is null
         if (result == null) {
             return null;
         }
 
-        var option = getThirdResultFormattingOption();
+        var option = getSecondResultFormattingOption();
 
         // default for option 2 and others
         if (option == 0) {
@@ -259,14 +298,14 @@ public class IOUtils {
      * @param result recognised result.
      * @return the formatted result.
      */
-    public static String fourthResultFormatter(String result) {
+    public static String thirdResultFormatter(String result) {
 
         // return null if the original result is null
         if (result == null) {
             return null;
         }
 
-        var option = getFourthResultFormattingOption();
+        var option = getThirdResultFormattingOption();
 
         if (option == 1) {
             return formatHelper(result, "\\begin{align}", "\\end{align}");
@@ -330,24 +369,6 @@ public class IOUtils {
 
         return new ProxyConfig(PREFERENCES.get(I2L_PROXY_HOSTNAME, ""), port);
 
-    }
-
-    /**
-     * Set improved OCR enable option.
-     *
-     * @param option option to be written.
-     */
-    public static void setImprovedOCREnableOption(Boolean option) {
-        PREFERENCES.putBoolean(I2L_IMPROVED_OCR_ENABLE_OPTION, option);
-    }
-
-    /**
-     * Get improved OCR option enabled or not.
-     *
-     * @return improved OCR enable option.
-     */
-    public static boolean getImprovedOCREnableOption() {
-        return PREFERENCES.getBoolean(I2L_IMPROVED_OCR_ENABLE_OPTION, true);
     }
 
 }

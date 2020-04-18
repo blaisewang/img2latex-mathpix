@@ -12,11 +12,11 @@ fi
 
 mkdir -p $APP_PATH $APP_PATH/MacOS $APP_PATH/Resources
 
-cp ../macOS/Info.plist.template $APP_PATH/Info.plist
+cp ../macos/Info.plist $APP_PATH/Info.plist
 
-cp ../macOS/AppIcon.icns $APP_PATH/Resources/AppIcon.icns
+cp ../macos/Assets.car $APP_PATH/Resources/Assets.car
 
-cp ../macOS/Assets.car $APP_PATH/Resources/Assets.car
+cp ../src/main/resources/icons/macos.icns $APP_PATH/Resources/AppIcon.icns
 
 FILENAME="$(echo ./*macos.zip)"
 

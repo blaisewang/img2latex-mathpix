@@ -3,7 +3,7 @@ package io;
 
 /**
  * IO.APICredentialConfig.java
- * used to store app_id and id_key.
+ * used to store appId and appKey.
  */
 public class APICredentialConfig {
 
@@ -16,14 +16,14 @@ public class APICredentialConfig {
     }
 
     /**
-     * @return app_id.
+     * @return appId
      */
     public String getAppId() {
         return appId;
     }
 
     /**
-     * @return app_key.
+     * @return appKey.
      */
     public String getAppKey() {
         return appKey;

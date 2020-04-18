@@ -1,13 +1,13 @@
 plugins {
     id "java"
     id "application"
-    id "org.beryx.runtime" version "1.8.0"
+    id "org.beryx.runtime" version "1.8.1"
     id 'edu.sc.seis.launch4j' version '2.4.6'
     id "org.openjfx.javafxplugin" version "0.0.8"
 }
 
 group "blaise.img2latex"
-version "0.7.2"
+version "0.7.3"
 
 compileJava {
     sourceCompatibility = 14
@@ -76,6 +76,6 @@ launch4j {
     version = project.version
     textVersion = project.version
     copyright = "github/blaisewang/img2latex-mathpix"
-    icon = "${projectDir}/src/main/resources/windows.ico"
+    icon = "${projectDir}/src/main/resources/icons/windows.ico"
     outputDir = "../releases/${applicationName}-${project.version}-windows"
 }

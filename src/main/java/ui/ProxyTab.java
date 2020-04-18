@@ -9,23 +9,21 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 
 
 /**
- * UI.HTTPTab.java
+ * UI.ProxyTab.java
  * Used to display and edit HTTP proxy options in the preferences panel.
  */
-public class HTTPTab extends Tab {
+public class ProxyTab extends Tab {
 
     private static final int PANEL_MARGIN = 20;
-    private static final int MINIMUM_MARGIN = 12;
+    private static final int MINIMUM_MARGIN = 8;
 
-    public HTTPTab() {
+    public ProxyTab() {
 
         // tab header
-        setText(" HTTP ");
+        setText(" Proxy ");
         // non-closable
         setClosable(false);
 
@@ -34,17 +32,11 @@ public class HTTPTab extends Tab {
         // load initial proxy config
         var proxyConfig = IOUtils.getProxyConfig();
 
-        // 4 * 2 layout
+        // 3 * 2 layout
         var gridPane = new GridPane();
-        gridPane.setHgap(4);
+        gridPane.setHgap(3);
         gridPane.setVgap(2);
         gridPane.setPadding(new Insets(PANEL_MARGIN, PANEL_MARGIN + MINIMUM_MARGIN, PANEL_MARGIN, PANEL_MARGIN));
-
-        // add header label
-        var headerLabel = new Label("HTTP Proxy");
-        headerLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
-        GridPane.setMargin(headerLabel, new Insets(0, MINIMUM_MARGIN, MINIMUM_MARGIN, 0));
-        gridPane.add(headerLabel, 0, 0, 2, 1);
 
         var proxyEnableOptionCheckBox = new CheckBox("HTTP Proxy");
         var hostnameTextField = new TextField();
@@ -61,12 +53,12 @@ public class HTTPTab extends Tab {
         });
 
         GridPane.setMargin(proxyEnableOptionCheckBox, new Insets(MINIMUM_MARGIN));
-        gridPane.add(proxyEnableOptionCheckBox, 0, 1, 2, 1);
+        gridPane.add(proxyEnableOptionCheckBox, 0, 0, 2, 1);
 
         // add "Host:" label
         var hostLabel = new Label("Host:");
         GridPane.setMargin(hostLabel, new Insets(MINIMUM_MARGIN));
-        gridPane.add(hostLabel, 0, 2);
+        gridPane.add(hostLabel, 0, 1);
 
         // customise hostname TextFiled
         hostnameTextField.setPromptText("Host");
@@ -84,12 +76,12 @@ public class HTTPTab extends Tab {
             }
         });
 
-        gridPane.add(hostnameTextField, 1, 2);
+        gridPane.add(hostnameTextField, 1, 1);
 
         // add "Port" label
         var portLabel = new Label("Port:");
         GridPane.setMargin(portLabel, new Insets(MINIMUM_MARGIN));
-        gridPane.add(portLabel, 0, 3);
+        gridPane.add(portLabel, 0, 2);
 
         // customise port TextFiled
         portTextField.setPromptText("Port");
@@ -113,7 +105,7 @@ public class HTTPTab extends Tab {
             }
         });
 
-        gridPane.add(portTextField, 1, 3);
+        gridPane.add(portTextField, 1, 2);
 
         setContent(gridPane);
 

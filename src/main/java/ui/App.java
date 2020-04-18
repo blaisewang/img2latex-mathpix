@@ -51,7 +51,7 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        // show API key dialog if the config is invalid
+        // show API credential dialog if the config is invalid
         if (!IOUtils.isAPICredentialConfigValid()) {
             backGridPane.showPreferencesDialog(1);
         }
@@ -83,7 +83,7 @@ public class App extends Application {
         stage.setTitle(APPLICATION_TITLE);
 
         // load icon resources
-        var iconInputStream = getClass().getClassLoader().getResourceAsStream("icon-other.png");
+        var iconInputStream = getClass().getClassLoader().getResourceAsStream("images/icon-other.png");
         assert iconInputStream != null;
 
         // set the title bar app icon
@@ -216,17 +216,17 @@ public class App extends Application {
             // dark mode
             if (IOUtils.isMacDarkMode()) {
                 // load the white colour icon
-                iconInputStream = getClass().getClassLoader().getResourceAsStream("icon-mac-dark.png");
+                iconInputStream = getClass().getClassLoader().getResourceAsStream("images/icon-mac-dark.png");
             } else {
                 // load the black colour icon
-                iconInputStream = getClass().getClassLoader().getResourceAsStream("icon-mac.png");
+                iconInputStream = getClass().getClassLoader().getResourceAsStream("images/icon-mac.png");
             }
         } else if (IOUtils.isOSWindows()) {
             // while colour icon for windows
-            iconInputStream = getClass().getClassLoader().getResourceAsStream("icon-windows.png");
+            iconInputStream = getClass().getClassLoader().getResourceAsStream("images/icon-windows.png");
         } else {
             // blue colour icon for the rest OS
-            iconInputStream = getClass().getClassLoader().getResourceAsStream("icon-other.png");
+            iconInputStream = getClass().getClassLoader().getResourceAsStream("images/icon-other.png");
         }
         assert iconInputStream != null;
 

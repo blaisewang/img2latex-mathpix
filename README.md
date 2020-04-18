@@ -10,7 +10,7 @@ English | [中文](https://github.com/blaisewang/img2latex-mathpix/blob/master/R
 [![License](https://img.shields.io/github/license/blaisewang/img2latex-mathpix?style=flat-square)](https://github.com/blaisewang/img2latex-mathpix/blob/master/LICENSE)
 
 [Snip](https://mathpix.com/) is an amazing app built by Mathpix to help you extract LaTeX, MathML,  basic table, and text from documents.
-It gives you the first 50 snips (**100 Snips** you sign up with a **.edu** or **.ac.uk** domain email) for free every single month.
+It gives you the first 50 snips for free (**100 snips** when you sign up with a **.edu** or **.ac.uk** domain email) every single month.
 
 With the help of [MathpixOCR API](https://mathpix.com/ocr/) and this supplementary app, you can now make up to 1000 OCR requests per month for free.
 
@@ -38,7 +38,7 @@ Enter your API keys (without single quotes) at the first launch of this app.
 
 To change your API keys, macOS and Windows users will find the `API Credentials` tab in the `Preferences` menu item by clicking this app's menu bar icon.
 
-Linux users can open the `Preferences` panel by right-clicking anywhere inside the application.
+Linux user can open the `Preferences` panel by right-clicking anywhere inside the application.
 
 **Note**, this app will not send your API keys to others except for MathpixOCR API server (see [OCRRequestHelper.java](https://github.com/blaisewang/img2latex-mathpix/blob/master/src/main/java/io/OCRRequestHelper.java) to learn how your API keys are used).
 

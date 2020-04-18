@@ -52,7 +52,7 @@ public class Response {
     /**
      * @return MathML result from data;
      */
-    public String getTypeFromData(String type) {
+    private String getTypeFromData(String type) {
 
         if (data == null) {
             return "";

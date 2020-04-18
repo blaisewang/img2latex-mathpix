@@ -252,14 +252,15 @@ public class BackGridPane extends GridPane {
                 return;
             }
 
+            var result = response.getText();
             var resultList = new String[]{
-                    response.getText(),
-                    IOUtils.secondResultFormatter(response.getText()),
-                    IOUtils.thirdResultFormatter(response.getText()),
+                    result,
+                    IOUtils.secondResultFormatter(result),
+                    IOUtils.thirdResultFormatter(result),
             };
 
             // put default result into the system clipboard
-            UIUtils.putStringIntoClipboard(resultList[0]);
+            UIUtils.putStringIntoClipboard(result);
             // set UI.CopiedButton to the corresponded location
             FRONT_GRID_PANE.setCopiedButtonRowIndex();
 
@@ -279,9 +280,9 @@ public class BackGridPane extends GridPane {
 
             FRONT_GRID_PANE.setCopyResultButtonColumnIndex(buttonList);
 
-            if (IOUtils.isTextAllWrapped(resultList[0])) {
+            if (IOUtils.isTextAllWrapped(result)) {
 
-                var renderResult = JLaTeXMathRenderingHelper.render(resultList[0]);
+                var renderResult = JLaTeXMathRenderingHelper.render(result);
 
                 if (renderResult != null) {
                     // set rendered equation to renderedImageView
@@ -303,7 +304,7 @@ public class BackGridPane extends GridPane {
                 resultTextFiledList.get(1).setDisable(true);
                 resultTextFiledList.get(2).setDisable(true);
             } else if (resultList[2].equals(resultList[1])) {
-                resultTextFiledList.get(1).setFormattedText(resultList[2]);
+                resultTextFiledList.get(1).setFormattedText(resultList[1]);
                 resultTextFiledList.get(2).setDisable(true);
             } else {
                 resultTextFiledList.get(1).setFormattedText(resultList[1]);

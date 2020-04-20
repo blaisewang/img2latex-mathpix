@@ -197,22 +197,21 @@ public class IOUtils {
      */
     public static boolean isTextAllWrapped(String string) {
 
+        if (!string.startsWith("\\(")) {
+            return false;
+        }
+
         var rIndex = string.indexOf("\\)");
 
         while (rIndex < string.length() - 2) {
-
             var lIndex = string.indexOf("\\(", rIndex);
-
             if (rIndex == -1 || lIndex == -1) {
                 return false;
             }
-
             if (string.substring(rIndex + 2, lIndex).trim().length() > 0) {
                 return false;
             }
-
             rIndex = string.indexOf("\\)", rIndex + 1);
-
         }
 
         return true;

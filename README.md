@@ -62,7 +62,7 @@ Run `Image2LaTeX` at `Image2LaTeX-linux/bin/` or with:
 
 Use your operating system's default methods (or other tools) to take a screenshot of equations or text (Shift (⇧)-Control (⌃)-Command (⌘)-4 on macOS by default).
 
-Then, press the `Space` key (or `Backspace` key) to preview the screenshot.
+Then, press the `Space` key to preview the screenshot.
 Or, press the `Return` or `Enter` key to send the OCR request directly.
 
 See [demo](#Demo) section below.

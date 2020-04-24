@@ -7,7 +7,6 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.GridPane;
@@ -24,7 +23,7 @@ import java.util.Objects;
  */
 public class UIUtils {
 
-    private static final Clipboard clipboard = Clipboard.getSystemClipboard();
+    private static final PreferencesDialog preferencesDialog = new PreferencesDialog();
 
     public static final Color DARK_GREY = new Color(0.149, 0.149, 0.149, 1);
     public static final Color LIGHT_BLUE = new Color(0.2392, 0.5765, 0.9686, 1);
@@ -74,16 +73,10 @@ public class UIUtils {
     }
 
     /**
-     * Display clipboard image inside an ImageView.
-     *
-     * @param imageView ImageView to be set.
+     * Show preferences dialog with the given tab index.
      */
-    public static void displayClipboardImage(ImageView imageView) {
-        // an Image has been registered on the clipboard
-        if (clipboard.hasImage()) {
-            // update the ImageView
-            imageView.setImage(clipboard.getImage());
-        }
+    public static void showPreferencesDialog(int index) {
+        preferencesDialog.show(index);
     }
 
     /**

@@ -37,11 +37,11 @@ public class App extends Application {
 
     private Stage stage;
 
+    private static String APPLICATION_TITLE;
+
     private final BackGridPane backGridPane = new BackGridPane();
 
     private static final Properties PROPERTIES = new Properties();
-
-    private static String APPLICATION_TITLE;
 
     /**
      * Start of JavaFX application.
@@ -53,7 +53,7 @@ public class App extends Application {
 
         // show API credential dialog if the config is invalid
         if (!IOUtils.isAPICredentialConfigValid()) {
-            backGridPane.showPreferencesDialog(1);
+            UIUtils.showPreferencesDialog(1);
         }
 
         // indicate whether the tray icon was successfully added to the menu bar
@@ -72,9 +72,6 @@ public class App extends Application {
 
         // initialise scene with the UI.BackGridPane
         var scene = new Scene(backGridPane);
-
-        // enter key pressed event binding to the Scene
-        scene.onKeyReleasedProperty().bind(backGridPane.onKeyReleasedProperty());
 
         // add scene to the primary stage
         stage.setScene(scene);
@@ -98,7 +95,7 @@ public class App extends Application {
             // right click to show API credential setting dialog
             scene.setOnMouseReleased(event -> {
                 if (event.getButton() == MouseButton.SECONDARY) {
-                    backGridPane.showPreferencesDialog(0);
+                    UIUtils.showPreferencesDialog(0);
                 }
             });
             // set the app shutdown when the window is closed
@@ -146,7 +143,7 @@ public class App extends Application {
 
         // add Preferences menu item
         var settingItem = new MenuItem("Preferences");
-        settingItem.addActionListener(event -> Platform.runLater(() -> backGridPane.showPreferencesDialog(0)));
+        settingItem.addActionListener(event -> Platform.runLater(() -> UIUtils.showPreferencesDialog(0)));
 
         // add check for updates menu item
         var updateCheckItem = new MenuItem("Check for Updates");

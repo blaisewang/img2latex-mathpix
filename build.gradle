@@ -7,7 +7,7 @@ plugins {
 }
 
 group "blaise.img2latex"
-version "0.7.4"
+version "0.7.5"
 
 compileJava {
     sourceCompatibility = 14
@@ -43,23 +43,21 @@ dependencies {
         implementation "org.openjfx:javafx-swing:14:win"
         implementation "org.openjfx:javafx-graphics:14:win"
         implementation "org.openjfx:javafx-controls:14:win"
+    } else if (project.hasProperty("linux")) {
+        implementation "org.openjfx:javafx-base:14:linux"
+        implementation "org.openjfx:javafx-swing:14:linux"
+        implementation "org.openjfx:javafx-graphics:14:linux"
+        implementation "org.openjfx:javafx-controls:14:linux"
     } else {
-        if (project.hasProperty("linux")) {
-            implementation "org.openjfx:javafx-base:14:linux"
-            implementation "org.openjfx:javafx-swing:14:linux"
-            implementation "org.openjfx:javafx-graphics:14:linux"
-            implementation "org.openjfx:javafx-controls:14:linux"
-        } else {
-            implementation "org.openjfx:javafx-base:14:mac"
-            implementation "org.openjfx:javafx-swing:14:mac"
-            implementation "org.openjfx:javafx-graphics:14:mac"
-            implementation "org.openjfx:javafx-controls:14:mac"
-        }
+        implementation "org.openjfx:javafx-base:14:mac"
+        implementation "org.openjfx:javafx-swing:14:mac"
+        implementation "org.openjfx:javafx-graphics:14:mac"
+        implementation "org.openjfx:javafx-controls:14:mac"
     }
 }
 
 runtime {
-    imageZip = file("${buildDir}/../releases/Image2LaTeX-${version}.zip")
+    imageZip.set(file("${buildDir}/../releases/Image2LaTeX-${version}.zip"))
     addOptions("--strip-debug", "--compress", "2", "--no-header-files", "--no-man-pages")
     addModules("java.base", "java.datatransfer", "java.desktop", "java.logging", "java.net.http", "java.prefs", "java.sql", "java.transaction.xa", "jdk.unsupported", "jdk.unsupported.desktop", "java.xml")
     if (project.hasProperty("linux")) {

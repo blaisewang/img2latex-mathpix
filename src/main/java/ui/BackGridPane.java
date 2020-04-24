@@ -9,6 +9,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.Clipboard;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -47,6 +48,8 @@ public class BackGridPane extends GridPane {
     private static final Label WAITING_TEXT_LABEL = new Label("Waiting...");
     private static final ProgressBar CONFIDENCE_PROGRESS_BAR = new ProgressBar(0);
 
+    private static final Clipboard clipboard = Clipboard.getSystemClipboard();
+
     private long lastUpdateCompletionTimestamp = Instant.now().getEpochSecond();
     private long lastRequestCompletionTimestamp = Instant.now().getEpochSecond();
 
@@ -58,8 +61,6 @@ public class BackGridPane extends GridPane {
     private static final Background BACKGROUND = new Background(BACKGROUND_FILL);
 
     private static final FrontGridPane FRONT_GRID_PANE = new FrontGridPane(PREFERRED_MARGIN, PANE_BORDER_STROKE);
-
-    private final PreferencesDialog preferencesDialog = new PreferencesDialog();
 
     // get components from UI.FrontGridPane instance
     private static final CopiedButton COPIED_BUTTON = FRONT_GRID_PANE.getCopiedButton();
@@ -109,30 +110,8 @@ public class BackGridPane extends GridPane {
         var renderedBorderPane = setImageViewBorder(RENDERED_IMAGE_VIEW);
         add(renderedBorderPane, 0, 3, 2, 1);
 
-        FRONT_GRID_PANE.setOnKeyReleased(event -> {
-
-            // space key or backspace key to preview image
-            if (event.getCode() == KeyCode.SPACE || event.getCode() == KeyCode.BACK_SPACE) {
-                // prevent multiple image updates in a short time
-                if (Instant.now().getEpochSecond() - lastUpdateCompletionTimestamp < 1) {
-                    lastUpdateCompletionTimestamp = Instant.now().getEpochSecond();
-                    return;
-                }
-                UIUtils.displayClipboardImage(CLIPBOARD_IMAGE_VIEW);
-                lastUpdateCompletionTimestamp = Instant.now().getEpochSecond();
-            }
-
-            // enter key to send the OCR request
-            if (event.getCode() == KeyCode.ENTER) {
-                requestHandler();
-            }
-
-        });
         // add front grid panel
         add(FRONT_GRID_PANE, 0, 4, 2, 1);
-
-        // enter key pressed event binding to the UI.FrontGridPane
-        onKeyReleasedProperty().bind(FRONT_GRID_PANE.onKeyReleasedProperty());
 
         // hide copied button if copy MathML button or copy TSV button is clicked.
         COPY_TSV_BUTTON.setOnMouseClicked(event -> COPIED_BUTTON.setVisible(false));
@@ -158,7 +137,34 @@ public class BackGridPane extends GridPane {
         });
         add(CONFIDENCE_PROGRESS_BAR, 0, 6, 2, 1);
 
-        UIUtils.displayClipboardImage(CLIPBOARD_IMAGE_VIEW);
+        setOnKeyReleased(event -> {
+            // Space key for displaying image in the clipboard
+            if (event.getCode() == KeyCode.SPACE) {
+                // prevent multiple image updates in a short time
+                if (Instant.now().getEpochSecond() - lastUpdateCompletionTimestamp < 1) {
+                    lastUpdateCompletionTimestamp = Instant.now().getEpochSecond();
+                    return;
+                }
+                displayClipboardImage();
+                lastUpdateCompletionTimestamp = Instant.now().getEpochSecond();
+            }
+            // Enter key for making OCR request
+            if (event.getCode() == KeyCode.ENTER) {
+                requestHandler();
+            }
+        });
+
+        // key released event binding
+        FRONT_GRID_PANE.onKeyReleasedProperty().bind(onKeyReleasedProperty());
+        COPY_TSV_BUTTON.onKeyReleasedProperty().bind(onKeyReleasedProperty());
+        COPY_MATH_ML_BUTTON.onKeyReleasedProperty().bind(onKeyReleasedProperty());
+
+        for (PressCopyTextField pressCopyTextField : resultTextFiledList) {
+            pressCopyTextField.onKeyReleasedProperty().bind(onKeyReleasedProperty());
+        }
+
+        // display clipboard image when the app starts
+        displayClipboardImage();
 
     }
 
@@ -206,13 +212,6 @@ public class BackGridPane extends GridPane {
     }
 
     /**
-     * Show preferences dialog with the given tab index.
-     */
-    public void showPreferencesDialog(int index) {
-        preferencesDialog.show(index);
-    }
-
-    /**
      * Error Handler.
      */
     private void errorHandler(Response response) {
@@ -222,11 +221,11 @@ public class BackGridPane extends GridPane {
         if (IOUtils.INVALID_CREDENTIALS_ERROR.equals(error)) {
             // show API credential setting dialog for invalid credential error
             UIUtils.displayError(error);
-            showPreferencesDialog(1);
+            UIUtils.showPreferencesDialog(1);
         } else if (IOUtils.INVALID_PROXY_CONFIG_ERROR.equals(error)) {
             // show proxy setting dialog for invalid proxy config
             UIUtils.displayError(error);
-            showPreferencesDialog(2);
+            UIUtils.showPreferencesDialog(2);
         } else if (error.contains(IOUtils.EXCEPTION_MARK)) {
             // display exception error
             UIUtils.displayError(IOUtils.exceptionFormatter(error));
@@ -331,6 +330,17 @@ public class BackGridPane extends GridPane {
     }
 
     /**
+     * Display clipboard image inside an ImageView.
+     */
+    private void displayClipboardImage() {
+        // an Image has been registered on the clipboard
+        if (clipboard.hasImage()) {
+            // update the ImageView
+            CLIPBOARD_IMAGE_VIEW.setImage(clipboard.getImage());
+        }
+    }
+
+    /**
      * OCR request handler.
      */
     private void requestHandler() {
@@ -341,7 +351,7 @@ public class BackGridPane extends GridPane {
             return;
         }
 
-        UIUtils.displayClipboardImage(CLIPBOARD_IMAGE_VIEW);
+        displayClipboardImage();
 
         if (CLIPBOARD_IMAGE_VIEW.getImage() != null) {
 

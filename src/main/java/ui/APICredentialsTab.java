@@ -1,6 +1,7 @@
 package ui;
 
 import io.IOUtils;
+import io.PreferenceHelper;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.control.Hyperlink;
@@ -22,7 +23,7 @@ import java.net.URISyntaxException;
  * UI.APICredentialsTab.java
  * Used to display and edit API Credentials in the preferences panel.
  */
-public class APICredentialsTab extends Tab {
+public final class APICredentialsTab extends Tab {
 
     private static final int MINIMUM_MARGIN = 10;
 
@@ -34,7 +35,7 @@ public class APICredentialsTab extends Tab {
         setClosable(false);
 
         // load initial API credential config
-        var apiCredentialConfig = IOUtils.getAPICredentialConfig();
+        var apiCredentialConfig = PreferenceHelper.getAPICredentialConfig();
 
         // 3 * 2 layout
         var gridPane = new GridPane();
@@ -75,7 +76,7 @@ public class APICredentialsTab extends Tab {
         GridPane.setMargin(idTextField, new Insets(MINIMUM_MARGIN, MINIMUM_MARGIN, MINIMUM_MARGIN, 0));
 
         // save to Java Preferences API when text is changed
-        idTextField.textProperty().addListener((observable, oldValue, newValue) -> IOUtils.setAppId(newValue));
+        idTextField.textProperty().addListener((observable, oldValue, newValue) -> PreferenceHelper.setAppId(newValue));
 
         // moves the caret after the last char of the text
         idTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
@@ -99,7 +100,7 @@ public class APICredentialsTab extends Tab {
         GridPane.setMargin(keyTextField, new Insets(MINIMUM_MARGIN, MINIMUM_MARGIN, MINIMUM_MARGIN, 0));
 
         // save to Java Preferences API when text is changed
-        keyTextField.textProperty().addListener((observable, oldValue, newValue) -> IOUtils.setAppKey(newValue));
+        keyTextField.textProperty().addListener((observable, oldValue, newValue) -> PreferenceHelper.setAppKey(newValue));
 
         // moves the caret after the last char of the text
         keyTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {

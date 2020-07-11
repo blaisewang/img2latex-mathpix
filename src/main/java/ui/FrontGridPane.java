@@ -18,7 +18,7 @@ import java.util.List;
  * Used for display recognised results.
  * The front grid panel has 1 Label, 1 UI.CopiedButton and 4 PressCopyTextFields.
  */
-public class FrontGridPane extends GridPane {
+public final class FrontGridPane extends GridPane {
 
     private static final CopiedButton COPIED_BUTTON = new CopiedButton();
     private static final CopyResultButton COPY_TSV_BUTTON = new CopyResultButton("TSV");

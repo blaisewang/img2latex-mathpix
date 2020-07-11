@@ -32,7 +32,7 @@ public class OCRRequestHelper {
         String appId;
         String appKey;
 
-        var APICredentialConfig = IOUtils.getAPICredentialConfig();
+        var APICredentialConfig = PreferenceHelper.getAPICredentialConfig();
 
         if (APICredentialConfig.isValid()) {
             appId = APICredentialConfig.getAppId();
@@ -46,9 +46,9 @@ public class OCRRequestHelper {
         HttpClient httpClient;
 
         // HTTP version 2 first, then HTTP version 1.1
-        if (IOUtils.getProxyEnableOption()) {
+        if (PreferenceHelper.getProxyEnableOption()) {
             // proxy enabled
-            var config = IOUtils.getProxyConfig();
+            var config = PreferenceHelper.getProxyConfig();
             if (config.isValid()) {
                 httpClient = HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).
                         proxy(ProxySelector.of(new InetSocketAddress(config.getHostname(), config.getPort()))).build();

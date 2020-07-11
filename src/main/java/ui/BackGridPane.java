@@ -1,11 +1,13 @@
 package ui;
 
 import io.IOUtils;
+import io.PreferenceHelper;
 import io.Recognition;
 import io.Response;
 import javafx.concurrent.Task;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
@@ -60,6 +62,8 @@ public class BackGridPane extends GridPane {
     private static final BackgroundFill BACKGROUND_FILL = new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY);
     private static final Background BACKGROUND = new Background(BACKGROUND_FILL);
 
+    private static final Button SUBMIT_BUTTON = new Button("Submit");
+
     private static final FrontGridPane FRONT_GRID_PANE = new FrontGridPane(PREFERRED_MARGIN, PANE_BORDER_STROKE);
 
     // get components from UI.FrontGridPane instance
@@ -78,8 +82,9 @@ public class BackGridPane extends GridPane {
      */
     public BackGridPane() {
 
-        setPadding(new Insets(PREFERRED_MARGIN, 0, PREFERRED_MARGIN, 0));
+        initialise();
         setBackground(BACKGROUND);
+        setPadding(new Insets(PREFERRED_MARGIN, 0, PREFERRED_MARGIN, 0));
 
         // 8 * 2 layout
         setVgap(8);
@@ -90,11 +95,7 @@ public class BackGridPane extends GridPane {
         UIUtils.setDefaultNodeMargin(clipboardTextLabel, PREFERRED_MARGIN, 0);
         add(clipboardTextLabel, 0, 0);
 
-        WAITING_TEXT_LABEL.setFont(Font.font("Arial Black", FontWeight.BOLD, 12));
-        WAITING_TEXT_LABEL.setTextFill(new Color(0.3882, 0.7882, 0.3373, 1));
-        WAITING_TEXT_LABEL.setVisible(false);
-        GridPane.setHalignment(WAITING_TEXT_LABEL, HPos.RIGHT);
-        UIUtils.setDefaultNodeMargin(WAITING_TEXT_LABEL, 0, PREFERRED_MARGIN);
+        // add "Waiting..." text label
         add(WAITING_TEXT_LABEL, 1, 0);
 
         // get bordered ImageView
@@ -110,32 +111,23 @@ public class BackGridPane extends GridPane {
         var renderedBorderPane = setImageViewBorder(RENDERED_IMAGE_VIEW);
         add(renderedBorderPane, 0, 3, 2, 1);
 
-        // add front grid panel
-        add(FRONT_GRID_PANE, 0, 4, 2, 1);
+        // show submit button if this option is enabled in the preferences panel
+        if (PreferenceHelper.getSubmitButtonEnableOption()) {
+            SUBMIT_BUTTON.setVisible(true);
+            // event binding
+            SUBMIT_BUTTON.setOnMouseClicked(event -> requestHandler());
+            add(SUBMIT_BUTTON, 0, 4, 2, 1);
+        }
 
-        // hide copied button if copy MathML button or copy TSV button is clicked.
-        COPY_TSV_BUTTON.setOnMouseClicked(event -> COPIED_BUTTON.setVisible(false));
-        COPY_MATH_ML_BUTTON.setOnMouseClicked(event -> COPIED_BUTTON.setVisible(false));
+        // add front grid panel
+        add(FRONT_GRID_PANE, 0, 5, 2, 1);
 
         // add "Confidence" label text
         var confidenceText = UIUtils.getTextLabel("Confidence");
         UIUtils.setDefaultNodeMargin(confidenceText, PREFERRED_MARGIN, 0);
-        add(confidenceText, 0, 5, 2, 1);
+        add(confidenceText, 0, 6, 2, 1);
 
-        // confidence progress bar
-        UIUtils.setDefaultNodeMargin(CONFIDENCE_PROGRESS_BAR, PREFERRED_MARGIN, 0);
-        CONFIDENCE_PROGRESS_BAR.setPrefSize(PREFERRED_WIDTH - 2 * PREFERRED_MARGIN - 1, 20);
-        // red for less than 20% certainty, yellow for 20% ~ 60%, and green for above 60%
-        CONFIDENCE_PROGRESS_BAR.progressProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.doubleValue() < 0.2) {
-                setStyle("-fx-accent: #ec4d3d;");
-            } else if (newValue.doubleValue() < 0.6) {
-                setStyle("-fx-accent: #f8cd46;");
-            } else {
-                setStyle("-fx-accent: #63c956;");
-            }
-        });
-        add(CONFIDENCE_PROGRESS_BAR, 0, 6, 2, 1);
+        add(CONFIDENCE_PROGRESS_BAR, 0, 7, 2, 1);
 
         setOnKeyReleased(event -> {
             // Space key for displaying image in the clipboard
@@ -154,6 +146,48 @@ public class BackGridPane extends GridPane {
             }
         });
 
+        // display clipboard image when the app starts
+        displayClipboardImage();
+
+    }
+
+    /**
+     * Node initialisation.
+     */
+    private void initialise() {
+
+        // waiting text label
+        WAITING_TEXT_LABEL.setFont(Font.font("Arial Black", FontWeight.BOLD, 12));
+        WAITING_TEXT_LABEL.setTextFill(new Color(0.3882, 0.7882, 0.3373, 1));
+        WAITING_TEXT_LABEL.setVisible(false);
+        GridPane.setHalignment(WAITING_TEXT_LABEL, HPos.RIGHT);
+        UIUtils.setDefaultNodeMargin(WAITING_TEXT_LABEL, 0, PREFERRED_MARGIN);
+
+        // submit button
+        SUBMIT_BUTTON.setVisible(false);
+        SUBMIT_BUTTON.setFont(Font.font(12));
+        SUBMIT_BUTTON.setFocusTraversable(false);
+        GridPane.setHalignment(SUBMIT_BUTTON, HPos.CENTER);
+
+        // hide copied button if copy MathML button or copy TSV button is clicked.
+        COPY_TSV_BUTTON.setOnMouseClicked(event -> COPIED_BUTTON.setVisible(false));
+        COPY_MATH_ML_BUTTON.setOnMouseClicked(event -> COPIED_BUTTON.setVisible(false));
+
+        // confidence progress bar
+        UIUtils.setDefaultNodeMargin(CONFIDENCE_PROGRESS_BAR, PREFERRED_MARGIN, 0);
+        CONFIDENCE_PROGRESS_BAR.setPrefSize(PREFERRED_WIDTH - 2 * PREFERRED_MARGIN - 1, 20);
+        // red for less than 20% certainty, yellow for 20% ~ 60%, and green for above 60%
+        CONFIDENCE_PROGRESS_BAR.progressProperty().addListener((observable, oldValue, newValue) -> {
+            var progress = newValue.doubleValue();
+            if (progress < 0.2) {
+                setStyle("-fx-accent: #ec4d3d;");
+            } else if (progress < 0.6) {
+                setStyle("-fx-accent: #f8cd46;");
+            } else {
+                setStyle("-fx-accent: #63c956;");
+            }
+        });
+
         // key released event binding
         FRONT_GRID_PANE.onKeyReleasedProperty().bind(onKeyReleasedProperty());
         COPY_TSV_BUTTON.onKeyReleasedProperty().bind(onKeyReleasedProperty());
@@ -162,9 +196,6 @@ public class BackGridPane extends GridPane {
         for (PressCopyTextField pressCopyTextField : resultTextFiledList) {
             pressCopyTextField.onKeyReleasedProperty().bind(onKeyReleasedProperty());
         }
-
-        // display clipboard image when the app starts
-        displayClipboardImage();
 
     }
 
@@ -221,11 +252,11 @@ public class BackGridPane extends GridPane {
         if (IOUtils.INVALID_CREDENTIALS_ERROR.equals(error)) {
             // show API credential setting dialog for invalid credential error
             UIUtils.displayError(error);
-            UIUtils.showPreferencesDialog(1);
+            UIUtils.showPreferencesDialog(2);
         } else if (IOUtils.INVALID_PROXY_CONFIG_ERROR.equals(error)) {
             // show proxy setting dialog for invalid proxy config
             UIUtils.displayError(error);
-            UIUtils.showPreferencesDialog(2);
+            UIUtils.showPreferencesDialog(3);
         } else if (error.contains(IOUtils.EXCEPTION_MARK)) {
             // display exception error
             UIUtils.displayError(IOUtils.exceptionFormatter(error));
@@ -244,6 +275,9 @@ public class BackGridPane extends GridPane {
 
         // if response received
         if (response != null) {
+
+            // update usage count
+            PreferenceHelper.updateUsageCount();
 
             // error occurred
             if (response.getError() != null) {

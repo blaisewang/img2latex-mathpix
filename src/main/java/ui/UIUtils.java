@@ -73,7 +73,7 @@ public class UIUtils {
     }
 
     /**
-     * Show preferences dialog with the given tab index.
+     * Show preferences panel with the given tab index.
      */
     public static void showPreferencesDialog(int index) {
         preferencesDialog.show(index);

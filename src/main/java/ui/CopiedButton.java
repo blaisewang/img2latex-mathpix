@@ -15,7 +15,7 @@ import javafx.scene.text.FontWeight;
  * javafx.scene.control.Button with customised border stroke and layout style.
  * Used to indicate which result has been copied.
  */
-public class CopiedButton extends Button {
+public final class CopiedButton extends Button {
 
     private static final CornerRadii RADII = new CornerRadii(14);
 

@@ -1,7 +1,7 @@
 package ui;
 
 
-import io.IOUtils;
+import io.PreferenceHelper;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.control.CheckBox;
@@ -15,7 +15,7 @@ import javafx.scene.layout.GridPane;
  * UI.ProxyTab.java
  * Used to display and edit HTTP proxy options in the preferences panel.
  */
-public class ProxyTab extends Tab {
+public final class ProxyTab extends Tab {
 
     private static final int PANEL_MARGIN = 20;
     private static final int MINIMUM_MARGIN = 8;
@@ -28,9 +28,9 @@ public class ProxyTab extends Tab {
         setClosable(false);
 
         // load initial proxy enable option
-        var proxyEnableOption = IOUtils.getProxyEnableOption();
+        var proxyEnableOption = PreferenceHelper.getProxyEnableOption();
         // load initial proxy config
-        var proxyConfig = IOUtils.getProxyConfig();
+        var proxyConfig = PreferenceHelper.getProxyConfig();
 
         // 3 * 2 layout
         var gridPane = new GridPane();
@@ -47,7 +47,7 @@ public class ProxyTab extends Tab {
         portTextField.setDisable(!proxyEnableOption);
 
         proxyEnableOptionCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            IOUtils.setProxyEnableOption(newValue);
+            PreferenceHelper.setProxyEnableOption(newValue);
             hostnameTextField.setDisable(!newValue);
             portTextField.setDisable(!newValue);
         });
@@ -67,7 +67,7 @@ public class ProxyTab extends Tab {
         GridPane.setMargin(hostnameTextField, new Insets(MINIMUM_MARGIN, MINIMUM_MARGIN, MINIMUM_MARGIN, 0));
 
         // save to Java Preferences API when hostname is changed
-        hostnameTextField.textProperty().addListener((observable, oldValue, newValue) -> IOUtils.setProxyHostname(newValue));
+        hostnameTextField.textProperty().addListener((observable, oldValue, newValue) -> PreferenceHelper.setProxyHostname(newValue));
 
         // moves the caret after the last char of the text
         hostnameTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
@@ -94,7 +94,7 @@ public class ProxyTab extends Tab {
             if (!newValue.matches("\\d*")) {
                 portTextField.setText(newValue.replaceAll("\\D+", ""));
             } else {
-                IOUtils.setProxyPort(newValue);
+                PreferenceHelper.setProxyPort(newValue);
             }
         });
 

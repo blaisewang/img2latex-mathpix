@@ -23,6 +23,7 @@ Image2LaTeX 是一个个人项目，仅保留了 Snip 的核心功能——将�
 
 ### 新功能
 
+- API 调用次数统计（仅供参考）。
 - 新 TSV OCR 格式用于 Microsoft Excel 等应用。
 - 新 MathML OCR 格式用于 Microsoft Word 等应用。
 - 支持[多选](https://mathpix.com/blog/mathpix-text-endpoint)、[段落](https://mathpix.com/blog/snip-2.0)、[基础表格](https://mathpix.com/blog/v1-table-recognition)的识别。

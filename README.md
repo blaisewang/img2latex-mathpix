@@ -23,6 +23,7 @@ See the [features](https://mathpix.com/ocr#features) section on MathpixOCR websi
 
 ### New Features
 
+- API Usage stats (for reference only).
 - New TSV OCR format for Microsoft Excel and more.
 - New MathML OCR format for Microsoft Word and more.
 - New [multiple choice](https://mathpix.com/blog/mathpix-text-endpoint), [paragraphs](https://mathpix.com/blog/snip-2.0), [basic table](https://mathpix.com/blog/v1-table-recognition) OCRs, and more.

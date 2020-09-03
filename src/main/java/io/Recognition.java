@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import javax.imageio.ImageIO;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.concurrent.Callable;
 
@@ -89,7 +90,7 @@ public class Recognition implements Callable<Response> {
      * @return OCR request result.
      */
     @Override
-    public Response call() {
+    public Response call() throws NoSuchAlgorithmException {
         return OCRRequestHelper.getResult(parameters);
     }
 

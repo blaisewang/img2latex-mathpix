@@ -3,7 +3,6 @@ package io;
 import javafx.scene.image.Image;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
@@ -107,7 +106,7 @@ public class IOUtils {
      * @return current date formatted like ${year}-${month}.
      */
     public static String getCurrentDate() {
-        LocalDate localDate = new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        var localDate = new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         return localDate.getYear() + "-" + localDate.getMonthValue();
     }
 

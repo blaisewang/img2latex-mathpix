@@ -100,11 +100,12 @@ Linux 用户可以通过在应用内任意位置右键单击的方式打开 `Pre
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://nyxflower.github.io/"><img src="https://avatars1.githubusercontent.com/u/38955723?v=4" width="100px;" alt=""/><br /><sub><b>Hao Xu</b></sub></a><br />🤔</td>
-    <td align="center"><a href="http://blog.gongyan.me"><img src="https://avatars0.githubusercontent.com/u/14838533?v=4" width="100px;" alt=""/><br /><sub><b>龚焱</b></sub></a><br />🤔 ✅</td>
-    <td align="center"><a href="https://github.com/wtbsw"><img src="https://avatars1.githubusercontent.com/u/14332504?v=4" width="100px;" alt=""/><br /><sub><b>BOB</b></sub></a><br />🐛 ⚠️</td>
-    <td align="center"><a href="https://github.com/YuiTH"><img src="https://avatars1.githubusercontent.com/u/22416062?v=4" width="100px;" alt=""/><br /><sub><b>YuiTH</b></sub></a><br />🐛</td>
-    <td align="center"><a href="https://github.com/Xyzhao1999"><img src="https://avatars2.githubusercontent.com/u/23482405?v=4" width="100px;" alt=""/><br /><sub><b>Xyzhao</b></sub></a><br />💻</td>
+    <td align="center"><a href="https://nyxflower.github.io/"><img src="https://avatars1.githubusercontent.com/u/38955723?v=4" width="100px;" alt=""/><br /><sub><b>Hao Xu</b></sub></a><br /><a href="#ideas-NYXFLOWER" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="http://blog.gongyan.me"><img src="https://avatars0.githubusercontent.com/u/14838533?v=4" width="100px;" alt=""/><br /><sub><b>龚焱</b></sub></a><br /><a href="#ideas-gongyan200" title="Ideas, Planning, & Feedback">🤔</a> <a href="#tutorial-gongyan200" title="Tutorials">✅</a></td>
+    <td align="center"><a href="https://github.com/wtbsw"><img src="https://avatars1.githubusercontent.com/u/14332504?v=4" width="100px;" alt=""/><br /><sub><b>BOB</b></sub></a><br /><a href="https://github.com/blaisewang/img2latex-mathpix/issues?q=author%3Awtbsw" title="Bug reports">🐛</a> <a href="https://github.com/blaisewang/img2latex-mathpix/commits?author=wtbsw" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://github.com/YuiTH"><img src="https://avatars1.githubusercontent.com/u/22416062?v=4" width="100px;" alt=""/><br /><sub><b>YuiTH</b></sub></a><br /><a href="https://github.com/blaisewang/img2latex-mathpix/issues?q=author%3AYuiTH" title="Bug reports">🐛</a></td>
+    <td align="center"><a href="https://github.com/Xyzhao1999"><img src="https://avatars2.githubusercontent.com/u/23482405?v=4" width="100px;" alt=""/><br /><sub><b>Xyzhao</b></sub></a><br /><a href="https://github.com/blaisewang/img2latex-mathpix/commits?author=Xyzhao1999" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/edward9503"><img src="https://avatars0.githubusercontent.com/u/39060488?v=4" width="100px;" alt=""/><br /><sub><b>edward9503</b></sub></a><br /><a href="https://github.com/blaisewang/img2latex-mathpix/issues?q=author%3Aedward9503" title="Bug reports">🐛</a></td>
   </tr>
 </table>
 

@@ -47,7 +47,7 @@ public class Recognition implements Callable<Response> {
 
         // metadata option for not helping to improve
         var metadataOption = new JsonObject();
-        metadataOption.addProperty("improve_mathpix", false);
+        metadataOption.addProperty("improve_mathpix", true);
 
         parameters.add("metadata", metadataOption);
 
@@ -74,7 +74,7 @@ public class Recognition implements Callable<Response> {
             // byte array output stream to byte[]
             var imageInByte = byteArrayOutputStream.toByteArray();
             // add header of "src"
-            var src = "data:image/jpg;base64," + Base64.getEncoder().encodeToString(imageInByte);
+            var src = "data:image/png;base64," + Base64.getEncoder().encodeToString(imageInByte);
             // replace original "src" with new encoded value
             parameters.addProperty("src", src);
             return true;

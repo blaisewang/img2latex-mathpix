@@ -2,16 +2,16 @@ plugins {
     id "java"
     id "application"
     id "org.beryx.runtime" version "1.11.4"
-    id "edu.sc.seis.launch4j" version '2.4.6'
+    id "edu.sc.seis.launch4j" version '2.4.8'
     id "org.openjfx.javafxplugin" version "0.0.9"
 }
 
 group "blaise.img2latex"
-version "0.7.7"
+version "0.7.8"
 
 compileJava {
-    sourceCompatibility = 14
-    targetCompatibility = 14
+    sourceCompatibility = 15
+    targetCompatibility = 15
 }
 
 repositories {
@@ -19,7 +19,7 @@ repositories {
 }
 
 javafx {
-    version = "14.0.2.1"
+    version = "15"
 }
 
 application {
@@ -39,20 +39,20 @@ dependencies {
     implementation "com.google.code.gson:gson:2.8.6"
     implementation "org.scilab.forge:jlatexmath:1.0.7"
     if (project.hasProperty("windows")) {
-        implementation "org.openjfx:javafx-base:14.0.2.1:win"
-        implementation "org.openjfx:javafx-swing:14.0.2.1:win"
-        implementation "org.openjfx:javafx-graphics:14.0.2.1:win"
-        implementation "org.openjfx:javafx-controls:14.0.2.1:win"
+        implementation "org.openjfx:javafx-base:15:win"
+        implementation "org.openjfx:javafx-swing:15:win"
+        implementation "org.openjfx:javafx-graphics:15:win"
+        implementation "org.openjfx:javafx-controls:15:win"
     } else if (project.hasProperty("linux")) {
-        implementation "org.openjfx:javafx-base:14.0.2.1:linux"
-        implementation "org.openjfx:javafx-swing:14.0.2.1:linux"
-        implementation "org.openjfx:javafx-graphics:14.0.2.1:linux"
-        implementation "org.openjfx:javafx-controls:14.0.2.1:linux"
+        implementation "org.openjfx:javafx-base:15:linux"
+        implementation "org.openjfx:javafx-swing:15:linux"
+        implementation "org.openjfx:javafx-graphics:15:linux"
+        implementation "org.openjfx:javafx-controls:15:linux"
     } else {
-        implementation "org.openjfx:javafx-base:14.0.2.1:mac"
-        implementation "org.openjfx:javafx-swing:14.0.2.1:mac"
-        implementation "org.openjfx:javafx-graphics:14.0.2.1:mac"
-        implementation "org.openjfx:javafx-controls:14.0.2.1:mac"
+        implementation "org.openjfx:javafx-base:15:mac"
+        implementation "org.openjfx:javafx-swing:15:mac"
+        implementation "org.openjfx:javafx-graphics:15:mac"
+        implementation "org.openjfx:javafx-controls:15:mac"
     }
 }
 
